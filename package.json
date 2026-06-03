@@ -1,0 +1,42 @@
+{
+  "name": "verdechain",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Transparent, tamper-proof green supply chain traceability on Stellar Soroban",
+  "workspaces": [
+    "api",
+    "frontend",
+    "sdk",
+    "cli"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "db:migrate": "npm run db:migrate -w api",
+    "db:seed": "npm run db:seed -w api",
+    "doctor": "npm run doctor -w cli",
+    "contracts:build": "cd contracts && cargo build --target wasm32-unknown-unknown --release",
+    "seed:testnet": "npm run seed:testnet -w api",
+    "seed:local": "npm run seed:local -w api",
+    "deploy:local": "cd contracts && ./deploy-testnet.sh --network local",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.3",
+    "typescript": "^5.4.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.13"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "packageManager": "npm@10.5.0"
+}
