@@ -2144,7 +2144,7 @@ The Stellar event indexer processes ~50M events/day and maintains:
 
 ## Roadmap
 
-### Phase 1 — Testnet MVP (Q2 2025)
+### Phase 1 — Testnet MVP (Q1 2026)
 
 - [x] Project architecture & documentation
 - [x] Soroban smart contract design
@@ -2156,7 +2156,7 @@ The Stellar event indexer processes ~50M events/day and maintains:
 - [ ] Basic product registration flow
 - [ ] QR code certificate viewer
 
-### Phase 2 — Attestation & Verifiers (Q3 2025)
+### Phase 2 — Attestation & Verifiers (Q2 2026)
 
 - [ ] Attestation contract (multi-sig approval workflow)
 - [ ] VerifierRegistry contract (staking, reputation, slashing)
@@ -2166,7 +2166,7 @@ The Stellar event indexer processes ~50M events/day and maintains:
 - [ ] Stake management (deposit, withdraw, slashing)
 - [ ] Verifier insurance pool
 
-### Phase 3 — Carbon Accounting (Q4 2025)
+### Phase 3 — Carbon Accounting (Q3 2026)
 
 - [ ] CarbonOracle contract (emission factor registry)
 - [ ] Automated GHG Protocol calculation engine
@@ -2176,7 +2176,7 @@ The Stellar event indexer processes ~50M events/day and maintains:
 - [ ] Carbon footprint comparison tool
 - [ ] Consumer-friendly equivalents (km driven, trees grown)
 
-### Phase 4 — Mainnet Launch (Q1 2026)
+### Phase 4 — Mainnet Launch (Q4 2026)
 
 - [ ] Full contract suite on Stellar mainnet
 - [ ] Multi-sig admin key ceremony
@@ -2187,7 +2187,7 @@ The Stellar event indexer processes ~50M events/day and maintains:
 - [ ] GreenTag certificate PDF generation
 - [ ] IPFS/Pinata integration for documentation
 
-### Phase 5 — Ecosystem & Scale (Q2–Q3 2026)
+### Phase 5 — Ecosystem & Scale (Q1 2027)
 
 - [ ] ERP connectors (SAP, Oracle, Dynamics)
 - [ ] IoT sensor integration (MQTT oracle sidecar)
