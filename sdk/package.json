@@ -1,0 +1,15 @@
+{
+  "name": "@verdechain/sdk",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "echo 'SDK scaffold ready'",
+    "build": "echo 'SDK build placeholder'",
+    "test": "echo 'SDK test placeholder'",
+    "lint": "echo 'SDK lint placeholder'",
+    "typecheck": "echo 'SDK typecheck placeholder'",
+    "clean": "rm -rf dist"
+  }
+}

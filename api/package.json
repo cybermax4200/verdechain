@@ -1,0 +1,13 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'API scaffold ready'",
+    "build": "echo 'API build placeholder'",
+    "test": "echo 'API test placeholder'",
+    "lint": "echo 'API lint placeholder'",
+    "typecheck": "echo 'API typecheck placeholder'",
+    "clean": "rm -rf dist"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@verdechain/cli",
+  "version": "1.0.0",
+  "private": true,
+  "bin": {
+    "verdechain": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "echo 'CLI scaffold ready'",
+    "build": "echo 'CLI build placeholder'",
+    "test": "echo 'CLI test placeholder'",
+    "lint": "echo 'CLI lint placeholder'",
+    "typecheck": "echo 'CLI typecheck placeholder'",
+    "clean": "rm -rf dist"
+  }
+}

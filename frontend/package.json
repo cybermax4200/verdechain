@@ -1,0 +1,13 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Frontend scaffold ready'",
+    "build": "echo 'Frontend build placeholder'",
+    "test": "echo 'Frontend test placeholder'",
+    "lint": "echo 'Frontend lint placeholder'",
+    "typecheck": "echo 'Frontend typecheck placeholder'",
+    "clean": "rm -rf .next dist"
+  }
+}
