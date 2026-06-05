@@ -1,0 +1,10 @@
+[package]
+name = "shared"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+[lib]
+crate-type = ["lib"]
