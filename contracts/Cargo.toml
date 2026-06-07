@@ -4,6 +4,7 @@ members = [
     "shared",
     "product_registry",
     "lifecycle_tracker",
+    "carbon_oracle",
 ]
 
 [workspace.package]
