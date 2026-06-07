@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "shared",
     "product_registry",
+    "lifecycle_tracker",
 ]
 
 [workspace.package]
