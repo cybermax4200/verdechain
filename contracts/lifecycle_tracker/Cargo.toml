@@ -1,0 +1,17 @@
+[package]
+name = "lifecycle_tracker"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+soroban-sdk = { workspace = true }
+shared = { path = "../shared" }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
+product_registry = { path = "../product_registry" }
+shared = { path = "../shared" }
