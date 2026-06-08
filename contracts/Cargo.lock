@@ -36,6 +36,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "attestation"
+version = "0.1.0"
+dependencies = [
+ "shared",
+ "soroban-sdk",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -535,6 +543,14 @@ name = "gimli"
 version = "0.32.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e629b9b98ef3dd8afe6ca2bd0f89306cec16d43d907889945bc5d6687f2f13c7"
+
+[[package]]
+name = "greentag_cert"
+version = "0.1.0"
+dependencies = [
+ "shared",
+ "soroban-sdk",
+]
 
 [[package]]
 name = "group"

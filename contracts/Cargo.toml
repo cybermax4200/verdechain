@@ -5,6 +5,8 @@ members = [
     "product_registry",
     "lifecycle_tracker",
     "carbon_oracle",
+    "attestation",
+    "greentag_cert",
 ]
 
 [workspace.package]
