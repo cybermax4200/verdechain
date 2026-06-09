@@ -7,6 +7,7 @@ members = [
     "carbon_oracle",
     "attestation",
     "greentag_cert",
+    "verifier_registry",
 ]
 
 [workspace.package]
