@@ -1,0 +1,284 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductStatus {
+  ACTIVE
+  RECALLED
+  DISCONTINUED
+}
+
+enum LifecycleStage {
+  RAW_MATERIAL_EXTRACTION
+  TRANSPORT_TO_SUPPLIER
+  MANUFACTURING
+  TRANSPORT_TO_DISTRIBUTOR
+  DISTRIBUTION
+  RETAIL
+  USE
+  END_OF_LIFE
+}
+
+enum CertType {
+  GREEN_TAG
+  CARBON_NEUTRAL
+  ORGANIC
+  FAIR_TRADE
+  RECYCLED
+  ENERGY_STAR
+}
+
+enum AttestationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ESCALATED
+}
+
+enum VerifierStatus {
+  ACTIVE
+  SUSPENDED
+  SLASHED
+  WITHDRAWN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  publicKey String   @unique
+  roles     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Manufacturer {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  publicKey   String   @unique
+  email       String?
+  website     String?
+  country     String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products   Product[]
+  facilities Facility[]
+
+  @@map("manufacturers")
+}
+
+model Facility {
+  id             String   @id @default(uuid())
+  manufacturerId String
+  name           String
+  location       String?
+  latitude       Float?
+  longitude      Float?
+  country        String?
+  facilityType   String?
+  status         String   @default("active")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  manufacturer Manufacturer @relation(fields: [manufacturerId], references: [id])
+
+  @@map("facilities")
+}
+
+model Product {
+  id              String        @id @default(uuid())
+  productId       Int           @unique
+  manufacturerId  String
+  name            String
+  description     String?
+  sku             String?
+  batchNumber     String?
+  productType     String?
+  originCountry   String?
+  ipfsHash        String?
+  status          ProductStatus @default(ACTIVE)
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  manufacturer        Manufacturer      @relation(fields: [manufacturerId], references: [id])
+  lifecycleEvents    LifecycleEvent[]
+  materialInputs     MaterialInput[]
+  certificates       Certificate[]
+  carbonFootprints   CarbonFootprint[]
+  attestationRecords AttestationRecord[]
+
+  @@index([manufacturerId])
+  @@index([status])
+  @@index([productType])
+  @@map("products")
+}
+
+model LifecycleEvent {
+  id          String         @id @default(uuid())
+  productId   String
+  stage       LifecycleStage
+  description String?
+  location    String?
+  timestamp   DateTime
+  energyKwh   Float?
+  fuelUsed    Float?
+  fuelType    String?
+  wasteKg     Float?
+  metadata    Json?
+  txHash      String?
+  createdAt   DateTime       @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@index([stage])
+  @@index([timestamp])
+  @@map("lifecycle_events")
+}
+
+model MaterialInput {
+  id          String   @id @default(uuid())
+  productId   String
+  name        String
+  quantity    Float
+  unit        String
+  source      String?
+  originCountry String?
+  carbonContent Float?
+  isRecycled  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@map("material_inputs")
+}
+
+model Certificate {
+  id            String     @id @default(uuid())
+  productId     String
+  certType      CertType
+  title         String
+  description   String?
+  issuerId      String?
+  issuedAt      DateTime   @default(now())
+  expiresAt     DateTime?
+  revokedAt     DateTime?
+  revocationReason String?
+  ipfsHash      String?
+  status        String     @default("active")
+  metadata      Json?
+  txHash        String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@index([certType])
+  @@index([status])
+  @@map("certificates")
+}
+
+model CarbonFootprint {
+  id              String   @id @default(uuid())
+  productId       String
+  scope1          Float    @default(0)
+  scope2          Float    @default(0)
+  scope3          Float    @default(0)
+  totalFootprint  Float    @default(0)
+  confidenceScore Float?
+  methodology     String   @default("ghg_protocol")
+  boundary        String?
+  breakdown       Json?
+  calculatedAt    DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@map("carbon_footprints")
+}
+
+model Verifier {
+  id              String         @id @default(uuid())
+  publicKey       String         @unique
+  name            String
+  email           String?
+  description     String?
+  stakeXlm        Float          @default(0)
+  reputationScore Float          @default(0)
+  status          VerifierStatus @default(ACTIVE)
+  metadata        Json?
+  lastHeartbeat   DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  attestationRecords AttestationRecord[]
+
+  @@map("verifiers")
+}
+
+model AttestationRecord {
+  id          String             @id @default(uuid())
+  productId   String
+  verifierId  String?
+  status      AttestationStatus  @default(PENDING)
+  threshold   Int                @default(2)
+  approvals   Int                @default(0)
+  rejections  Int                @default(0)
+  evidence    Json?
+  txHash      String?
+  submittedAt DateTime           @default(now())
+  resolvedAt  DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  product  Product   @relation(fields: [productId], references: [id])
+  verifier Verifier? @relation(fields: [verifierId], references: [id])
+
+  @@index([productId])
+  @@index([verifierId])
+  @@index([status])
+  @@map("attestation_records")
+}
+
+model Webhook {
+  id        String   @id @default(uuid())
+  url       String
+  secret    String
+  events    String[]
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events_log WebhookEvent[]
+
+  @@map("webhooks")
+}
+
+model WebhookEvent {
+  id        String   @id @default(uuid())
+  webhookId String
+  eventType String
+  payload   Json
+  status    String   @default("pending")
+  attempts  Int      @default(0)
+  response  Json?
+  createdAt DateTime @default(now())
+
+  webhook Webhook @relation(fields: [webhookId], references: [id])
+
+  @@index([webhookId])
+  @@index([status])
+  @@map("webhook_events")
+}
