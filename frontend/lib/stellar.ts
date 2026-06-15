@@ -1,0 +1,97 @@
+import {
+  rpc,
+  TransactionBuilder,
+  Operation,
+  Keypair,
+  xdr,
+  Networks,
+} from '@stellar/stellar-sdk';
+
+export interface StellarConfig {
+  sorobanRpc: string;
+  networkPassphrase?: string;
+}
+
+export interface ContractAddresses {
+  productRegistry?: string;
+  lifecycleTracker?: string;
+  attestation?: string;
+  greenTagCert?: string;
+  verifierRegistry?: string;
+  carbonOracle?: string;
+}
+
+export class StellarBrowserClient {
+  private server: rpc.Server;
+  private networkPassphrase: string;
+
+  constructor(config: StellarConfig) {
+    this.server = new rpc.Server(config.sorobanRpc);
+    this.networkPassphrase =
+      config.networkPassphrase ?? Networks.TESTNET;
+  }
+
+  async callContract(
+    contractId: string,
+    method: string,
+    args: xdr.ScVal[] = [],
+    publicKey: string,
+  ): Promise<string> {
+    const account = await this.server.getAccount(publicKey);
+
+    const tx = new TransactionBuilder(account, {
+      fee: '100000',
+      networkPassphrase: this.networkPassphrase,
+    })
+      .addOperation(
+        Operation.invokeContractFunction({
+          contract: contractId,
+          function: method,
+          args,
+        }),
+      )
+      .setTimeout(30)
+      .build();
+
+    const prepared = await this.server.prepareTransaction(tx);
+
+    return prepared.toXDR();
+  }
+
+  async getContractEvents(
+    contractId: string,
+    startLedger?: number,
+  ): Promise<rpc.Api.EventResponse[]> {
+    const response = await this.server.getEvents({
+      filters: [{ contractIds: [contractId] }],
+      startLedger: startLedger ?? 1,
+    });
+    return response.events;
+  }
+
+  async getTransaction(hash: string) {
+    return this.server.getTransaction(hash);
+  }
+
+  getNetworkPassphrase(): string {
+    return this.networkPassphrase;
+  }
+}
+
+export function scValToString(val: xdr.ScVal): string {
+  if (val.symbol() !== undefined) {
+    return val.symbol()!.toString();
+  }
+  if (val.str() !== undefined) {
+    return val.str()!.toString();
+  }
+  return val.toXDR('base64');
+}
+
+export function scValToNumber(val: xdr.ScVal): number {
+  if (val.i32() !== undefined) return val.i32()!;
+  if (val.u32() !== undefined) return val.u32()!;
+  if (val.i64() !== undefined) return Number(val.i64()!);
+  if (val.u64() !== undefined) return Number(val.u64()!);
+  return 0;
+}
