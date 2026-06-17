@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import { CertificatePreview } from '@/components/certificate-preview';
 
 export default function CertificateDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const [certificate, setCertificate] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -15,69 +15,64 @@ export default function CertificateDetailPage() {
     api.getCertificate(params.id as string).then(setCertificate).catch(() => setCertificate(null)).finally(() => setIsLoading(false));
   }, [params.id]);
 
+  const handleVerify = async (id: string): Promise<boolean> => {
+    try {
+      const result = await api.request<any>({ method: 'POST', url: `/certificates/verify`, data: { id } });
+      return result.valid === true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleRevoke = async (id: string) => {
+    try {
+      await api.request({ method: 'POST', url: `/certificates/${id}/revoke` });
+      const updated = await api.getCertificate(id);
+      setCertificate(updated);
+    } catch (error) {
+      console.error('Failed to revoke certificate:', error);
+    }
+  };
+
   if (isLoading) {
-    return <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />;
+    return (
+      <div className="max-w-3xl mx-auto space-y-4 animate-pulse">
+        <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/3" />
+        <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl" />
+      </div>
+    );
   }
 
   if (!certificate) {
     return (
       <div className="text-center py-16">
-        <p className="text-red-500">Certificate not found</p>
-        <a href="/certificates" className="text-brand-600 hover:underline mt-4 inline-block">← Back to certificates</a>
+        <p className="text-lg text-red-500 mb-2">Certificate not found</p>
+        <p className="text-sm text-gray-500 mb-4">The certificate you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+        <button onClick={() => router.push('/certificates')} className="text-brand-600 dark:text-brand-400 hover:underline">
+          ← Back to certificates
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-3xl mx-auto">
-      <a href="/certificates" className="text-sm text-brand-600 dark:text-brand-400 hover:underline">← Back to certificates</a>
-      <Card className="p-8">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{certificate.title}</h1>
-            <div className="flex items-center gap-3 mt-2">
-              <Badge>{certificate.certType}</Badge>
-              <Badge variant={certificate.status === 'active' ? 'default' : 'secondary'}>{certificate.status}</Badge>
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <p className="text-gray-500 dark:text-gray-400">Issued</p>
-            <p className="font-medium">{new Date(certificate.issuedAt).toLocaleDateString()}</p>
-          </div>
-          {certificate.expiresAt && (
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">Expires</p>
-              <p className="font-medium">{new Date(certificate.expiresAt).toLocaleDateString()}</p>
-            </div>
-          )}
-          {certificate.issuerId && (
-            <div className="col-span-2">
-              <p className="text-gray-500 dark:text-gray-400">Issuer</p>
-              <p className="font-medium font-mono text-xs break-all">{certificate.issuerId}</p>
-            </div>
-          )}
-          {certificate.description && (
-            <div className="col-span-2">
-              <p className="text-gray-500 dark:text-gray-400">Description</p>
-              <p className="text-gray-700 dark:text-gray-300">{certificate.description}</p>
-            </div>
-          )}
-        </div>
-        {certificate.ipfsHash && (
-          <div className="mt-6 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
-            <p className="text-xs text-gray-500 dark:text-gray-400">IPFS Hash</p>
-            <p className="text-xs font-mono text-brand-600 dark:text-brand-400 break-all">{certificate.ipfsHash}</p>
-          </div>
-        )}
-      </Card>
+    <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
+      <button onClick={() => router.push('/certificates')} className="text-sm text-brand-600 dark:text-brand-400 hover:underline">
+        ← Back to certificates
+      </button>
+      <CertificatePreview
+        certificate={{
+          ...certificate,
+          pdfUrl: certificate.pdfUrl ?? `/api/certificates/${certificate.id}/pdf`,
+        }}
+        showPdf={true}
+        onVerify={handleVerify}
+        onRevoke={handleRevoke}
+      />
       <div className="text-center">
-        <iframe
-          src={`/api/certificates/${certificate.id}/pdf`}
-          className="w-full h-96 rounded-xl border border-gray-200 dark:border-gray-800"
-          title="Certificate PDF"
-        />
+        <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
+          Certificate ID: {certificate.id} | Verify on Stellar blockchain
+        </p>
       </div>
     </div>
   );

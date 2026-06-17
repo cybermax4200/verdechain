@@ -41,7 +41,7 @@ export default function HomePage() {
   const loadData = async () => {
     try {
       const [products, certificates, carbon] = await Promise.all([
-        api.getProducts({ limit: 6, sort: 'newest' }).catch(() => ({ data: [] })),
+        api.getProducts({ limit: 6, sort: 'newest' }).catch(() => ({ data: [] as any[], total: 0 })),
         api.getCertificates({ limit: 1 }).catch(() => ({ total: 0 })),
         api.calculateFootprint('all').catch(() => null),
       ]);
