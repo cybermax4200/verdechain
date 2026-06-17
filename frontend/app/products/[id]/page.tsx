@@ -6,6 +6,10 @@ import { api, CarbonFootprint, LifecycleEvent } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ProvenanceGraph } from '@/components/provenance-graph';
+import { LifecycleTimeline } from '@/components/lifecycle-timeline';
+import { CarbonBreakdown } from '@/components/carbon-breakdown';
+import { CertificatePreview } from '@/components/certificate-preview';
 
 interface ProductDetail {
   id: string;
@@ -22,12 +26,18 @@ interface ProductDetail {
   createdAt: string;
 }
 
+interface ProvenanceData {
+  nodes: { id: string; label: string; role: 'manufacturer' | 'supplier' | 'logistics' | 'verifier' | 'retailer' }[];
+  edges: { source: string; target: string; label?: string; type: 'transfer' | 'lifecycle' | 'certification' }[];
+}
+
 export default function ProductDetailPage() {
   const params = useParams();
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [lifecycle, setLifecycle] = useState<LifecycleEvent[]>([]);
   const [carbon, setCarbon] = useState<CarbonFootprint[]>([]);
-  const [certificates, setCertificates] = useState<unknown[]>([]);
+  const [certificates, setCertificates] = useState<any[]>([]);
+  const [provenance, setProvenance] = useState<ProvenanceData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,16 +50,18 @@ export default function ProductDetailPage() {
     setError(null);
     try {
       const id = params.id as string;
-      const [productData, lifecycleData, carbonData, certData] = await Promise.all([
+      const [productData, lifecycleData, carbonData, certData, provenanceData] = await Promise.all([
         api.getProduct(id),
-        api.getLifecycle(id).catch(() => []),
-        api.getCarbonFootprint(id).catch(() => []),
+        api.getLifecycle(id).catch(() => [] as LifecycleEvent[]),
+        api.getCarbonFootprint(id).catch(() => [] as CarbonFootprint[]),
         api.getCertificatesByProduct(id).catch(() => []),
+        api.getProvenance(id).catch(() => ({ nodes: [], edges: [] })),
       ]);
       setProduct(productData);
       setLifecycle(lifecycleData);
       setCarbon(carbonData);
       setCertificates(certData);
+      setProvenance(provenanceData);
     } catch {
       setError('Failed to load product details');
     } finally {
@@ -82,7 +94,27 @@ export default function ProductDetailPage() {
   }
 
   const latestCarbon = carbon[0];
-  const carbonByStage = latestCarbon?.breakdown as Record<string, number> | undefined;
+  const carbonBreakdown = latestCarbon?.breakdown
+    ? Object.entries(latestCarbon.breakdown as Record<string, number>).map(([stage, value]) => ({
+        stage,
+        scope: stage === 'rawMaterialExtraction' || stage === 'manufacturing' ? 'scope1' as const
+          : stage === 'transportation' || stage === 'distribution' ? 'scope3' as const
+          : 'scope2' as const,
+        value,
+        percentage: latestCarbon.totalFootprint > 0 ? (value / latestCarbon.totalFootprint) * 100 : 0,
+      }))
+    : [];
+
+  const lifecycleEvents: any[] = lifecycle.map((event) => ({
+    id: event.id,
+    stage: event.stage ?? 'unknown',
+    description: event.description,
+    location: event.location,
+    timestamp: event.timestamp ?? new Date().toISOString(),
+    energyKwh: event.energyKwh,
+    fuelUsed: event.fuelUsed,
+    wasteKg: event.wasteKg,
+  }));
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -109,30 +141,28 @@ export default function ProductDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2 p-6">
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold">Product Information</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Manufacturer</p>
-                <p className="font-medium">{product.manufacturer.name}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Origin</p>
-                <p className="font-medium">{product.originCountry ?? 'Unknown'}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Product ID</p>
-                <p className="font-medium font-mono">#{product.productId}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Registered</p>
-                <p className="font-medium">{new Date(product.createdAt).toLocaleDateString()}</p>
-              </div>
+          <h2 className="text-lg font-semibold mb-4">Product Information</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Manufacturer</p>
+              <p className="font-medium">{product.manufacturer.name}</p>
             </div>
-            {product.description && (
-              <p className="text-gray-600 dark:text-gray-300 mt-4">{product.description}</p>
-            )}
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Origin</p>
+              <p className="font-medium">{product.originCountry ?? 'Unknown'}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Product ID</p>
+              <p className="font-medium font-mono">#{product.productId}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Registered</p>
+              <p className="font-medium">{new Date(product.createdAt).toLocaleDateString()}</p>
+            </div>
           </div>
+          {product.description && (
+            <p className="text-gray-600 dark:text-gray-300 mt-4">{product.description}</p>
+          )}
         </Card>
 
         <Card className="p-6">
@@ -167,109 +197,82 @@ export default function ProductDetailPage() {
         </Card>
       </div>
 
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Lifecycle Timeline</h2>
-        {lifecycle.length > 0 ? (
-          <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-800" />
-            <div className="space-y-6">
-              {lifecycle.map((event, index) => (
-                <div key={event.id ?? index} className="relative pl-10">
-                  <div className="absolute left-2.5 top-1.5 w-3 h-3 rounded-full bg-brand-500 border-2 border-white dark:border-gray-950" />
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-gray-100 capitalize">
-                          {event.stage?.replace(/_/g, ' ').toLowerCase()}
-                        </p>
-                        {event.description && (
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{event.description}</p>
-                        )}
-                      </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                        {event.timestamp ? new Date(event.timestamp).toLocaleDateString() : ''}
-                      </span>
-                    </div>
-                    {event.location && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">📍 {event.location}</p>
-                    )}
-                    {(event.energyKwh || event.fuelUsed || event.wasteKg) && (
-                      <div className="flex gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        {event.energyKwh && <span>⚡ {event.energyKwh} kWh</span>}
-                        {event.fuelUsed && <span>⛽ {event.fuelUsed} L</span>}
-                        {event.wasteKg && <span>🗑️ {event.wasteKg} kg</span>}
-                      </div>
-                    )}
-                  </div>
-                </div>
+      <Tabs defaultValue="lifecycle">
+        <TabsList>
+          <TabsTrigger value="lifecycle">Lifecycle Timeline ({lifecycle.length})</TabsTrigger>
+          <TabsTrigger value="carbon">Carbon Breakdown</TabsTrigger>
+          <TabsTrigger value="certificates">Certificates ({certificates.length})</TabsTrigger>
+          <TabsTrigger value="provenance">Provenance Graph</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="lifecycle" className="mt-4">
+          <LifecycleTimeline events={lifecycleEvents} />
+        </TabsContent>
+
+        <TabsContent value="carbon" className="mt-4">
+          {latestCarbon ? (
+            <CarbonBreakdown
+              breakdown={carbonBreakdown}
+              totalFootprint={latestCarbon.totalFootprint}
+              scope1={latestCarbon.scope1}
+              scope2={latestCarbon.scope2}
+              scope3={latestCarbon.scope3}
+              confidenceScore={latestCarbon.confidenceScore}
+              methodology={latestCarbon.methodology}
+            />
+          ) : (
+            <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
+              <p className="text-lg mb-2">🌱</p>
+              <p>No carbon data available for this product.</p>
+              <p className="text-sm mt-1">Record lifecycle events to generate a carbon footprint breakdown.</p>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="certificates" className="mt-4">
+          {certificates.length > 0 ? (
+            <div className="space-y-4">
+              {certificates.map((cert: any) => (
+                <a key={cert.id} href={`/certificates/${cert.id}`} className="block">
+                  <CertificatePreview
+                    certificate={{
+                      id: cert.id,
+                      title: cert.title,
+                      certType: cert.certType,
+                      status: cert.status,
+                      issuedAt: cert.issuedAt,
+                      expiresAt: cert.expiresAt,
+                      issuerName: cert.issuerName,
+                      ipfsHash: cert.ipfsHash,
+                      description: cert.description,
+                    }}
+                  />
+                </a>
               ))}
             </div>
-          </div>
-        ) : (
-          <p className="text-gray-500 dark:text-gray-400 text-sm">No lifecycle events recorded</p>
-        )}
-      </Card>
+          ) : (
+            <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
+              <p className="text-lg mb-2">🏷️</p>
+              <p>No certificates issued for this product.</p>
+              <p className="text-sm mt-1">Complete the attestation process to issue certificates.</p>
+            </Card>
+          )}
+        </TabsContent>
 
-      <Tabs defaultValue="breakdown">
-        <TabsList>
-          <TabsTrigger value="breakdown">Emissions Breakdown</TabsTrigger>
-          <TabsTrigger value="certificates">Certificates ({certificates.length})</TabsTrigger>
-          <TabsTrigger value="provenance">Provenance</TabsTrigger>
-        </TabsList>
-        <TabsContent value="breakdown" className="mt-4">
-          <Card className="p-6">
-            {carbonByStage ? (
-              <div className="space-y-3">
-                <h3 className="font-semibold mb-3">Emissions by Lifecycle Stage</h3>
-                {Object.entries(carbonByStage).map(([stage, value]) => (
-                  <div key={stage} className="flex items-center gap-3">
-                    <span className="text-sm w-48 capitalize">{stage.replace(/([A-Z])/g, ' $1').trim()}</span>
-                    <div className="flex-1 h-4 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-brand-500 rounded-full transition-all"
-                        style={{ width: `${(value / (latestCarbon?.totalFootprint ?? 1)) * 100}%` }}
-                      />
-                    </div>
-                    <span className="text-sm font-medium w-20 text-right">{value.toFixed(1)} kg</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">No breakdown data available</p>
-            )}
-          </Card>
-        </TabsContent>
-        <TabsContent value="certificates" className="mt-4">
-          <Card className="p-6">
-            {certificates.length > 0 ? (
-              <div className="space-y-3">
-                {certificates.map((cert: any) => (
-                  <div key={cert.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                    <div>
-                      <p className="font-medium">{cert.title}</p>
-                      <p className="text-sm text-gray-500">{cert.certType} · {new Date(cert.issuedAt).toLocaleDateString()}</p>
-                    </div>
-                    <Badge variant={cert.status === 'active' ? 'default' : 'secondary'}>
-                      {cert.status}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">No certificates issued</p>
-            )}
-          </Card>
-        </TabsContent>
         <TabsContent value="provenance" className="mt-4">
-          <Card className="p-6">
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              Interactive provenance graph will be rendered here using D3.js.
-              Shows the complete supply chain journey from raw materials to retail.
-            </p>
-            <div className="mt-4 h-48 bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center text-gray-400">
-              Provenance Graph (D3.js) — Coming in Day 15
-            </div>
-          </Card>
+          {provenance && provenance.nodes.length > 0 ? (
+            <ProvenanceGraph
+              nodes={provenance.nodes}
+              edges={provenance.edges}
+              onNodeClick={(node) => console.log('Node clicked:', node)}
+            />
+          ) : (
+            <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
+              <p className="text-lg mb-2">🔗</p>
+              <p>No provenance data available for this product.</p>
+              <p className="text-sm mt-1">The provenance graph will show the complete supply chain journey.</p>
+            </Card>
+          )}
         </TabsContent>
       </Tabs>
 
