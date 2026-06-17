@@ -2,15 +2,31 @@
   "name": "@verdechain/cli",
   "version": "1.0.0",
   "private": true,
+  "description": "Command-line interface for VerdeChain",
   "bin": {
     "verdechain": "dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "echo 'CLI scaffold ready'",
-    "build": "echo 'CLI build placeholder'",
+    "build": "tsc",
     "test": "echo 'CLI test placeholder'",
     "lint": "echo 'CLI lint placeholder'",
-    "typecheck": "echo 'CLI typecheck placeholder'",
+    "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "chalk": "^4.1.2",
+    "ora": "^8.0.0",
+    "cli-table": "^0.3.11",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.11.0",
+    "@types/cli-table": "^0.3.4"
   }
 }
