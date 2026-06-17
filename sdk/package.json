@@ -2,14 +2,36 @@
   "name": "@verdechain/sdk",
   "version": "1.0.0",
   "private": true,
+  "description": "TypeScript SDK for the VerdeChain API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "echo 'SDK scaffold ready'",
-    "build": "echo 'SDK build placeholder'",
-    "test": "echo 'SDK test placeholder'",
+    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --passWithNoTests",
     "lint": "echo 'SDK lint placeholder'",
-    "typecheck": "echo 'SDK typecheck placeholder'",
+    "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "axios-mock-adapter": "^1.22.0"
   }
 }
