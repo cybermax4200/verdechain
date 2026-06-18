@@ -13,7 +13,9 @@ export interface IssueCertificateData {
 export class CertificatesAPI {
   constructor(private client: VerdeChainClient) {}
 
-  async getCertificates(filters: CertificateFilters = {}): Promise<PaginatedResponse<CertificateRecord>> {
+  async getCertificates(
+    filters: CertificateFilters = {},
+  ): Promise<PaginatedResponse<CertificateRecord>> {
     const params: Record<string, string> = {};
     if (filters.type) params.type = filters.type;
     if (filters.status) params.status = filters.status;

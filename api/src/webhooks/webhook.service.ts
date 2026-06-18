@@ -39,7 +39,9 @@ export class WebhookService {
       try {
         await this.sendWebhook(webhook, payload);
       } catch (error) {
-        this.logger.error(`Failed to dispatch to webhook ${webhook.id}: ${error instanceof Error ? error.message : String(error)}`);
+        this.logger.error(
+          `Failed to dispatch to webhook ${webhook.id}: ${error instanceof Error ? error.message : String(error)}`,
+        );
         await this.scheduleRetry(webhook.id, payload);
       }
     }
@@ -127,7 +129,9 @@ export class WebhookService {
           attempts: newAttempts,
         },
       });
-      this.logger.warn(`Webhook retry ${newAttempts}/${this.maxRetries} failed for event ${eventId}`);
+      this.logger.warn(
+        `Webhook retry ${newAttempts}/${this.maxRetries} failed for event ${eventId}`,
+      );
     }
   }
 

@@ -84,7 +84,7 @@ impl LifecycleTrackerContract {
 
     pub fn get_lifecycle(env: Env, product_id: u64) -> Result<LifecycleSummary, Error> {
         let events = LifecycleStore::events_for_product(&env, product_id);
-        if events.len() == 0 {
+        if events.is_empty() {
             return Err(Error::EventNotFound);
         }
 
@@ -132,7 +132,7 @@ impl LifecycleTrackerContract {
         product_id: u64,
     ) -> Result<EmissionsSummary, Error> {
         let events = LifecycleStore::events_for_product(&env, product_id);
-        if events.len() == 0 {
+        if events.is_empty() {
             return Err(Error::EventNotFound);
         }
 
@@ -250,10 +250,10 @@ impl LifecycleTrackerContract {
 }
 
 fn validate_event_data(data: &LifecycleEventData) -> Result<(), Error> {
-    if data.location.len() == 0 {
+    if data.location.is_empty() {
         return Err(Error::InvalidEventData);
     }
-    if data.description.len() == 0 {
+    if data.description.is_empty() {
         return Err(Error::InvalidEventData);
     }
     if data.energy_used < 0 || data.fuel_used < 0 || data.waste_generated < 0 {

@@ -40,11 +40,17 @@ export class SyncService {
     const totalAttestations = await this.prisma.attestationRecord.count();
     const totalCertificates = await this.prisma.certificate.count();
 
-    this.logger.log(`Products: ${totalProducts}, Events: ${totalEvents}, Attestations: ${totalAttestations}, Certificates: ${totalCertificates}`);
+    this.logger.log(
+      `Products: ${totalProducts}, Events: ${totalEvents}, Attestations: ${totalAttestations}, Certificates: ${totalCertificates}`,
+    );
 
     if (totalEvents > 0) {
       const orphanEvents = await this.prisma.lifecycleEvent.findMany({
-        where: { productId: { notIn: (await this.prisma.product.findMany({ select: { id: true } })).map((p) => p.id) } },
+        where: {
+          productId: {
+            notIn: (await this.prisma.product.findMany({ select: { id: true } })).map((p) => p.id),
+          },
+        },
         take: 10,
       });
 
@@ -55,7 +61,11 @@ export class SyncService {
 
     if (totalAttestations > 0) {
       const orphanAttestations = await this.prisma.attestationRecord.findMany({
-        where: { productId: { notIn: (await this.prisma.product.findMany({ select: { id: true } })).map((p) => p.id) } },
+        where: {
+          productId: {
+            notIn: (await this.prisma.product.findMany({ select: { id: true } })).map((p) => p.id),
+          },
+        },
         take: 10,
       });
 

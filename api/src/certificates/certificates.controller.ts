@@ -58,10 +58,7 @@ export class CertificatesController {
   }
 
   @Post(':id/revoke')
-  async revoke(
-    @Param('id') id: string,
-    @Body('reason') reason: string,
-  ) {
+  async revoke(@Param('id') id: string, @Body('reason') reason: string) {
     return this.certificatesService.revoke(id, reason ?? 'No reason provided');
   }
 }

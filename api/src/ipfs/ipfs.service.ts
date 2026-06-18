@@ -35,7 +35,7 @@ export class IpfsService {
       },
     );
 
-    const data = await response.json() as { IpfsHash?: string };
+    const data = (await response.json()) as { IpfsHash?: string };
     const cid = data.IpfsHash ?? '';
 
     return {
@@ -58,7 +58,7 @@ export class IpfsService {
       },
     );
 
-    const result = await response.json() as { IpfsHash?: string };
+    const result = (await response.json()) as { IpfsHash?: string };
     const cid = result.IpfsHash ?? '';
 
     return {
@@ -70,15 +70,16 @@ export class IpfsService {
 
   async get(cid: string): Promise<Buffer> {
     try {
-      const response = await this.fetchWithFallback(
-        `${this.config.gatewayUrl}/${cid}`,
-        { method: 'GET' },
-      );
+      const response = await this.fetchWithFallback(`${this.config.gatewayUrl}/${cid}`, {
+        method: 'GET',
+      });
 
       const arrayBuffer = await response.arrayBuffer();
       return Buffer.from(arrayBuffer);
     } catch (error) {
-      this.logger.error(`Failed to fetch CID ${cid}: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `Failed to fetch CID ${cid}: ${error instanceof Error ? error.message : String(error)}`,
+      );
       throw new NotFoundException(`Content not found for CID: ${cid}`);
     }
   }
@@ -102,7 +103,9 @@ export class IpfsService {
       this.logger.log(`Unpinned CID: ${cid}`);
       return true;
     } catch (error) {
-      this.logger.error(`Failed to unpin CID ${cid}: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `Failed to unpin CID ${cid}: ${error instanceof Error ? error.message : String(error)}`,
+      );
       return false;
     }
   }
@@ -115,11 +118,7 @@ export class IpfsService {
       }
       return response;
     } catch (error) {
-      if (
-        this.config.pinataApiKey &&
-        this.config.pinataApiSecret &&
-        !this.config.pinataJwt
-      ) {
+      if (this.config.pinataApiKey && this.config.pinataApiSecret && !this.config.pinataJwt) {
         const headers: Record<string, string> = {
           pinata_api_key: this.config.pinataApiKey,
           pinata_secret_api_key: this.config.pinataApiSecret,

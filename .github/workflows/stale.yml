@@ -2,7 +2,7 @@ name: Stale Issues and PRs
 
 on:
   schedule:
-    - cron: "0 8 * * 1"   # every Monday at 08:00 UTC
+    - cron: '0 8 * * 1' # every Monday at 08:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -35,6 +35,6 @@ jobs:
           close-pr-message: >
             Closing due to inactivity. Please re-open if you plan to continue this work.
 
-          exempt-issue-labels: "pinned,security,blocked,in-progress"
-          exempt-pr-labels: "pinned,security,blocked,in-progress"
+          exempt-issue-labels: 'pinned,security,blocked,in-progress'
+          exempt-pr-labels: 'pinned,security,blocked,in-progress'
           exempt-all-assignees: true

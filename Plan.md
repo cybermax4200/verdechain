@@ -6,17 +6,17 @@
 
 ## Completion Targets by Layer
 
-| Layer | Target % | What "Done" Means |
-|---|---|---|
-| **Monorepo / Tooling** | 90% | Workspaces, Turborepo, ESLint, Prettier, Docker Compose, `.env.example`, CI workflows |
-| **Smart Contracts (Rust/Soroban)** | 70% | ProductRegistry, LifecycleTracker, CarbonOracle complete with tests; Attestation scaffolded; VerifierRegistry + GreenTagCert stubbed |
-| **Backend API (NestJS)** | 60% | All 8 modules scaffolded; Products, Supply Chain, Auth, Stellar, IPFS modules functional; Carbon engine (Scope 1-2-3) implemented; certificates module in progress |
-| **Frontend (Next.js)** | 40% | App shell, routing, wallet connector, product search, product detail with lifecycle timeline, certificate viewer page |
-| **SDK (TypeScript)** | 50% | `VerdeChainClient` with product, lifecycle, carbon methods; types exported; basic tests |
-| **CLI (Commander.js)** | 40% | Product, lifecycle, carbon commands functional; verifier, certificate commands stubbed |
-| **Infrastructure** | 50% | Docker Compose for local dev, GitHub Actions CI + audit workflows, basic Terraform module stubs |
-| **Docs** | 40% | Architecture docs, per-contract README, API reference skeleton, contributor guide |
-| **Oracle / Connectors** | 0% | Not started — planned for Phase 2 |
+| Layer                              | Target % | What "Done" Means                                                                                                                                                  |
+| ---------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Monorepo / Tooling**             | 90%      | Workspaces, Turborepo, ESLint, Prettier, Docker Compose, `.env.example`, CI workflows                                                                              |
+| **Smart Contracts (Rust/Soroban)** | 70%      | ProductRegistry, LifecycleTracker, CarbonOracle complete with tests; Attestation scaffolded; VerifierRegistry + GreenTagCert stubbed                               |
+| **Backend API (NestJS)**           | 60%      | All 8 modules scaffolded; Products, Supply Chain, Auth, Stellar, IPFS modules functional; Carbon engine (Scope 1-2-3) implemented; certificates module in progress |
+| **Frontend (Next.js)**             | 40%      | App shell, routing, wallet connector, product search, product detail with lifecycle timeline, certificate viewer page                                              |
+| **SDK (TypeScript)**               | 50%      | `VerdeChainClient` with product, lifecycle, carbon methods; types exported; basic tests                                                                            |
+| **CLI (Commander.js)**             | 40%      | Product, lifecycle, carbon commands functional; verifier, certificate commands stubbed                                                                             |
+| **Infrastructure**                 | 50%      | Docker Compose for local dev, GitHub Actions CI + audit workflows, basic Terraform module stubs                                                                    |
+| **Docs**                           | 40%      | Architecture docs, per-contract README, API reference skeleton, contributor guide                                                                                  |
+| **Oracle / Connectors**            | 0%       | Not started — planned for Phase 2                                                                                                                                  |
 
 ---
 
@@ -29,6 +29,7 @@
 #### Day 1 — Monorepo Scaffolding & Tooling
 
 **Files created:**
+
 - `package.json` — npm workspaces root (`contracts`, `api`, `frontend`, `sdk`, `cli`)
 - `turbo.json` — pipeline config (build, test, lint, typecheck)
 - `.eslintrc.js` — shared ESLint config (TypeScript + React)
@@ -45,6 +46,7 @@
 - `SUSTAINABILITY.md` — project's own carbon impact report
 
 **Key decisions:**
+
 - Turborepo for build orchestration
 - npm workspaces (not pnpm) for broadest compatibility
 - All TypeScript projects share `tsconfig.base.json`
@@ -57,6 +59,7 @@
 #### Day 2 — Shared Contract Infrastructure
 
 **Files created:**
+
 - `contracts/Cargo.toml` — workspace with 6 members:
   - `product_registry`, `lifecycle_tracker`, `attestation`
   - `greentag_cert`, `verifier_registry`, `carbon_oracle`
@@ -79,6 +82,7 @@
 #### Day 3 — Contract: ProductRegistry (Complete)
 
 **Files created:**
+
 - `contracts/product_registry/src/types.rs` — `ProductMetadata` struct, `ProductStatus` enum
 - `contracts/product_registry/src/storage.rs` — persistent state management:
   - `Products` map (`u64 → ProductMetadata`)
@@ -97,6 +101,7 @@
   - `get_products_by_owner()`, `recall_product()`, `total_products()`
 
 **Test files:**
+
 - `contracts/product_registry/tests/unit/test_registration.rs` — 8 test cases
 - `contracts/product_registry/tests/unit/test_transfer.rs` — 6 test cases
 - `contracts/product_registry/tests/unit/test_recall.rs` — 4 test cases
@@ -109,6 +114,7 @@
 #### Day 4 — Contract: LifecycleTracker (Complete)
 
 **Files created:**
+
 - `contracts/lifecycle_tracker/src/events.rs` — lifecycle event type definitions
 - `contracts/lifecycle_tracker/src/emissions.rs` — on-chain emission factor lookups (calls CarbonOracle)
 - `contracts/lifecycle_tracker/src/milestones.rs` — configurable lifecycle milestone validator
@@ -117,6 +123,7 @@
   - `get_emissions_summary()`, `batch_record_events()`
 
 **Test files:**
+
 - `contracts/lifecycle_tracker/tests/unit/test_recording.rs` — 10 test cases
 - `contracts/lifecycle_tracker/tests/unit/test_batch.rs` — 6 test cases
 - `contracts/lifecycle_tracker/tests/integration/test_with_registry.rs` — 4 flow tests
@@ -128,6 +135,7 @@
 #### Day 5 — Contract: CarbonOracle (Complete)
 
 **Files created:**
+
 - `contracts/carbon_oracle/src/factors.rs` — emission factor storage and cache:
   - `EmissionFactors` map (`String → EmissionFactor`)
   - Batched factor update support
@@ -143,6 +151,7 @@
   - `get_methodology_version()`
 
 **Test files:**
+
 - `contracts/carbon_oracle/tests/unit/test_factors.rs` — 8 test cases
 - `contracts/carbon_oracle/tests/unit/test_grid.rs` — 5 test cases
 - `contracts/carbon_oracle/tests/integration/test_lifecycle_integration.rs` — 4 flow tests
@@ -154,6 +163,7 @@
 #### Day 6 — Contracts: Attestation (Scaffolded) + GreenTagCert (Stubbed)
 
 **Files created — Attestation:**
+
 - `contracts/attestation/src/types.rs` — `AttestationRecord`, `AttestationStatus`
 - `contracts/attestation/src/escalation.rs` — quorum escalation logic (3 → 5 verifiers)
 - `contracts/attestation/src/dissent.rs` — minority opinion recording
@@ -163,9 +173,11 @@
   - `get_attestations_for_product()`, `get_pending_for_verifier()`
 
 **Test files — Attestation:**
+
 - `contracts/attestation/tests/unit/test_workflow.rs` — 10 test cases (happy path, rejection, threshold)
 
 **Files created — GreenTagCert:**
+
 - `contracts/greentag_cert/src/types.rs` — `CertificateRecord`, `CertType` enum
 - `contracts/greentag_cert/src/templates.rs` — template management (stubbed)
 - `contracts/greentag_cert/src/verification.rs` — off-chain verification helpers (stubbed)
@@ -180,6 +192,7 @@
 #### Day 7 — Contract: VerifierRegistry (Scaffolded) + Deploy Scripts
 
 **Files created — VerifierRegistry:**
+
 - `contracts/verifier_registry/src/staking.rs` — stake lock, cooldown, withdrawal:
   - `register_verifier()`, `add_stake()`, `request_stake_withdrawal()`, `complete_stake_withdrawal()`
 - `contracts/verifier_registry/src/reputation.rs` — reputation scoring algorithm (weighted: accuracy 40%, timeliness 20%, volume 15%, peer reviews 15%, longevity 10%)
@@ -187,10 +200,12 @@
 - `contracts/verifier_registry/src/lib.rs` — all entry points implemented
 
 **Test files — VerifierRegistry:**
+
 - `contracts/verifier_registry/tests/unit/test_staking.rs` — 8 test cases
 - `contracts/verifier_registry/tests/unit/test_reputation.rs` — 5 test cases
 
 **Deploy scripts:**
+
 - `contracts/deploy-testnet.sh` — full testnet deployment pipeline:
   - Builds all WASM artifacts
   - Funds admin keypair via Friendbot
@@ -208,6 +223,7 @@
 #### Day 8 — API Scaffold: NestJS + Prisma + Stellar Integration
 
 **Files created:**
+
 - `api/package.json` — dependencies: NestJS 10.x, `@stellar/stellar-sdk` 21.x, Prisma 5.x, class-validator, bullmq, jsonwebtoken, passport, swagger
 - `api/tsconfig.json` — extends `tsconfig.base.json`
 - `api/src/main.ts` — NestJS bootstrap, Swagger setup (`/v1/docs`), global validation pipe, CORS, Helmet
@@ -225,6 +241,7 @@
   - `guards/` — `RateLimitGuard` (token bucket), `RolesGuard`
 
 **Stellar integration:**
+
 - `api/src/stellar/soroban-client.ts` — Soroban RPC client wrapper (connection pool, retry logic)
 - `api/src/stellar/horizon-client.ts` — Horizon client for event streaming
 - `api/src/stellar/wallet.ts` — Keypair management (generate, fund via Friendbot, sign)
@@ -239,6 +256,7 @@
 #### Day 9 — Products Module + Supply Chain Module
 
 **Files created — Products:**
+
 - `api/src/products/products.module.ts`
 - `api/src/products/dto/create-product.dto.ts` — validation: `@IsString()`, `@IsOptional()`, `@Min(0)`, custom `@IsProductType()`
 - `api/src/products/dto/query-product.dto.ts` — pagination, filters (`type`, `origin`, `manufacturer`, `q`, `sort`)
@@ -255,6 +273,7 @@
   - `GET /products/owned`, `GET /products/batch/:batch`
 
 **Files created — Supply Chain:**
+
 - `api/src/supply-chain/supply-chain.module.ts`
 - `api/src/supply-chain/dto/create-event.dto.ts` — lifecycle event validation
 - `api/src/supply-chain/dto/batch-event.dto.ts`
@@ -273,6 +292,7 @@
 #### Day 10 — Auth Module (SEP-10 + JWT) + IPFS Module
 
 **Files created — Auth:**
+
 - `api/src/auth/auth.module.ts`
 - `api/src/auth/strategies/sep10.strategy.ts` — SEP-10 challenge generation:
   - `generateChallenge()` — creates Stellar challenge transaction XDR
@@ -294,6 +314,7 @@
   - `POST /auth/refresh` — `{ token } → { jwt, expiresIn }`
 
 **Files created — IPFS:**
+
 - `api/src/ipfs/ipfs.module.ts`
 - `api/src/ipfs/ipfs.service.ts`:
   - `upload(buffer, filename)` — pins to Pinata, returns CID
@@ -308,6 +329,7 @@
 #### Day 11 — Carbon Accounting Engine
 
 **Files created:**
+
 - `api/src/carbon-accounting/carbon.module.ts`
 - `api/src/carbon-accounting/methodology.ts` — GHG Protocol methodology engine:
   - `getApplicableFactors(event, region)` — selects correct factors by location + stage
@@ -340,6 +362,7 @@
   - `GET /carbon/methodology`
 
 **Test files:**
+
 - `api/test/unit/carbon/scope1.spec.ts` — 5 test cases
 - `api/test/unit/carbon/scope2.spec.ts` — 4 test cases
 - `api/test/unit/carbon/scope3.spec.ts` — 5 test cases
@@ -353,6 +376,7 @@
 #### Day 12 — Certificates Module + Verifiers Module
 
 **Files created — Certificates:**
+
 - `api/src/certificates/certificates.module.ts`
 - `api/src/certificates/dto/issue-certificate.dto.ts`
 - `api/src/certificates/generators/pdf-generator.ts` — Puppeteer + Handlebars:
@@ -373,6 +397,7 @@
   - `POST /certificates/verify`, `GET /certificates/product/:productId`
 
 **Files created — Verifiers:**
+
 - `api/src/verifiers/verifiers.module.ts`
 - `api/src/verifiers/dto/register-verifier.dto.ts`
 - `api/src/verifiers/staking.service.ts` — stake management helpers:
@@ -395,6 +420,7 @@
 #### Day 13 — Indexer + Webhooks + Seed Scripts
 
 **Files created — Indexer:**
+
 - `api/src/indexer/indexer.service.ts` — Horizon event stream consumer:
   - `start()` — begins streaming from last processed ledger
   - `processLedger(seq)` — processes all contract events in a ledger
@@ -409,6 +435,7 @@
   - `verifyConsistency()` — compares on-chain state with off-chain index
 
 **Webhooks:**
+
 - `api/src/webhooks/webhook.service.ts` — event dispatch:
   - `dispatch(eventType, payload)` — fans out to registered webhooks
   - `retry(id)` — exponential backoff (3 attempts)
@@ -416,6 +443,7 @@
 - Webhook endpoints: `POST /webhooks`, `GET /webhooks`, `DELETE /webhooks/:id`, `POST /webhooks/:id/test`
 
 **Seed scripts:**
+
 - `api/scripts/seed-products.ts` — 10 sample products with lifecycle events
 - `api/scripts/seed-verifiers.ts` — 5 sample verifiers with stakes
 - `api/scripts/generate-demo-chain.ts` — multi-hop supply chain demo (raw material → manufacturer → logistics → retailer)
@@ -429,6 +457,7 @@
 #### Day 14 — Next.js App Shell + Core Pages
 
 **Files created:**
+
 - `frontend/package.json` — Next.js 14, Tailwind CSS 3, D3.js, `@stellar/freighter-api`, `react-qr-reader`
 - `frontend/tsconfig.json`
 - `frontend/tailwind.config.ts` — custom theme (green + earth tones)
@@ -456,6 +485,7 @@
   - QR code with verification link
 
 **Components created:**
+
 - `frontend/components/ui/` — shadcn/ui primitives:
   - `Button`, `Card`, `Input`, `Badge`, `Tabs`, `Table`, `Dialog`, `Select`, `Skeleton`
 - `frontend/components/product-card/index.tsx` — search result card
@@ -463,6 +493,7 @@
 - `frontend/components/scanner/index.tsx` — QR code scanner using `react-qr-reader`
 
 **Library files:**
+
 - `frontend/lib/stellar.ts` — Stellar SDK browser wrapper (Soroban contract calls)
 - `frontend/lib/freighter.ts` — Freighter wallet helpers (`isConnected()`, `getPublicKey()`, `signTransaction()`)
 - `frontend/lib/api.ts` — API client (axios, auth token management, error handling)
@@ -474,6 +505,7 @@
 #### Day 15 — Provenance Graph + Carbon Visualization + Certificate Viewer
 
 **Components created:**
+
 - `frontend/components/provenance-graph/index.tsx` — interactive D3.js force-directed graph:
   - Nodes: participants (manufacturer, supplier, logistics, verifier)
   - Edges: transfers and lifecycle events
@@ -496,6 +528,7 @@
   - Revocation info (if applicable)
 
 **Pages added:**
+
 - `frontend/app/certificates/page.tsx` — certificate search + listing
 - `frontend/app/certificates/[id]/page.tsx` — certificate detail + PDF preview
 - `frontend/app/explorer/page.tsx` — public provenance explorer (search + browse)
@@ -517,6 +550,7 @@
 #### Day 16 — TypeScript SDK + CLI Tool
 
 **Files created — SDK (`sdk/`):**
+
 - `sdk/package.json` — `@verdechain/sdk`, builds to ESM + CJS
 - `sdk/src/types.ts` — all TypeScript type definitions:
   - `ProductMetadata`, `LifecycleEvent`, `MaterialInput`
@@ -545,11 +579,13 @@
   - `addStake(id, amount)`, `getPendingAttestations()`, `heartbeat(id)`
 
 **Test files — SDK:**
+
 - `sdk/__tests__/client.test.ts` — 4 tests (config validation, auth token management)
 - `sdk/__tests__/products.test.ts` — 5 tests (mock API responses)
 - `sdk/__tests__/carbon.test.ts` — 3 tests
 
 **Files created — CLI (`cli/`):**
+
 - `cli/package.json` — `@verdechain/cli`, Commander.js, chalk, ora, cli-table3
 - `cli/src/index.ts` — program entry point:
   - `verdechain products`, `verdechain lifecycle`, `verdechain carbon`
@@ -577,6 +613,7 @@
 #### Day 17 — CI/CD, Infra, Docs & Integration Testing
 
 **CI/CD — GitHub Actions:**
+
 - `.github/workflows/ci.yml` — test + lint on every PR:
   - Matrix: Node 20, Rust 1.75
   - Steps: checkout, cache, install, build contracts, `cargo test`, build API, `npm test`, build frontend, lint (ESLint + clippy), typecheck
@@ -590,6 +627,7 @@
 - `.github/PULL_REQUEST_TEMPLATE.md` — structured PR template
 
 **Infrastructure (Terraform stubs):**
+
 - `infra/modules/ecs/main.tf` — Fargate cluster + service definition (scaffold)
 - `infra/modules/rds/main.tf` — PostgreSQL 16 RDS instance (scaffold)
 - `infra/modules/elasticache/main.tf` — Redis 7 ElastiCache (scaffold)
@@ -599,6 +637,7 @@
 - `infra/README.md` — Terraform usage guide
 
 **Scripts:**
+
 - `scripts/bootstrap.sh` — one-click local setup:
   - Verifies prerequisites, installs deps, starts Docker services, runs migrations, funds testnet keys, deploys contracts, seeds data, starts API + frontend
 - `scripts/demo.sh` — interactive walkthrough:
@@ -607,6 +646,7 @@
 - `scripts/rotate-keys.sh` — admin key rotation ceremony (scaffold)
 
 **Docs:**
+
 - `docs/architecture/overview.md` — system architecture with diagrams
 - `docs/contracts/product-registry.md` — ProductRegistry reference
 - `docs/contracts/lifecycle-tracker.md` — LifecycleTracker reference
@@ -617,6 +657,7 @@
 - `docs/guides/contributing.md` — how to contribute guide
 
 **Integration tests:**
+
 - `api/test/e2e/full-flow.spec.ts` — full user journey:
   1. Connect Freighter wallet
   2. Register product
@@ -628,6 +669,7 @@
   8. Query carbon footprint
 
 **Final verification:**
+
 - `npm run test` — all tests pass (contracts + API + frontend + SDK)
 - `npm run lint` — zero ESLint/clippy warnings
 - `npm run typecheck` — zero TypeScript errors
@@ -767,43 +809,43 @@ verdechain/
 
 ## What's Left for the Remaining 45%
 
-| Area | Remaining Work |
-|---|---|
-| **Smart Contracts** (30%) | Fuzz testing, formal verification, mainnet-optimized WASM, multi-sig upgrade support |
-| **Backend API** (40%) | Webhook retry queue, rate limiting at scale, ERP sync endpoints, admin audit log |
-| **Frontend** (60%) | Mobile responsive, accessibility audit, i18n, PWA, push notifications, advanced filtering |
-| **SDK/CLI** (50%) | Full certificate + verifier commands, batch operations, offline mode |
-| **Oracle** (100%) | IoT MQTT ingestion, emission factor sync cron, grid intensity live poller |
-| **Connectors** (100%) | SAP, Oracle EBS, Dynamics, Shopify plugins |
-| **Infrastructure** (50%) | Production-ready Terraform, auto-scaling policies, disaster recovery, monitoring dashboards |
-| **Testing** (60%) | Load testing (k6), penetration testing, fuzzing, browser E2E tests (Playwright) |
-| **Security** (100%) | Third-party audits (Trail of Bits, OpenZeppelin, Halborn), bug bounty program |
-| **Docs** (60%) | Video tutorials, interactive API playground, deployment guides, mobile SDK docs |
-| **Governance** (100%) | DAO migration, token-weighted voting, treasury management |
+| Area                      | Remaining Work                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| **Smart Contracts** (30%) | Fuzz testing, formal verification, mainnet-optimized WASM, multi-sig upgrade support        |
+| **Backend API** (40%)     | Webhook retry queue, rate limiting at scale, ERP sync endpoints, admin audit log            |
+| **Frontend** (60%)        | Mobile responsive, accessibility audit, i18n, PWA, push notifications, advanced filtering   |
+| **SDK/CLI** (50%)         | Full certificate + verifier commands, batch operations, offline mode                        |
+| **Oracle** (100%)         | IoT MQTT ingestion, emission factor sync cron, grid intensity live poller                   |
+| **Connectors** (100%)     | SAP, Oracle EBS, Dynamics, Shopify plugins                                                  |
+| **Infrastructure** (50%)  | Production-ready Terraform, auto-scaling policies, disaster recovery, monitoring dashboards |
+| **Testing** (60%)         | Load testing (k6), penetration testing, fuzzing, browser E2E tests (Playwright)             |
+| **Security** (100%)       | Third-party audits (Trail of Bits, OpenZeppelin, Halborn), bug bounty program               |
+| **Docs** (60%)            | Video tutorials, interactive API playground, deployment guides, mobile SDK docs             |
+| **Governance** (100%)     | DAO migration, token-weighted voting, treasury management                                   |
 
 ---
 
 ## Daily Velocity Metrics
 
-| Day | Focus Area | Files Created | Tests Added | Cumulative Pass Rate |
-|-----|-----------|--------------|-------------|---------------------|
-| 1 | Monorepo + Tooling | ~15 | 0 | — |
-| 2 | Shared Contract Infrastructure | ~8 | 0 | — |
-| 3 | ProductRegistry Contract | ~7 | 21 | 100% |
-| 4 | LifecycleTracker Contract | ~6 | 20 | 100% |
-| 5 | CarbonOracle Contract | ~6 | 17 | 100% |
-| 6 | Attestation + GreenTagCert | ~10 | 10 | 100% |
-| 7 | VerifierRegistry + Deploy Scripts | ~9 | 13 | 100% |
-| 8 | API Scaffold + Prisma + Stellar | ~20 | 0 | — |
-| 9 | Products + Supply Chain Modules | ~18 | 0 | — |
-| 10 | Auth + IPFS Modules | ~12 | 0 | — |
-| 11 | Carbon Accounting Engine | ~15 | 20 | 100% |
-| 12 | Certificates + Verifiers Modules | ~20 | 0 | — |
-| 13 | Indexer + Webhooks + Seed Scripts | ~15 | 0 | — |
-| 14 | Next.js App Shell + Core Pages | ~20 | 0 | — |
-| 15 | Provenance Graph + Visualization | ~12 | 0 | — |
-| 16 | SDK + CLI Tool | ~20 | 12 | 100% |
-| 17 | CI/CD + Infra + Docs + Integration | ~25 | 1 (E2E) | 100% |
+| Day | Focus Area                         | Files Created | Tests Added | Cumulative Pass Rate |
+| --- | ---------------------------------- | ------------- | ----------- | -------------------- |
+| 1   | Monorepo + Tooling                 | ~15           | 0           | —                    |
+| 2   | Shared Contract Infrastructure     | ~8            | 0           | —                    |
+| 3   | ProductRegistry Contract           | ~7            | 21          | 100%                 |
+| 4   | LifecycleTracker Contract          | ~6            | 20          | 100%                 |
+| 5   | CarbonOracle Contract              | ~6            | 17          | 100%                 |
+| 6   | Attestation + GreenTagCert         | ~10           | 10          | 100%                 |
+| 7   | VerifierRegistry + Deploy Scripts  | ~9            | 13          | 100%                 |
+| 8   | API Scaffold + Prisma + Stellar    | ~20           | 0           | —                    |
+| 9   | Products + Supply Chain Modules    | ~18           | 0           | —                    |
+| 10  | Auth + IPFS Modules                | ~12           | 0           | —                    |
+| 11  | Carbon Accounting Engine           | ~15           | 20          | 100%                 |
+| 12  | Certificates + Verifiers Modules   | ~20           | 0           | —                    |
+| 13  | Indexer + Webhooks + Seed Scripts  | ~15           | 0           | —                    |
+| 14  | Next.js App Shell + Core Pages     | ~20           | 0           | —                    |
+| 15  | Provenance Graph + Visualization   | ~12           | 0           | —                    |
+| 16  | SDK + CLI Tool                     | ~20           | 12          | 100%                 |
+| 17  | CI/CD + Infra + Docs + Integration | ~25           | 1 (E2E)     | 100%                 |
 
 **Total: ~238 files created, ~114 tests, all passing at sprint end.**
 
@@ -820,6 +862,7 @@ After the 17-day sprint, a new contributor can:
 5. **Submit a PR** knowing CI will run 114+ tests, lint, and typecheck
 
 The 55% foundation ensures that every new feature has:
+
 - Existing contracts to integrate with (ProductRegistry, LifecycleTracker, CarbonOracle)
 - API patterns to follow (controllers → services → repositories → Stellar)
 - Frontend components to reuse (ui primitives, wallet connector, provenance graph)

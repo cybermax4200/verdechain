@@ -7,8 +7,8 @@ on:
     branches: [main, develop]
 
 env:
-  NODE_VERSION: "20"
-  RUST_VERSION: "1.75"
+  NODE_VERSION: '20'
+  RUST_VERSION: '1.75'
 
 jobs:
   contracts:

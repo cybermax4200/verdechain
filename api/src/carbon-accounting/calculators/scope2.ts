@@ -13,10 +13,7 @@ export interface EnergyEmissionsResult {
   }[];
 }
 
-export function calculateEnergyEmissions(
-  kwh: number,
-  gridIntensity: number,
-): number {
+export function calculateEnergyEmissions(kwh: number, gridIntensity: number): number {
   return kwh * gridIntensity;
 }
 

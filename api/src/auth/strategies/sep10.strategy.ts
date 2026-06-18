@@ -57,7 +57,10 @@ export class Sep10Strategy {
 
   verifyChallenge(signedXdr: string): { publicKey: string; valid: boolean } {
     try {
-      const tx = TransactionBuilder.fromXDR(signedXdr, this.config.networkPassphrase) as Transaction;
+      const tx = TransactionBuilder.fromXDR(
+        signedXdr,
+        this.config.networkPassphrase,
+      ) as Transaction;
       const sourceAccount = tx.source;
 
       const hash = tx.hash();
@@ -76,7 +79,9 @@ export class Sep10Strategy {
 
       return { publicKey: sourceAccount, valid: true };
     } catch (error) {
-      this.logger.error(`Challenge verification failed: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `Challenge verification failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
       return { publicKey: '', valid: false };
     }
   }
@@ -87,7 +92,9 @@ export class Sep10Strategy {
 
   private randomBytes(length: number): Buffer {
     const hex = Array.from({ length }, () =>
-      Math.floor(Math.random() * 256).toString(16).padStart(2, '0'),
+      Math.floor(Math.random() * 256)
+        .toString(16)
+        .padStart(2, '0'),
     ).join('');
     return Buffer.from(hex, 'hex');
   }

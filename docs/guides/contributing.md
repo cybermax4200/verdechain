@@ -39,6 +39,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`
 
 Examples:
+
 ```
 feat(api): add product carbon footprint endpoint
 fix(contracts): correct emission factor lookup key

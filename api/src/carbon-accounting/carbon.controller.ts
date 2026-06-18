@@ -1,28 +1,19 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Query,
-  Body,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, Body, ValidationPipe } from '@nestjs/common';
 import { CarbonService } from './carbon.service';
-import { FootprintQueryDto, CompareQueryDto, UpdateFactorDto, UpdateGridIntensityDto } from './dto/footprint-query.dto';
+import {
+  FootprintQueryDto,
+  CompareQueryDto,
+  UpdateFactorDto,
+  UpdateGridIntensityDto,
+} from './dto/footprint-query.dto';
 
 @Controller('carbon')
 export class CarbonController {
   constructor(private readonly carbonService: CarbonService) {}
 
   @Get('footprint/:productId')
-  async getFootprint(
-    @Param('productId') productId: string,
-    @Query() query: FootprintQueryDto,
-  ) {
-    return this.carbonService.calculateFootprint(
-      productId,
-      query.methodology as any,
-    );
+  async getFootprint(@Param('productId') productId: string, @Query() query: FootprintQueryDto) {
+    return this.carbonService.calculateFootprint(productId, query.methodology as any);
   }
 
   @Get('breakdown/:productId')
@@ -58,12 +49,7 @@ export class CarbonController {
 
   @Post('grid-intensity')
   async updateGridIntensity(@Body(ValidationPipe) dto: UpdateGridIntensityDto) {
-    return this.carbonService.updateGridIntensity(
-      dto.region,
-      dto.value,
-      dto.unit,
-      'admin',
-    );
+    return this.carbonService.updateGridIntensity(dto.region, dto.value, dto.unit, 'admin');
   }
 
   @Get('methodology')

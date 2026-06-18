@@ -1,14 +1,17 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 
-export const verifiersCommand = new Command('verifiers')
-  .description('Manage verifiers (stubbed — planned for Phase 2)');
+export const verifiersCommand = new Command('verifiers').description(
+  'Manage verifiers (stubbed — planned for Phase 2)',
+);
 
 verifiersCommand
   .command('list')
   .description('List verifiers')
   .action(() => {
-    console.log(chalk.yellow('⚠ Verifier commands are stubbed and will be implemented in Phase 2.'));
+    console.log(
+      chalk.yellow('⚠ Verifier commands are stubbed and will be implemented in Phase 2.'),
+    );
     console.log('Expected commands:');
     console.log('  verdechain verifiers list                    List all verifiers');
     console.log('  verdechain verifiers get <id>                Get verifier details');
@@ -28,7 +31,9 @@ verifiersCommand
   .command('register <json-file>')
   .description('Register as a verifier (stubbed)')
   .action(() => {
-    console.log(chalk.yellow('⚠ Verifier commands are stubbed and will be implemented in Phase 2.'));
+    console.log(
+      chalk.yellow('⚠ Verifier commands are stubbed and will be implemented in Phase 2.'),
+    );
   });
 
 verifiersCommand

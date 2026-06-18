@@ -53,9 +53,7 @@ describe('Scope2 - Energy Indirect Emissions', () => {
     });
 
     it('returns zero for events without energy data', () => {
-      const events = [
-        { stage: 'RAW_MATERIAL_EXTRACTION' },
-      ];
+      const events = [{ stage: 'RAW_MATERIAL_EXTRACTION' }];
       const result = calculateScope2FromEvents(events as any);
       expect(result.totalScope2).toBe(0);
       expect(result.breakdown.length).toBe(0);

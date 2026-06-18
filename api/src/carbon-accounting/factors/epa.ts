@@ -37,11 +37,11 @@ const US_TRANSPORT_FACTORS: FactorCategory = {
 const US_WASTE_FACTORS: FactorCategory = {
   landfill_msw: { value: 0.623, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
   combustion_msw: { value: 0.456, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
-  recycling_aluminum: { value: -8.290, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
-  recycling_steel: { value: -1.420, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
-  recycling_glass: { value: -0.340, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
-  recycling_plastic: { value: -1.860, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
-  recycling_paper: { value: -0.980, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
+  recycling_aluminum: { value: -8.29, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
+  recycling_steel: { value: -1.42, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
+  recycling_glass: { value: -0.34, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
+  recycling_plastic: { value: -1.86, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
+  recycling_paper: { value: -0.98, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
   composting_food: { value: 0.127, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
   anaerobic_digestion: { value: 0.076, unit: 'kgCO2e/kg', source: 'EPA WARM 2024', year: 2024 },
 };

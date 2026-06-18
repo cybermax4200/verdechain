@@ -37,10 +37,10 @@ pub struct GridIntensity {
 
 Updates or adds an emission factor.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `key` | `String` | Factor identifier (e.g., `natural_gas.co2`) |
-| `factor` | `EmissionFactor` | Emission factor data |
+| Parameter | Type             | Description                                 |
+| --------- | ---------------- | ------------------------------------------- |
+| `key`     | `String`         | Factor identifier (e.g., `natural_gas.co2`) |
+| `factor`  | `EmissionFactor` | Emission factor data                        |
 
 **Auth:** Admin only
 
@@ -52,10 +52,10 @@ Retrieves an emission factor by key.
 
 Updates grid intensity for a region.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `region` | `String` | ISO country/region code |
-| `intensity` | `i128` | Grid intensity in gCO₂e/kWh |
+| Parameter   | Type     | Description                 |
+| ----------- | -------- | --------------------------- |
+| `region`    | `String` | ISO country/region code     |
+| `intensity` | `i128`   | Grid intensity in gCO₂e/kWh |
 
 **Auth:** Admin only
 
@@ -71,8 +71,8 @@ Returns the current methodology version string.
 
 Sets the active methodology version.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter     | Type     | Description            |
+| ------------- | -------- | ---------------------- |
 | `methodology` | `String` | Methodology identifier |
 
 **Supported methodologies:** `GHG Protocol 2024`, `IPCC 2024`, `EPA 2024`
@@ -89,13 +89,13 @@ The oracle maintains factors for:
 
 ## Error Codes
 
-| Code | Error | Description |
-|------|-------|-------------|
-| 500 | `NotAuthorized` | Admin-only operation |
-| 501 | `FactorNotFound` | Emission factor not found |
-| 502 | `InvalidFactor` | Factor data is invalid |
-| 503 | `RegionNotFound` | Grid intensity not available for region |
-| 504 | `InvalidMethodology` | Methodology version not recognized |
+| Code | Error                | Description                             |
+| ---- | -------------------- | --------------------------------------- |
+| 500  | `NotAuthorized`      | Admin-only operation                    |
+| 501  | `FactorNotFound`     | Emission factor not found               |
+| 502  | `InvalidFactor`      | Factor data is invalid                  |
+| 503  | `RegionNotFound`     | Grid intensity not available for region |
+| 504  | `InvalidMethodology` | Methodology version not recognized      |
 
 ## Testing
 

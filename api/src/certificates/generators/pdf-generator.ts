@@ -31,11 +31,7 @@ export class PdfGeneratorService {
 
   private loadTemplates(): void {
     const templatesDir = path.resolve(__dirname, '..', 'templates');
-    const templateFiles = [
-      'certificate-of-origin.hbs',
-      'carbon-neutral.hbs',
-      'organic.hbs',
-    ];
+    const templateFiles = ['certificate-of-origin.hbs', 'carbon-neutral.hbs', 'organic.hbs'];
 
     for (const file of templateFiles) {
       try {
@@ -69,9 +65,7 @@ export class PdfGeneratorService {
     const template = this.templates.get(templateName);
 
     if (!template) {
-      this.logger.warn(
-        `Template not found for cert type ${certData.certType}, using default`,
-      );
+      this.logger.warn(`Template not found for cert type ${certData.certType}, using default`);
       const defaultTemplate = this.templates.get('certificate-of-origin');
       if (!defaultTemplate) {
         return this.generateFallbackHtml(certData);
@@ -153,9 +147,7 @@ export class PdfGeneratorService {
     return [
       ' ',
       `${streamContent.length} 0 obj`,
-      '<< /Type /EmbeddedFile /Subtype /text%2Fxml /Length ' +
-        streamContent.length +
-        ' >>',
+      '<< /Type /EmbeddedFile /Subtype /text%2Fxml /Length ' + streamContent.length + ' >>',
       'stream',
       streamContent,
       'endstream',

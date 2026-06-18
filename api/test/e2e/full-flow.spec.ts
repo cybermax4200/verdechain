@@ -161,8 +161,21 @@ describe('E2E: Full User Journey', () => {
     },
     lifecycleEvent: {
       create: jest.fn().mockImplementation(({ data }: { data: { stage: string } }) => {
-        const base = { id: 'evt-new', productId: 'prod-001', description: '', location: '', timestamp: new Date(), energyKwh: null, fuelUsed: null, fuelType: null, wasteKg: null, metadata: null, txHash: null, createdAt: new Date() };
-        const match = mockEvents.find(e => e.stage === data.stage);
+        const base = {
+          id: 'evt-new',
+          productId: 'prod-001',
+          description: '',
+          location: '',
+          timestamp: new Date(),
+          energyKwh: null,
+          fuelUsed: null,
+          fuelType: null,
+          wasteKg: null,
+          metadata: null,
+          txHash: null,
+          createdAt: new Date(),
+        };
+        const match = mockEvents.find((e) => e.stage === data.stage);
         return Promise.resolve(match ? { ...base, ...match } : { ...base, stage: data.stage });
       }),
       createMany: jest.fn().mockResolvedValue({ count: 3 }),

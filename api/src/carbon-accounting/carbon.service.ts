@@ -60,9 +60,7 @@ function computeEquivalents(totalKgCO2e: number): Equivalents {
 
 @Injectable()
 export class CarbonService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async calculateFootprint(
     productId: string,
@@ -193,9 +191,7 @@ export class CarbonService {
   }
 
   async compare(productIds: string[]) {
-    const footprints = await Promise.all(
-      productIds.map((id) => this.calculateFootprint(id)),
-    );
+    const footprints = await Promise.all(productIds.map((id) => this.calculateFootprint(id)));
 
     return {
       products: footprints.map((f) => ({
@@ -254,7 +250,8 @@ export class CarbonService {
         scope3: ['Upstream (materials, transport)', 'Downstream (distribution, use, disposal)'],
       },
       factorSources: ['IPCC 2024', 'EPA eGRID 2024', 'EPA WARM 2024'],
-      confidenceScoring: 'Based on data completeness across energy, fuel, material, transport, waste, and region fields',
+      confidenceScoring:
+        'Based on data completeness across energy, fuel, material, transport, waste, and region fields',
     };
   }
 }

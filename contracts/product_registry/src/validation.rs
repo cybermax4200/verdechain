@@ -10,13 +10,13 @@ use shared::types::ProductStatus;
 use crate::types::ProductMetadata;
 
 pub fn validate_metadata(env: &Env, metadata: &ProductMetadata) -> Result<(), Error> {
-    if metadata.name.len() == 0 || metadata.name.len() > MAX_PRODUCT_NAME_LEN {
+    if metadata.name.is_empty() || metadata.name.len() > MAX_PRODUCT_NAME_LEN {
         return Err(Error::InvalidProductMetadata);
     }
     if metadata.description.len() > MAX_PRODUCT_DESC_LEN {
         return Err(Error::InvalidProductMetadata);
     }
-    if metadata.ipfs_hash.len() == 0 || metadata.ipfs_hash.len() > MAX_IPFS_HASH_LEN {
+    if metadata.ipfs_hash.is_empty() || metadata.ipfs_hash.len() > MAX_IPFS_HASH_LEN {
         return Err(Error::InvalidProductMetadata);
     }
     if metadata.origin.len() > MAX_ORIGIN_LEN {
@@ -34,7 +34,7 @@ pub fn validate_metadata(env: &Env, metadata: &ProductMetadata) -> Result<(), Er
     if metadata.material_list.len() > MAX_METADATA_ENTRIES {
         return Err(Error::InvalidProductMetadata);
     }
-    if metadata.product_type.len() == 0 {
+    if metadata.product_type.is_empty() {
         return Err(Error::InvalidProductMetadata);
     }
 

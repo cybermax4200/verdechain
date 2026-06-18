@@ -17,7 +17,7 @@ pub fn register_verifier(
         return Err(Error::InsufficientStake);
     }
 
-    if name.len() == 0 {
+    if name.is_empty() {
         return Err(Error::InvalidInput);
     }
 

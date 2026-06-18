@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 
 @Controller('webhooks')
@@ -15,9 +6,7 @@ export class WebhooksController {
   constructor(private readonly webhookService: WebhookService) {}
 
   @Post()
-  async register(
-    @Body() body: { url: string; events: string[]; secret: string },
-  ) {
+  async register(@Body() body: { url: string; events: string[]; secret: string }) {
     return this.webhookService.register(body.url, body.events, body.secret);
   }
 

@@ -29,10 +29,9 @@ export function calculateUpstreamEmissions(
   for (const leg of transport) {
     if (leg.mode && leg.distanceKm && leg.massKg) {
       const factor =
-        IpccFactors.getTransportFactor(leg.mode) ||
-        EpaFactors.getTransportFactor(leg.mode);
+        IpccFactors.getTransportFactor(leg.mode) || EpaFactors.getTransportFactor(leg.mode);
       if (factor) {
-        total += (leg.distanceKm * leg.massKg / 1000) * factor.value;
+        total += ((leg.distanceKm * leg.massKg) / 1000) * factor.value;
       }
     }
   }
@@ -50,10 +49,9 @@ export function calculateDownstreamEmissions(
   for (const leg of distribution) {
     if (leg.mode && leg.distanceKm && leg.massKg) {
       const factor =
-        IpccFactors.getTransportFactor(leg.mode) ||
-        EpaFactors.getTransportFactor(leg.mode);
+        IpccFactors.getTransportFactor(leg.mode) || EpaFactors.getTransportFactor(leg.mode);
       if (factor) {
-        total += (leg.distanceKm * leg.massKg / 1000) * factor.value;
+        total += ((leg.distanceKm * leg.massKg) / 1000) * factor.value;
       }
     }
   }
@@ -65,8 +63,7 @@ export function calculateDownstreamEmissions(
   for (const item of disposal) {
     if (item.wasteKg && item.method) {
       const factor =
-        IpccFactors.getWasteFactor(item.method) ||
-        EpaFactors.getWasteFactor(item.method);
+        IpccFactors.getWasteFactor(item.method) || EpaFactors.getWasteFactor(item.method);
       if (factor) {
         total += item.wasteKg * factor.value;
       }
@@ -76,7 +73,9 @@ export function calculateDownstreamEmissions(
   return total;
 }
 
-export function calculateScope3FromEvents(events: LifecycleEventData[]): SupplyChainEmissionsResult {
+export function calculateScope3FromEvents(
+  events: LifecycleEventData[],
+): SupplyChainEmissionsResult {
   const upstreamEvents = events.filter((e) => {
     const stage = e.stage;
     return stage === 'RAW_MATERIAL_EXTRACTION' || stage === 'TRANSPORT_TO_SUPPLIER';
@@ -84,7 +83,9 @@ export function calculateScope3FromEvents(events: LifecycleEventData[]): SupplyC
 
   const downstreamEvents = events.filter((e) => {
     const stage = e.stage;
-    return stage === 'DISTRIBUTION' || stage === 'RETAIL' || stage === 'USE' || stage === 'END_OF_LIFE';
+    return (
+      stage === 'DISTRIBUTION' || stage === 'RETAIL' || stage === 'USE' || stage === 'END_OF_LIFE'
+    );
   });
 
   const breakdown: { source: string; value: number; unit: string }[] = [];
@@ -116,9 +117,8 @@ export function calculateScope3FromEvents(events: LifecycleEventData[]): SupplyC
       ? [{ mode: event.transportMode, distanceKm: event.distanceKm || 0, massKg: 1000 }]
       : [];
     const usePhase = { energyKwh: event.energyKwh || 0, gridIntensity: 0.475 };
-    const disposal = event.wasteKg != null
-      ? [{ wasteKg: event.wasteKg, method: 'landfill_mixed' }]
-      : [];
+    const disposal =
+      event.wasteKg != null ? [{ wasteKg: event.wasteKg, method: 'landfill_mixed' }] : [];
 
     const emissions = calculateDownstreamEmissions(distribution, usePhase, disposal);
     downstreamEmissions += emissions;

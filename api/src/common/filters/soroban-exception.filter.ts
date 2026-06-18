@@ -1,10 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpStatus,
-  Logger,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
 export class SorobanException extends Error {
@@ -27,9 +21,7 @@ export class SorobanExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest();
 
-    this.logger.warn(
-      `Soroban error: ${exception.code} - ${exception.message}`,
-    );
+    this.logger.warn(`Soroban error: ${exception.code} - ${exception.message}`);
 
     response.status(HttpStatus.BAD_GATEWAY).json({
       statusCode: HttpStatus.BAD_GATEWAY,

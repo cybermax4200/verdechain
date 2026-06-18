@@ -46,10 +46,7 @@ export class HorizonClientService {
   }
 
   async getOperations(transactionHash: string) {
-    return this.server
-      .operations()
-      .forTransaction(transactionHash)
-      .call();
+    return this.server.operations().forTransaction(transactionHash).call();
   }
 
   async getPayments(

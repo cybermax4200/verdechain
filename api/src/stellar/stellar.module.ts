@@ -54,13 +54,8 @@ const stellarProviders: Provider[] = [
   },
   {
     provide: StellarService,
-    useFactory: (
-      sorobanClient: SorobanClientService,
-    ) => {
-      return new StellarService(
-        sorobanClient,
-        createContractAddresses(),
-      );
+    useFactory: (sorobanClient: SorobanClientService) => {
+      return new StellarService(sorobanClient, createContractAddresses());
     },
     inject: [SorobanClientService],
   },

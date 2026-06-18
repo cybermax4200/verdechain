@@ -90,7 +90,13 @@ class ApiClient {
     if (filters.page) params.page = String(filters.page);
     if (filters.limit) params.limit = String(filters.limit);
 
-    return this.request<{ data: any[]; total: number; page: number; limit: number; totalPages: number }>({
+    return this.request<{
+      data: any[];
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    }>({
       method: 'GET',
       url: '/products',
       params,

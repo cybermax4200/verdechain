@@ -1,55 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>{{title}} - Organic Certificate</title>
-<style>
-  @page { size: A4; margin: 20mm 15mm; }
-  body { font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; padding: 40px; }
-  .border { border: 4px solid #166534; padding: 28px; }
-  .inner { border: 2px solid #bbf7d0; padding: 24px; text-align: center; }
-  h1 { color: #166534; font-size: 28px; margin-bottom: 4px; }
-  .seal { font-size: 56px; margin: 16px 0; }
-  .subtitle { color: #16a34a; font-size: 14px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 24px; }
-  .details { text-align: left; max-width: 500px; margin: 24px auto; }
-  .details p { margin: 8px 0; font-size: 14px; }
-  .details strong { display: inline-block; width: 130px; color: #374151; }
-  .certified-by { margin-top: 24px; padding: 12px; background: #f0fdf4; border-radius: 8px; font-size: 13px; }
-  .footer { margin-top: 32px; font-size: 11px; color: #9ca3af; border-top: 1px solid #d1d5db; padding-top: 12px; }
-</style>
-</head>
-<body>
-<div class="border">
-  <div class="inner">
-    <h1>Organic</h1>
-    <div class="subtitle">Certified Organic Product</div>
-    <div class="seal">&nbsp;</div>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>{{title}} - Organic Certificate</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 20mm 15mm;
+      }
+      body {
+        font-family: Georgia, 'Times New Roman', serif;
+        color: #1a1a1a;
+        padding: 40px;
+      }
+      .border {
+        border: 4px solid #166534;
+        padding: 28px;
+      }
+      .inner {
+        border: 2px solid #bbf7d0;
+        padding: 24px;
+        text-align: center;
+      }
+      h1 {
+        color: #166534;
+        font-size: 28px;
+        margin-bottom: 4px;
+      }
+      .seal {
+        font-size: 56px;
+        margin: 16px 0;
+      }
+      .subtitle {
+        color: #16a34a;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 24px;
+      }
+      .details {
+        text-align: left;
+        max-width: 500px;
+        margin: 24px auto;
+      }
+      .details p {
+        margin: 8px 0;
+        font-size: 14px;
+      }
+      .details strong {
+        display: inline-block;
+        width: 130px;
+        color: #374151;
+      }
+      .certified-by {
+        margin-top: 24px;
+        padding: 12px;
+        background: #f0fdf4;
+        border-radius: 8px;
+        font-size: 13px;
+      }
+      .footer {
+        margin-top: 32px;
+        font-size: 11px;
+        color: #9ca3af;
+        border-top: 1px solid #d1d5db;
+        padding-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='border'>
+      <div class='inner'>
+        <h1>Organic</h1>
+        <div class='subtitle'>Certified Organic Product</div>
+        <div class='seal'>&nbsp;</div>
 
-    <div class="details">
-      <p><strong>Certificate:</strong> {{certificateId}}</p>
-      <p><strong>Product:</strong> {{productName}}</p>
-      {{#if productSku}}<p><strong>SKU:</strong> {{productSku}}</p>{{/if}}
-      {{#if productBatch}}<p><strong>Batch:</strong> {{productBatch}}</p>{{/if}}
-      <p><strong>Producer:</strong> {{manufacturerName}}</p>
-      {{#if manufacturerCountry}}<p><strong>Origin:</strong> {{manufacturerCountry}}</p>{{/if}}
-      {{#if issuerName}}<p><strong>Certifier:</strong> {{issuerName}}</p>{{/if}}
-      <p><strong>Issued:</strong> {{formatDate issuedAt}}</p>
-      {{#if expiresAt}}<p><strong>Expires:</strong> {{formatDate expiresAt}}</p>{{/if}}
+        <div class='details'>
+          <p><strong>Certificate:</strong> {{certificateId}}</p>
+          <p><strong>Product:</strong> {{productName}}</p>
+          {{#if productSku}}<p><strong>SKU:</strong> {{productSku}}</p>{{/if}}
+          {{#if productBatch}}<p><strong>Batch:</strong> {{productBatch}}</p>{{/if}}
+          <p><strong>Producer:</strong> {{manufacturerName}}</p>
+          {{#if manufacturerCountry}}<p><strong>Origin:</strong> {{manufacturerCountry}}</p>{{/if}}
+          {{#if issuerName}}<p><strong>Certifier:</strong> {{issuerName}}</p>{{/if}}
+          <p><strong>Issued:</strong> {{formatDate issuedAt}}</p>
+          {{#if expiresAt}}<p><strong>Expires:</strong> {{formatDate expiresAt}}</p>{{/if}}
+        </div>
+
+        {{#if description}}
+          <p
+            style='color: #555; font-style: italic; max-width: 500px; margin: 16px auto;'
+          >{{description}}</p>
+        {{/if}}
+
+        <div class='certified-by'>
+          Certified by VerdeChain &mdash; Decentralized Attestation Protocol<br />
+          Verify at:
+          {{verificationUrl}}
+        </div>
+
+        <div class='footer'>
+          VerdeChain &bull; Organic Certification &bull; Stellar Network
+        </div>
+      </div>
     </div>
-
-    {{#if description}}
-    <p style="color: #555; font-style: italic; max-width: 500px; margin: 16px auto;">{{description}}</p>
-    {{/if}}
-
-    <div class="certified-by">
-      Certified by VerdeChain &mdash; Decentralized Attestation Protocol<br>
-      Verify at: {{verificationUrl}}
-    </div>
-
-    <div class="footer">
-      VerdeChain &bull; Organic Certification &bull; Stellar Network
-    </div>
-  </div>
-</div>
-</body>
+  </body>
 </html>

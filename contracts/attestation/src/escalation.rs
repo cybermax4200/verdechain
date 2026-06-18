@@ -4,7 +4,7 @@ pub const BASE_QUORUM: u32 = 3;
 pub const ESCALATED_QUORUM: u32 = 5;
 
 pub fn needs_escalation(approvals: &Vec<Address>, current_quorum: u32) -> bool {
-    let approval_count: u32 = approvals.len() as u32;
+    let approval_count: u32 = approvals.len();
     approval_count < current_quorum
 }
 
@@ -18,7 +18,7 @@ pub fn escalate_verifiers(
         expanded.push_back(v);
     }
     for v in available_verifiers.iter() {
-        if expanded.len() >= ESCALATED_QUORUM as u32 {
+        if expanded.len() >= ESCALATED_QUORUM {
             break;
         }
         if !contains(&expanded, &v) {

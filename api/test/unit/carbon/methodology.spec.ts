@@ -60,7 +60,10 @@ describe('Methodology Engine', () => {
     });
 
     it('returns transport factor when transport mode is provided', () => {
-      const event = { stage: 'TRANSPORT_TO_DISTRIBUTOR', transportMode: 'road_freight_diesel' } as any;
+      const event = {
+        stage: 'TRANSPORT_TO_DISTRIBUTOR',
+        transportMode: 'road_freight_diesel',
+      } as any;
       const factors = getApplicableFactors(event);
       expect(factors.transportFactor).toBeDefined();
     });
@@ -92,9 +95,7 @@ describe('Methodology Engine', () => {
     });
 
     it('returns lower score for sparse data', () => {
-      const events = [
-        { stage: 'MANUFACTURING' },
-      ];
+      const events = [{ stage: 'MANUFACTURING' }];
       const score = computeConfidence(events);
       expect(score).toBeLessThan(50);
     });
@@ -119,7 +120,13 @@ describe('Methodology Engine', () => {
 
     it('averages confidence across multiple events', () => {
       const events = [
-        { stage: 'MANUFACTURING', energyKwh: 1000, region: 'eu', fuelUsed: 100, fuelType: 'diesel' },
+        {
+          stage: 'MANUFACTURING',
+          energyKwh: 1000,
+          region: 'eu',
+          fuelUsed: 100,
+          fuelType: 'diesel',
+        },
         { stage: 'RETAIL' },
       ];
       const score = computeConfidence(events);

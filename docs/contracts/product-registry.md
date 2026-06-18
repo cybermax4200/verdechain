@@ -37,12 +37,12 @@ pub enum ProductStatus {
 
 Registers a new product on-chain.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `manufacturer` | `Address` | Manufacturer's Stellar address |
-| `owner` | `Address` | Initial owner address |
-| `ipfs_hash` | `BytesN<32>` | SHA-256 hash of IPFS metadata |
-| `metadata` | `ProductMetadata` | Product details |
+| Parameter      | Type              | Description                    |
+| -------------- | ----------------- | ------------------------------ |
+| `manufacturer` | `Address`         | Manufacturer's Stellar address |
+| `owner`        | `Address`         | Initial owner address          |
+| `ipfs_hash`    | `BytesN<32>`      | SHA-256 hash of IPFS metadata  |
+| `metadata`     | `ProductMetadata` | Product details                |
 
 **Events emitted:** `ProductRegistered { product_id, manufacturer, ipfs_hash }`
 
@@ -50,11 +50,11 @@ Registers a new product on-chain.
 
 Transfers product ownership to a new address.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `product_id` | `u64` | Product identifier |
-| `from` | `Address` | Current owner |
-| `to` | `Address` | New owner address |
+| Parameter    | Type      | Description        |
+| ------------ | --------- | ------------------ |
+| `product_id` | `u64`     | Product identifier |
+| `from`       | `Address` | Current owner      |
+| `to`         | `Address` | New owner address  |
 
 **Events emitted:** `ProductTransferred { product_id, from, to, timestamp }`
 
@@ -62,10 +62,10 @@ Transfers product ownership to a new address.
 
 Recalls a product (manufacturer or authorized entity only).
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `product_id` | `u64` | Product identifier |
-| `reason` | `String` | Recall reason |
+| Parameter    | Type     | Description        |
+| ------------ | -------- | ------------------ |
+| `product_id` | `u64`    | Product identifier |
+| `reason`     | `String` | Recall reason      |
 
 **Events emitted:** `ProductRecalled { product_id, reason, timestamp }`
 
@@ -83,13 +83,13 @@ Returns the total number of registered products.
 
 ## Error Codes
 
-| Code | Error | Description |
-|------|-------|-------------|
-| 200 | `NotAuthorized` | Caller is not the owner or authorized |
-| 201 | `ProductNotFound` | No product with the given ID |
-| 202 | `ProductAlreadyExists` | Duplicate product registration |
-| 203 | `InvalidMetadata` | Metadata validation failed |
-| 204 | `ProductNotActive` | Product is not in Active status |
+| Code | Error                  | Description                           |
+| ---- | ---------------------- | ------------------------------------- |
+| 200  | `NotAuthorized`        | Caller is not the owner or authorized |
+| 201  | `ProductNotFound`      | No product with the given ID          |
+| 202  | `ProductAlreadyExists` | Duplicate product registration        |
+| 203  | `InvalidMetadata`      | Metadata validation failed            |
+| 204  | `ProductNotActive`     | Product is not in Active status       |
 
 ## Testing
 

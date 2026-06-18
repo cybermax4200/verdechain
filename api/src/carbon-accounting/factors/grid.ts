@@ -17,7 +17,7 @@ const GRID_INTENSITIES: GridIntensity[] = [
   { region: 'de', value: 0.329, unit: 'kgCO2e/kWh', source: 'EEA 2024', year: 2024 },
   { region: 'fr', value: 0.052, unit: 'kgCO2e/kWh', source: 'EEA 2024', year: 2024 },
   { region: 'uk', value: 0.212, unit: 'kgCO2e/kWh', source: 'EEA 2024', year: 2024 },
-  { region: 'ca', value: 0.130, unit: 'kgCO2e/kWh', source: 'NRC 2024', year: 2024 },
+  { region: 'ca', value: 0.13, unit: 'kgCO2e/kWh', source: 'NRC 2024', year: 2024 },
   { region: 'au', value: 0.507, unit: 'kgCO2e/kWh', source: 'AEMO 2024', year: 2024 },
   { region: 'br', value: 0.089, unit: 'kgCO2e/kWh', source: 'IEA 2024', year: 2024 },
   { region: 'ru', value: 0.347, unit: 'kgCO2e/kWh', source: 'IEA 2024', year: 2024 },
@@ -44,9 +44,7 @@ const GRID_INTENSITIES: GridIntensity[] = [
 
 export class GridIntensityFactor {
   static getIntensity(region: string): GridIntensity | undefined {
-    return GRID_INTENSITIES.find(
-      (g) => g.region.toLowerCase() === region.toLowerCase(),
-    );
+    return GRID_INTENSITIES.find((g) => g.region.toLowerCase() === region.toLowerCase());
   }
 
   static getAll(): GridIntensity[] {

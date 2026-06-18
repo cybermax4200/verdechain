@@ -16,7 +16,14 @@ interface Certificate {
   productName?: string;
 }
 
-const CERT_TYPES = ['', 'carbon_neutral', 'certificate_of_origin', 'organic', 'green_tag', 'fair_trade'];
+const CERT_TYPES = [
+  '',
+  'carbon_neutral',
+  'certificate_of_origin',
+  'organic',
+  'green_tag',
+  'fair_trade',
+];
 const STATUS_FILTERS = ['', 'active', 'revoked', 'expired'];
 
 export default function CertificatesPage() {
@@ -59,27 +66,25 @@ export default function CertificatesPage() {
   });
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="animate-fade-in space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Certificates
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Certificates</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Browse and verify product certificates
           </p>
         </div>
         <button
           onClick={loadCertificates}
           disabled={isLoading}
-          className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors disabled:opacity-50"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-900"
         >
           {isLoading ? 'Loading...' : '🔄 Refresh'}
         </button>
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <div className="flex-1 min-w-[200px]">
+        <div className="min-w-[200px] flex-1">
           <Input
             placeholder="Search certificates..."
             value={searchQuery}
@@ -89,18 +94,20 @@ export default function CertificatesPage() {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm"
+          className="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900"
         >
           {CERT_TYPES.map((type) => (
             <option key={type} value={type}>
-              {type ? type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'All Types'}
+              {type
+                ? type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+                : 'All Types'}
             </option>
           ))}
         </select>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm"
+          className="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900"
         >
           {STATUS_FILTERS.map((s) => (
             <option key={s} value={s}>
@@ -111,31 +118,31 @@ export default function CertificatesPage() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-32 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
+            <div key={i} className="h-32 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-800" />
           ))}
         </div>
       ) : filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((cert) => (
             <a key={cert.id} href={`/certificates/${cert.id}`}>
-              <Card className="p-4 hover:shadow-md transition-shadow h-full">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-lg">
+              <Card className="h-full p-4 transition-shadow hover:shadow-md">
+                <div className="mb-3 flex items-start justify-between">
+                  <div className="bg-brand-100 dark:bg-brand-900 flex h-10 w-10 items-center justify-center rounded-lg text-lg">
                     🏷️
                   </div>
                   <Badge variant={cert.status === 'active' ? 'default' : 'secondary'}>
                     {cert.status}
                   </Badge>
                 </div>
-                <p className="font-medium text-gray-900 dark:text-gray-100 mb-1 line-clamp-2">
+                <p className="mb-1 line-clamp-2 font-medium text-gray-900 dark:text-gray-100">
                   {cert.title}
                 </p>
                 <Badge variant="outline" className="mb-2">
                   {cert.certType?.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
                 </Badge>
-                <div className="text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
+                <div className="space-y-0.5 text-xs text-gray-500 dark:text-gray-400">
                   <p>Issued: {new Date(cert.issuedAt).toLocaleDateString()}</p>
                   {cert.issuerName && <p>By: {cert.issuerName}</p>}
                   {cert.productName && <p>Product: {cert.productName}</p>}
@@ -145,11 +152,14 @@ export default function CertificatesPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 text-gray-500 dark:text-gray-400">
-          <p className="text-lg mb-2">🏷️</p>
+        <div className="py-16 text-center text-gray-500 dark:text-gray-400">
+          <p className="mb-2 text-lg">🏷️</p>
           <p>{searchQuery ? 'No certificates match your search.' : 'No certificates found.'}</p>
           {searchQuery && (
-            <button onClick={() => setSearchQuery('')} className="text-sm text-brand-600 dark:text-brand-400 hover:underline mt-2">
+            <button
+              onClick={() => setSearchQuery('')}
+              className="text-brand-600 dark:text-brand-400 mt-2 text-sm hover:underline"
+            >
               Clear search
             </button>
           )}

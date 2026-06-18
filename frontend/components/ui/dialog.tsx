@@ -38,7 +38,13 @@ export function Dialog({
   );
 }
 
-export function DialogTrigger({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) {
+export function DialogTrigger({
+  children,
+  asChild,
+}: {
+  children: React.ReactNode;
+  asChild?: boolean;
+}) {
   const ctx = React.useContext(DialogContext);
   if (asChild) {
     return <span onClick={() => ctx?.onOpenChange(true)}>{children}</span>;
@@ -46,7 +52,13 @@ export function DialogTrigger({ children, asChild }: { children: React.ReactNode
   return <button onClick={() => ctx?.onOpenChange(true)}>{children}</button>;
 }
 
-export function DialogContent({ className, children }: { className?: string; children: React.ReactNode }) {
+export function DialogContent({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   const ctx = React.useContext(DialogContext);
   if (!ctx?.open) return null;
 
@@ -55,7 +67,7 @@ export function DialogContent({ className, children }: { className?: string; chi
       <div className="fixed inset-0 bg-black/50" onClick={() => ctx.onOpenChange(false)} />
       <div
         className={cn(
-          'relative z-50 w-full max-w-lg rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-lg',
+          'relative z-50 w-full max-w-lg rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-gray-900',
           className,
         )}
       >
@@ -65,10 +77,22 @@ export function DialogContent({ className, children }: { className?: string; chi
   );
 }
 
-export function DialogHeader({ className, children }: { className?: string; children: React.ReactNode }) {
+export function DialogHeader({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   return <div className={cn('mb-4', className)}>{children}</div>;
 }
 
-export function DialogTitle({ className, children }: { className?: string; children: React.ReactNode }) {
+export function DialogTitle({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   return <h2 className={cn('text-lg font-semibold', className)}>{children}</h2>;
 }

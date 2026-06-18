@@ -43,10 +43,7 @@ export class StellarService {
     return this.sorobanClient.simulateContract(contractId, method, args);
   }
 
-  async getContractEvents(
-    contractName: keyof ContractAddresses,
-    startLedger?: number,
-  ) {
+  async getContractEvents(contractName: keyof ContractAddresses, startLedger?: number) {
     const contractId = this.contractAddresses[contractName];
     if (!contractId) {
       throw new Error(`Contract address not configured: ${contractName}`);

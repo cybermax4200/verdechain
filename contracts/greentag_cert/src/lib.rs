@@ -27,7 +27,7 @@ impl GreenTagCertContract {
     ) -> Result<u64, Error> {
         issuer.require_auth();
 
-        if metadata_ipfs_hash.len() == 0 {
+        if metadata_ipfs_hash.is_empty() {
             return Err(Error::InvalidCertificateData);
         }
         if expires_at != 0 && expires_at <= env.ledger().timestamp() {

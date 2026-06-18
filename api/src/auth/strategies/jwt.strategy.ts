@@ -44,7 +44,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-      this.logger.error(`JWT validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `JWT validation failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
       throw new UnauthorizedException('Invalid token');
     }
   }

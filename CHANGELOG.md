@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ### Added
+
 - Initial project scaffold: NestJS API, Next.js frontend, Soroban smart contracts
 - `ProductRegistry` contract — register, transfer, recall products
 - `LifecycleTracker` contract — record and batch lifecycle events

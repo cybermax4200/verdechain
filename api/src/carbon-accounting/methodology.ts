@@ -53,12 +53,14 @@ export function getApplicableFactors(
     result.fuelFactor = IpccFactors.getFuelFactor(event.fuelType);
   }
 
-  result.gridFactor = GridIntensityFactor.getIntensity(region) ||
+  result.gridFactor =
+    GridIntensityFactor.getIntensity(region) ||
     IpccFactors.getGridFactor(region) ||
     IpccFactors.getGridFactor('global_avg');
 
   if (event.transportMode) {
-    result.transportFactor = IpccFactors.getTransportFactor(event.transportMode) ||
+    result.transportFactor =
+      IpccFactors.getTransportFactor(event.transportMode) ||
       EpaFactors.getTransportFactor(event.transportMode);
   }
 
@@ -70,11 +72,11 @@ export function computeConfidence(events: LifecycleEventData[]): number {
 
   const weights = {
     hasEnergyData: 0.25,
-    hasFuelData: 0.20,
-    hasMaterialData: 0.20,
+    hasFuelData: 0.2,
+    hasMaterialData: 0.2,
     hasTransportData: 0.15,
-    hasWasteData: 0.10,
-    hasRegionData: 0.10,
+    hasWasteData: 0.1,
+    hasRegionData: 0.1,
   };
 
   let score = 0;
@@ -84,7 +86,8 @@ export function computeConfidence(events: LifecycleEventData[]): number {
 
     if (event.energyKwh != null) eventScore += weights.hasEnergyData;
     if (event.fuelUsed != null && event.fuelType) eventScore += weights.hasFuelData;
-    if (event.materialInputs && event.materialInputs.length > 0) eventScore += weights.hasMaterialData;
+    if (event.materialInputs && event.materialInputs.length > 0)
+      eventScore += weights.hasMaterialData;
     if (event.transportMode && event.distanceKm != null) eventScore += weights.hasTransportData;
     if (event.wasteKg != null) eventScore += weights.hasWasteData;
     if (event.region || event.location) eventScore += weights.hasRegionData;

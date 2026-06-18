@@ -5,9 +5,7 @@ import { LifecycleStage } from '@prisma/client';
 
 @Injectable()
 export class SupplyChainService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async recordEvent(dto: CreateEventDto) {
     const product = await this.prisma.product.findUnique({

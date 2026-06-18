@@ -23,7 +23,9 @@ export class VerifiersService {
     try {
       await this.stellarService.callContract('verifierRegistry', 'register_verifier');
     } catch (error) {
-      this.logger.warn(`Stellar contract call failed: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(
+        `Stellar contract call failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
 
     const verifier = await this.prisma.verifier.create({

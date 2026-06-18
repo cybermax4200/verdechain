@@ -1,14 +1,17 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 
-export const certificatesCommand = new Command('certificates')
-  .description('Manage certificates (stubbed — planned for Phase 2)');
+export const certificatesCommand = new Command('certificates').description(
+  'Manage certificates (stubbed — planned for Phase 2)',
+);
 
 certificatesCommand
   .command('list')
   .description('List certificates')
   .action(() => {
-    console.log(chalk.yellow('⚠ Certificate commands are stubbed and will be implemented in Phase 2.'));
+    console.log(
+      chalk.yellow('⚠ Certificate commands are stubbed and will be implemented in Phase 2.'),
+    );
     console.log('Expected commands:');
     console.log('  verdechain certificates list          List all certificates');
     console.log('  verdechain certificates get <id>      Get certificate details');
@@ -28,7 +31,9 @@ certificatesCommand
   .command('issue <json-file>')
   .description('Issue a new certificate (stubbed)')
   .action(() => {
-    console.log(chalk.yellow('⚠ Certificate commands are stubbed and will be implemented in Phase 2.'));
+    console.log(
+      chalk.yellow('⚠ Certificate commands are stubbed and will be implemented in Phase 2.'),
+    );
   });
 
 certificatesCommand

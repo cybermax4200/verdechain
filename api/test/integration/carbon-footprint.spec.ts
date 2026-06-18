@@ -117,10 +117,7 @@ describe('CarbonFootprint Integration', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        CarbonService,
-        { provide: PrismaService, useValue: mockPrisma },
-      ],
+      providers: [CarbonService, { provide: PrismaService, useValue: mockPrisma }],
     }).compile();
 
     carbonService = module.get<CarbonService>(CarbonService);

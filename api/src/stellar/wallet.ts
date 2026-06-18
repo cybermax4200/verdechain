@@ -30,13 +30,9 @@ export class WalletService {
   }
 
   async fundTestnetWallet(publicKey: string): Promise<boolean> {
-    const friendbotUrl =
-      this.config.friendbotUrl ?? 'https://friendbot.stellar.org';
+    const friendbotUrl = this.config.friendbotUrl ?? 'https://friendbot.stellar.org';
     try {
-      const response = await fetch(
-        `${friendbotUrl}?addr=${publicKey}`,
-        { method: 'GET' },
-      );
+      const response = await fetch(`${friendbotUrl}?addr=${publicKey}`, { method: 'GET' });
       if (!response.ok) {
         throw new Error(`Friendbot responded with ${response.status}`);
       }
@@ -52,10 +48,7 @@ export class WalletService {
 
   async getBalance(publicKey: string): Promise<Array<{ asset: string; balance: string }>> {
     try {
-      const account = await this.horizonServer
-        .accounts()
-        .accountId(publicKey)
-        .call();
+      const account = await this.horizonServer.accounts().accountId(publicKey).call();
       return account.balances.map((b) => {
         if (b.asset_type === 'native') {
           return { asset: 'XLM', balance: b.balance };
@@ -105,17 +98,10 @@ export class WalletService {
     return signature.toString('base64');
   }
 
-  verifySignature(
-    message: string,
-    signature: string,
-    publicKey: string,
-  ): boolean {
+  verifySignature(message: string, signature: string, publicKey: string): boolean {
     try {
       const keypair = Keypair.fromPublicKey(publicKey);
-      return keypair.verify(
-        Buffer.from(message),
-        Buffer.from(signature, 'base64'),
-      );
+      return keypair.verify(Buffer.from(message), Buffer.from(signature, 'base64'));
     } catch {
       return false;
     }

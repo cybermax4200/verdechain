@@ -1,11 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  rpc,
-  TransactionBuilder,
-  Operation,
-  Keypair,
-  xdr,
-} from '@stellar/stellar-sdk';
+import { rpc, TransactionBuilder, Operation, Keypair, xdr } from '@stellar/stellar-sdk';
 
 export interface SorobanClientConfig {
   rpcUrl: string;

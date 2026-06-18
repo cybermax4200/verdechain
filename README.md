@@ -41,15 +41,15 @@ Despite 92% of Fortune 500 companies publishing sustainability reports, independ
 
 **Key failures in today's supply chains:**
 
-| Issue | Description |
-|---|---|
-| **Opaque Provenance** | Raw material origins are buried in paper trails, PDFs, and siloed ERP systems — impossible for end consumers to verify |
-| **Fragmented Certifications** | Organic, Fair Trade, Rainforest Alliance, Carbon Neutral — dozens of labels with no interoperable verification layer |
-| **Double Counting Offsets** | The same carbon offset is sold to multiple buyers; there is no global deduplication layer |
-| **Forged Certificates of Origin** | PDF certificates are trivially reproducible; no cryptographic binding exists between a certificate and the underlying supply chain data |
-| **Manual Audits** | Sustainability audits cost $50k–$200k per facility and occur annually at best — leaving 11 months of unverified operations |
-| **Regulatory Fragmentation** | EU CBAM, SEC climate rules, UK SDR, Japan's Green Transformation — each mandates different data formats with no cross-compliance standard |
-| **Consumer Distrust** | 74% of consumers say they would pay more for sustainable products, but only 12% trust current green labels (Deloitte, 2024) |
+| Issue                             | Description                                                                                                                               |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Opaque Provenance**             | Raw material origins are buried in paper trails, PDFs, and siloed ERP systems — impossible for end consumers to verify                    |
+| **Fragmented Certifications**     | Organic, Fair Trade, Rainforest Alliance, Carbon Neutral — dozens of labels with no interoperable verification layer                      |
+| **Double Counting Offsets**       | The same carbon offset is sold to multiple buyers; there is no global deduplication layer                                                 |
+| **Forged Certificates of Origin** | PDF certificates are trivially reproducible; no cryptographic binding exists between a certificate and the underlying supply chain data   |
+| **Manual Audits**                 | Sustainability audits cost $50k–$200k per facility and occur annually at best — leaving 11 months of unverified operations                |
+| **Regulatory Fragmentation**      | EU CBAM, SEC climate rules, UK SDR, Japan's Green Transformation — each mandates different data formats with no cross-compliance standard |
+| **Consumer Distrust**             | 74% of consumers say they would pay more for sustainable products, but only 12% trust current green labels (Deloitte, 2024)               |
 
 ---
 
@@ -64,15 +64,15 @@ VerdeChain solves these problems by turning every product into a **transparent, 
 
 ### Who It Serves
 
-| Role | What VerdeChain Gives Them |
-|---|---|
-| **Manufacturers & Brands** | Immutable proof of sustainable sourcing; automated ESG reporting; green premium monetization |
-| **Suppliers & Producers** | Verifiable chain of custody for raw materials; access to green finance based on attested provenance |
-| **Certification Bodies** | On-chain verifier workflow with multi-sig attestation; reduced audit overhead via continuous monitoring |
-| **Logistics Providers** | Smart-contract-enforced carbon-aware routing; tamper-proof shipping emissions records |
-| **Consumers** | Scan-to-verify provenance; trust-minimized assurance that green claims are real |
-| **Regulators** | Standardized, machine-readable compliance data; cross-jurisdictional data sharing via open protocol |
-| **Impact Investors** | Real-time visibility into the actual environmental performance of portfolio companies |
+| Role                       | What VerdeChain Gives Them                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Manufacturers & Brands** | Immutable proof of sustainable sourcing; automated ESG reporting; green premium monetization            |
+| **Suppliers & Producers**  | Verifiable chain of custody for raw materials; access to green finance based on attested provenance     |
+| **Certification Bodies**   | On-chain verifier workflow with multi-sig attestation; reduced audit overhead via continuous monitoring |
+| **Logistics Providers**    | Smart-contract-enforced carbon-aware routing; tamper-proof shipping emissions records                   |
+| **Consumers**              | Scan-to-verify provenance; trust-minimized assurance that green claims are real                         |
+| **Regulators**             | Standardized, machine-readable compliance data; cross-jurisdictional data sharing via open protocol     |
+| **Impact Investors**       | Real-time visibility into the actual environmental performance of portfolio companies                   |
 
 ---
 
@@ -113,6 +113,7 @@ Each certificate is a cryptographic commitment to a specific on-chain state:
 - Biodiversity impact assessment
 
 Certificates are:
+
 - PDF/A-3 format with embedded machine-readable XML
 - QR code linking directly to the Stellar transaction
 - Digitally signed with the issuer's Stellar keypair
@@ -127,6 +128,7 @@ The platform calculates carbon footprints automatically from attested data:
 - **Cradle-to-Cradle** — circular economy accounting with recycled content credits
 
 Emission factors are sourced from:
+
 - IPCC guidelines
 - EPA Emission Factors Hub
 - GHG Protocol Scope 3 guidance
@@ -249,25 +251,25 @@ All product documentation, certificate templates, and lifecycle metadata are sto
 
 ## Tech Stack
 
-| Layer | Technology | Version | Rationale |
-|---|---|---|---|
-| Blockchain | Stellar | — | 5s finality, ~$0.000001/tx, built-in DEX, energy-efficient SCP consensus |
-| Smart Contracts | Soroban (Rust) | SDK 21.x | Memory-safe, WASM compilation, deterministic execution, formal verification-friendly |
-| Backend | NestJS + TypeScript | 10.x / 5.x | Enterprise-grade modularity, built-in DI, OpenAPI generation, strong typing |
-| Frontend | Next.js + Tailwind | 14.x / 3.x | App Router, RSC, edge-compatible, excellent DX |
-| Database | PostgreSQL + Prisma | 16.x / 5.x | ACID compliance, JSON support, excellent TypeScript ORM |
-| Cache / Queue | Redis + BullMQ | 7.x / 5.x | Job queue for cert generation, API response caching |
-| Storage | IPFS via Pinata | — | Decentralized, content-addressed, permanent |
-| Auth | SEP-10 + JWT | — | Wallet-native, no passwords, Stellar ecosystem standard |
-| PDF Generation | Puppeteer + Handlebars | 21.x / 4.x | Headless Chrome rendering for pixel-perfect certificates |
-| IoT Oracle | MQTT + HiveMQ | 5.x | Real-time sensor data ingestion (energy meters, GPS) |
-| ERP Connector | SAP BAPI / Oracle REST | — | Bridging on-chain attestations with legacy systems |
-| Testing (Contracts) | Soroban Test SDK | — | Native in-VM contract testing |
-| Testing (Backend) | Jest + Supertest | 29.x / 6.x | Unit, integration, and E2E coverage |
-| Testing (Frontend) | Playwright | 1.40.x | Cross-browser E2E testing |
-| CI/CD | GitHub Actions | — | Automated test, lint, audit, and deployment pipelines |
-| Infrastructure | AWS ECS + RDS + ElastiCache | — | Container-native, auto-scaling, managed databases |
-| Monitoring | Datadog + PagerDuty | — | APM, log aggregation, alerting |
+| Layer               | Technology                  | Version    | Rationale                                                                            |
+| ------------------- | --------------------------- | ---------- | ------------------------------------------------------------------------------------ |
+| Blockchain          | Stellar                     | —          | 5s finality, ~$0.000001/tx, built-in DEX, energy-efficient SCP consensus             |
+| Smart Contracts     | Soroban (Rust)              | SDK 21.x   | Memory-safe, WASM compilation, deterministic execution, formal verification-friendly |
+| Backend             | NestJS + TypeScript         | 10.x / 5.x | Enterprise-grade modularity, built-in DI, OpenAPI generation, strong typing          |
+| Frontend            | Next.js + Tailwind          | 14.x / 3.x | App Router, RSC, edge-compatible, excellent DX                                       |
+| Database            | PostgreSQL + Prisma         | 16.x / 5.x | ACID compliance, JSON support, excellent TypeScript ORM                              |
+| Cache / Queue       | Redis + BullMQ              | 7.x / 5.x  | Job queue for cert generation, API response caching                                  |
+| Storage             | IPFS via Pinata             | —          | Decentralized, content-addressed, permanent                                          |
+| Auth                | SEP-10 + JWT                | —          | Wallet-native, no passwords, Stellar ecosystem standard                              |
+| PDF Generation      | Puppeteer + Handlebars      | 21.x / 4.x | Headless Chrome rendering for pixel-perfect certificates                             |
+| IoT Oracle          | MQTT + HiveMQ               | 5.x        | Real-time sensor data ingestion (energy meters, GPS)                                 |
+| ERP Connector       | SAP BAPI / Oracle REST      | —          | Bridging on-chain attestations with legacy systems                                   |
+| Testing (Contracts) | Soroban Test SDK            | —          | Native in-VM contract testing                                                        |
+| Testing (Backend)   | Jest + Supertest            | 29.x / 6.x | Unit, integration, and E2E coverage                                                  |
+| Testing (Frontend)  | Playwright                  | 1.40.x     | Cross-browser E2E testing                                                            |
+| CI/CD               | GitHub Actions              | —          | Automated test, lint, audit, and deployment pipelines                                |
+| Infrastructure      | AWS ECS + RDS + ElastiCache | —          | Container-native, auto-scaling, managed databases                                    |
+| Monitoring          | Datadog + PagerDuty         | —          | APM, log aggregation, alerting                                                       |
 
 ---
 
@@ -585,6 +587,7 @@ cd verdechain
 ```
 
 This script:
+
 1. Verifies all prerequisites
 2. Installs all Node.js dependencies (`npm install`)
 3. Starts PostgreSQL and Redis via Docker Compose
@@ -1346,31 +1349,31 @@ Interactive Swagger UI: `https://api.verdechain.io/v1/docs`
 
 ### Products
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/products` | Public | List products (paginated, filterable) |
-| GET | `/products/:id` | Public | Get product with full metadata |
-| POST | `/products` | Required | Register a new product on-chain |
-| GET | `/products/:id/provenance` | Public | Complete provenance graph (JSON-LD) |
-| GET | `/products/:id/lifecycle` | Public | All lifecycle events, chronologically |
-| GET | `/products/:id/carbon` | Public | Carbon footprint with full breakdown |
-| GET | `/products/:id/certificates` | Public | All issued GreenTag certificates |
-| GET | `/products/owned` | Required | Products owned by authenticated wallet |
-| GET | `/products/batch/:batch` | Public | Find all products in a batch |
+| Method | Path                         | Auth     | Description                            |
+| ------ | ---------------------------- | -------- | -------------------------------------- |
+| GET    | `/products`                  | Public   | List products (paginated, filterable)  |
+| GET    | `/products/:id`              | Public   | Get product with full metadata         |
+| POST   | `/products`                  | Required | Register a new product on-chain        |
+| GET    | `/products/:id/provenance`   | Public   | Complete provenance graph (JSON-LD)    |
+| GET    | `/products/:id/lifecycle`    | Public   | All lifecycle events, chronologically  |
+| GET    | `/products/:id/carbon`       | Public   | Carbon footprint with full breakdown   |
+| GET    | `/products/:id/certificates` | Public   | All issued GreenTag certificates       |
+| GET    | `/products/owned`            | Required | Products owned by authenticated wallet |
+| GET    | `/products/batch/:batch`     | Public   | Find all products in a batch           |
 
 **GET /products Query Parameters:**
 
-| Parameter | Type | Description |
-|---|---|---|
-| `type` | string | Product type filter (`consumer_good`, `food`, `textile`, etc.) |
-| `origin` | string | ISO 3166-1 alpha-2 country of origin |
-| `manufacturer` | string | Stellar public key of manufacturer |
-| `owner` | string | Stellar public key of current owner |
-| `certified` | string | Cert type filter (`carbon_neutral`, `organic`, etc.) |
-| `q` | string | Search by name, brand, or SKU |
-| `page` | number | Page number (default: 1) |
-| `limit` | number | Page size (default: 20, max: 100) |
-| `sort` | string | `created_asc` \| `created_desc` \| `name` |
+| Parameter      | Type   | Description                                                    |
+| -------------- | ------ | -------------------------------------------------------------- |
+| `type`         | string | Product type filter (`consumer_good`, `food`, `textile`, etc.) |
+| `origin`       | string | ISO 3166-1 alpha-2 country of origin                           |
+| `manufacturer` | string | Stellar public key of manufacturer                             |
+| `owner`        | string | Stellar public key of current owner                            |
+| `certified`    | string | Cert type filter (`carbon_neutral`, `organic`, etc.)           |
+| `q`            | string | Search by name, brand, or SKU                                  |
+| `page`         | number | Page number (default: 1)                                       |
+| `limit`        | number | Page size (default: 20, max: 100)                              |
+| `sort`         | string | `created_asc` \| `created_desc` \| `name`                      |
 
 **POST /products Request Body:**
 
@@ -1400,14 +1403,14 @@ Interactive Swagger UI: `https://api.verdechain.io/v1/docs`
 
 ### Supply Chain
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/supply-chain/events/:productId` | Public | All lifecycle events for a product |
-| POST | `/supply-chain/events` | Required | Record a new lifecycle event |
-| GET | `/supply-chain/events/:eventId` | Public | Single event detail |
-| POST | `/supply-chain/events/batch` | Required | Batch record lifecycle events |
-| GET | `/supply-chain/timeline/:productId` | Public | Chronological timeline with emissions |
-| GET | `/supply-chain/participants/:productId` | Public | All participants in a product's chain |
+| Method | Path                                    | Auth     | Description                           |
+| ------ | --------------------------------------- | -------- | ------------------------------------- |
+| GET    | `/supply-chain/events/:productId`       | Public   | All lifecycle events for a product    |
+| POST   | `/supply-chain/events`                  | Required | Record a new lifecycle event          |
+| GET    | `/supply-chain/events/:eventId`         | Public   | Single event detail                   |
+| POST   | `/supply-chain/events/batch`            | Required | Batch record lifecycle events         |
+| GET    | `/supply-chain/timeline/:productId`     | Public   | Chronological timeline with emissions |
+| GET    | `/supply-chain/participants/:productId` | Public   | All participants in a product's chain |
 
 **POST /supply-chain/events Request Body:**
 
@@ -1448,16 +1451,16 @@ Interactive Swagger UI: `https://api.verdechain.io/v1/docs`
 
 ### GreenTag Certificates
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/certificates` | Public | List certificates (filterable) |
-| GET | `/certificates/:id` | Public | Certificate metadata (JSON) |
-| GET | `/certificates/:id/pdf` | Public | Download signed PDF certificate |
-| POST | `/certificates` | Required | Issue a new GreenTag certificate |
-| POST | `/certificates/:id/revoke` | Issuer/Admin | Revoke a certificate with reason |
-| POST | `/certificates/verify` | Public | Verify certificate authenticity via hash |
-| GET | `/certificates/product/:productId` | Public | All certificates for a product |
-| GET | `/certificates/owned` | Required | All certificates for authenticated wallet |
+| Method | Path                               | Auth         | Description                               |
+| ------ | ---------------------------------- | ------------ | ----------------------------------------- |
+| GET    | `/certificates`                    | Public       | List certificates (filterable)            |
+| GET    | `/certificates/:id`                | Public       | Certificate metadata (JSON)               |
+| GET    | `/certificates/:id/pdf`            | Public       | Download signed PDF certificate           |
+| POST   | `/certificates`                    | Required     | Issue a new GreenTag certificate          |
+| POST   | `/certificates/:id/revoke`         | Issuer/Admin | Revoke a certificate with reason          |
+| POST   | `/certificates/verify`             | Public       | Verify certificate authenticity via hash  |
+| GET    | `/certificates/product/:productId` | Public       | All certificates for a product            |
+| GET    | `/certificates/owned`              | Required     | All certificates for authenticated wallet |
 
 **POST /certificates Request Body:**
 
@@ -1474,15 +1477,15 @@ Interactive Swagger UI: `https://api.verdechain.io/v1/docs`
 
 ### Carbon Accounting
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/carbon/footprint/:productId` | Public | Full cradle-to-grave carbon footprint |
-| GET | `/carbon/breakdown/:productId` | Public | Emissions breakdown by lifecycle stage |
-| GET | `/carbon/compare` | Public | Compare carbon footprints across products |
-| GET | `/carbon/factors` | Public | List available emission factors |
-| POST | `/carbon/factors` | Admin | Update emission factors |
-| GET | `/carbon/grid-intensity/:region` | Public | Grid carbon intensity by region |
-| GET | `/carbon/methodology` | Public | Current methodology version |
+| Method | Path                             | Auth   | Description                               |
+| ------ | -------------------------------- | ------ | ----------------------------------------- |
+| GET    | `/carbon/footprint/:productId`   | Public | Full cradle-to-grave carbon footprint     |
+| GET    | `/carbon/breakdown/:productId`   | Public | Emissions breakdown by lifecycle stage    |
+| GET    | `/carbon/compare`                | Public | Compare carbon footprints across products |
+| GET    | `/carbon/factors`                | Public | List available emission factors           |
+| POST   | `/carbon/factors`                | Admin  | Update emission factors                   |
+| GET    | `/carbon/grid-intensity/:region` | Public | Grid carbon intensity by region           |
+| GET    | `/carbon/methodology`            | Public | Current methodology version               |
 
 **GET /carbon/footprint/:productId Response:**
 
@@ -1528,15 +1531,15 @@ Interactive Swagger UI: `https://api.verdechain.io/v1/docs`
 
 ### Verifiers
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/verifiers` | Public | List registered verifiers |
-| GET | `/verifiers/:id` | Public | Verifier profile and reputation score |
-| POST | `/verifiers/register` | Required | Register as a verifier (requires stake) |
-| PUT | `/verifiers/:id/stake` | Required | Add or withdraw stake |
-| GET | `/verifiers/:id/attestations` | Public | Verifier's attestation history |
-| GET | `/verifiers/pending` | Verifier | Attestations awaiting review |
-| POST | `/verifiers/:id/heartbeat` | Verifier | Liveness signal (required every 24h) |
+| Method | Path                          | Auth     | Description                             |
+| ------ | ----------------------------- | -------- | --------------------------------------- |
+| GET    | `/verifiers`                  | Public   | List registered verifiers               |
+| GET    | `/verifiers/:id`              | Public   | Verifier profile and reputation score   |
+| POST   | `/verifiers/register`         | Required | Register as a verifier (requires stake) |
+| PUT    | `/verifiers/:id/stake`        | Required | Add or withdraw stake                   |
+| GET    | `/verifiers/:id/attestations` | Public   | Verifier's attestation history          |
+| GET    | `/verifiers/pending`          | Verifier | Attestations awaiting review            |
+| POST   | `/verifiers/:id/heartbeat`    | Verifier | Liveness signal (required every 24h)    |
 
 ---
 
@@ -1544,27 +1547,27 @@ Interactive Swagger UI: `https://api.verdechain.io/v1/docs`
 
 Register webhook endpoints to receive real-time notifications:
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | `/webhooks` | Required | Register a webhook endpoint |
-| GET | `/webhooks` | Required | List registered webhooks |
-| DELETE | `/webhooks/:id` | Required | Remove a webhook |
-| POST | `/webhooks/:id/test` | Required | Send a test event |
+| Method | Path                 | Auth     | Description                 |
+| ------ | -------------------- | -------- | --------------------------- |
+| POST   | `/webhooks`          | Required | Register a webhook endpoint |
+| GET    | `/webhooks`          | Required | List registered webhooks    |
+| DELETE | `/webhooks/:id`      | Required | Remove a webhook            |
+| POST   | `/webhooks/:id/test` | Required | Send a test event           |
 
 **Webhook Event Types:**
 
-| Event | Trigger |
-|---|---|
-| `product.registered` | New product registered |
-| `product.transferred` | Product ownership transferred |
-| `product.recalled` | Product recalled by manufacturer |
-| `lifecycle.event.recorded` | New lifecycle event recorded |
-| `lifecycle.event.attested` | Lifecycle event fully attested |
-| `carbon.footprint.updated` | Carbon footprint recalculated |
-| `certificate.issued` | New GreenTag certificate issued |
-| `certificate.revoked` | Certificate revoked |
-| `verifier.registered` | New verifier registered |
-| `verifier.slashed` | Verifier stake slashed |
+| Event                      | Trigger                          |
+| -------------------------- | -------------------------------- |
+| `product.registered`       | New product registered           |
+| `product.transferred`      | Product ownership transferred    |
+| `product.recalled`         | Product recalled by manufacturer |
+| `lifecycle.event.recorded` | New lifecycle event recorded     |
+| `lifecycle.event.attested` | Lifecycle event fully attested   |
+| `carbon.footprint.updated` | Carbon footprint recalculated    |
+| `certificate.issued`       | New GreenTag certificate issued  |
+| `certificate.revoked`      | Certificate revoked              |
+| `verifier.registered`      | New verifier registered          |
+| `verifier.slashed`         | Verifier stake slashed           |
 
 All webhook payloads include a `X-VerdeChain-Signature` header (HMAC-SHA256 of the body using the webhook secret) for verification.
 
@@ -1603,16 +1606,16 @@ Frontend loads certificate from API and on-chain contract
 
 ### Certificate Types
 
-| Type | Description | Validates |
-|---|---|---|
-| Certificate of Origin | Country of origin, raw material source | ISO 20400 |
-| Carbon Neutral (Cradle-to-Gate) | Manufacturing emissions fully offset | PAS 2060 |
-| Carbon Neutral (Full Lifecycle) | Full lifecycle emissions offset | PAS 2060 |
-| Organic | Organic material content | USDA Organic, EU Organic |
-| Fair Trade | Fair labor practices | Fair Trade Certified |
-| Circular Economy | Recycled content ≥50%, recyclable | ISO 14021 |
-| Water Stewardship | Water usage certified | AWS Standard |
-| Biodiversity Positive | Net positive biodiversity impact | TNFD-aligned |
+| Type                            | Description                            | Validates                |
+| ------------------------------- | -------------------------------------- | ------------------------ |
+| Certificate of Origin           | Country of origin, raw material source | ISO 20400                |
+| Carbon Neutral (Cradle-to-Gate) | Manufacturing emissions fully offset   | PAS 2060                 |
+| Carbon Neutral (Full Lifecycle) | Full lifecycle emissions offset        | PAS 2060                 |
+| Organic                         | Organic material content               | USDA Organic, EU Organic |
+| Fair Trade                      | Fair labor practices                   | Fair Trade Certified     |
+| Circular Economy                | Recycled content ≥50%, recyclable      | ISO 14021                |
+| Water Stewardship               | Water usage certified                  | AWS Standard             |
+| Biodiversity Positive           | Net positive biodiversity impact       | TNFD-aligned             |
 
 ---
 
@@ -1803,14 +1806,14 @@ VerdeChain uses **SEP-10 Stellar Web Authentication** — no passwords, no email
 
 ### Roles & Permissions
 
-| Role | Permissions |
-|---|---|
-| `consumer` (default) | Read public products, certificates, footprints |
-| `manufacturer` | Register products, record lifecycle events, issue certificates |
-| `supplier` | Record raw material extraction events, transfer to manufacturer |
-| `logistics` | Record shipping events |
-| `verifier` | Approve/reject attestations, view pending list |
-| `admin` | Manage verifiers, update carbon factors, recall products |
+| Role                 | Permissions                                                     |
+| -------------------- | --------------------------------------------------------------- |
+| `consumer` (default) | Read public products, certificates, footprints                  |
+| `manufacturer`       | Register products, record lifecycle events, issue certificates  |
+| `supplier`           | Record raw material extraction events, transfer to manufacturer |
+| `logistics`          | Record shipping events                                          |
+| `verifier`           | Approve/reject attestations, view pending list                  |
+| `admin`              | Manage verifiers, update carbon factors, recall products        |
 
 Roles are derived from the Stellar public key — the server maintains a mapping of `publicKey → role` in PostgreSQL. On mainnet, role assignments will be governed by the DAO.
 
@@ -1824,10 +1827,7 @@ const server = new SorobanRpc.Server(SOROBAN_RPC_URL);
 const contract = new Contract(PRODUCT_REGISTRY_CONTRACT_ID);
 
 // Register a product on-chain via Soroban
-async function registerProduct(
-  metadata: ProductMetadata,
-  ipfsHash: string
-): Promise<number> {
+async function registerProduct(metadata: ProductMetadata, ipfsHash: string): Promise<number> {
   const publicKey = await getPublicKey();
   const sourceAccount = await server.getAccount(publicKey);
 
@@ -1838,10 +1838,7 @@ async function registerProduct(
 
   const preparedTx = await server.prepareTransaction(tx);
   const signedXdr = await signTransaction(preparedTx.toXDR());
-  const signedTx = TransactionBuilder.fromXDR(
-    signedXdr,
-    Networks.TESTNET
-  );
+  const signedTx = TransactionBuilder.fromXDR(signedXdr, Networks.TESTNET);
 
   const result = await server.sendTransaction(signedTx);
   const { returnValue } = await server.getTransaction(result.hash);
@@ -1893,13 +1890,13 @@ Approve      Reject      Escalate
 
 Verifiers earn reputation points based on:
 
-| Metric | Weight | Description |
-|---|---|---|
-| Accuracy | 40% | % of attestations matching final verified outcome |
-| Timeliness | 20% | Average response time (shorter = better) |
-| Volume | 15% | Total attestations handled |
-| Peer Review | 15% | Ratings from other verifiers |
-| Longevity | 10% | Continuous active service duration |
+| Metric      | Weight | Description                                       |
+| ----------- | ------ | ------------------------------------------------- |
+| Accuracy    | 40%    | % of attestations matching final verified outcome |
+| Timeliness  | 20%    | Average response time (shorter = better)          |
+| Volume      | 15%    | Total attestations handled                        |
+| Peer Review | 15%    | Ratings from other verifiers                      |
+| Longevity   | 10%    | Continuous active service duration                |
 
 Scores range from 0–1000. Verifiers below 200 are automatically suspended.
 
@@ -1924,24 +1921,24 @@ The carbon accounting engine calculates product footprints automatically from at
 
 VerdeChain follows the **GHG Protocol Corporate Standard** and **Product Life Cycle Accounting and Reporting Standard**:
 
-| Scope | Included Emissions | Data Source |
-|---|---|---|
-| Scope 1 | Direct emissions from owned sources | Facility energy meters, fuel use |
-| Scope 2 | Indirect emissions from purchased energy | Grid intensity factor + usage |
-| Scope 3 (Upstream) | Raw materials, transport, purchased goods | Supplier attestations + LCA databases |
-| Scope 3 (Downstream) | Distribution, usage, end-of-life | Logistics + product design specs |
+| Scope                | Included Emissions                        | Data Source                           |
+| -------------------- | ----------------------------------------- | ------------------------------------- |
+| Scope 1              | Direct emissions from owned sources       | Facility energy meters, fuel use      |
+| Scope 2              | Indirect emissions from purchased energy  | Grid intensity factor + usage         |
+| Scope 3 (Upstream)   | Raw materials, transport, purchased goods | Supplier attestations + LCA databases |
+| Scope 3 (Downstream) | Distribution, usage, end-of-life          | Logistics + product design specs      |
 
 ### Emission Factor Sources
 
-| Source | Coverage | Refresh Frequency |
-|---|---|---|
-| IPCC Guidelines | Global, all sectors | Annual |
-| EPA Emission Factors Hub | US-specific | Annual |
-| EIA Grid Intensity | US regional grids | Hourly (real-time via API) |
-| ENTSO-E Grid Intensity | European regional grids | Hourly (real-time via API) |
-| IEA World Energy Outlook | Global regional grids | Annual |
-| ecoinvent 3.9 | Process-based LCA data | Periodic |
-| Regional Grid Operators | Country-specific | Configurable |
+| Source                   | Coverage                | Refresh Frequency          |
+| ------------------------ | ----------------------- | -------------------------- |
+| IPCC Guidelines          | Global, all sectors     | Annual                     |
+| EPA Emission Factors Hub | US-specific             | Annual                     |
+| EIA Grid Intensity       | US regional grids       | Hourly (real-time via API) |
+| ENTSO-E Grid Intensity   | European regional grids | Hourly (real-time via API) |
+| IEA World Energy Outlook | Global regional grids   | Annual                     |
+| ecoinvent 3.9            | Process-based LCA data  | Periodic                   |
+| Regional Grid Operators  | Country-specific        | Configurable               |
 
 ### Calculation Example
 
@@ -1955,7 +1952,7 @@ function calculateFootprint(events: LifecycleEvent[]): FootprintResult {
     // 1. Material emissions: input_kg × emission_factor
     const materialEmissions = event.inputs.reduce(
       (sum, input) => sum + input.quantityKg * input.co2ePerKg,
-      0
+      0,
     );
 
     // 2. Energy emissions: energy_kwh × grid_intensity_factor
@@ -1963,8 +1960,7 @@ function calculateFootprint(events: LifecycleEvent[]): FootprintResult {
     const energyEmissions = event.energyUsedKwh * gridFactor;
 
     // 3. Process emissions: waste_kg × waste_factor + water_l × water_factor
-    const processEmissions = event.wasteKg * WASTE_FACTOR
-      + event.waterUsedL * WATER_FACTOR;
+    const processEmissions = event.wasteKg * WASTE_FACTOR + event.waterUsedL * WATER_FACTOR;
 
     const stageTotal = materialEmissions + energyEmissions + processEmissions;
     breakdown[event.stage] = (breakdown[event.stage] || 0) + stageTotal;
@@ -2103,12 +2099,12 @@ stellar contract deploy --wasm ... --source <MULTISIG_KEY> --network mainnet
 
 All smart contracts undergo third-party security audits before mainnet deployment:
 
-| Audit | Scope | Status |
-|---|---|---|
-| Trail of Bits | ProductRegistry, LifecycleTracker | Scheduled |
-| OpenZeppelin | Attestation, GreenTagCert | Scheduled |
-| Halborn | VerifierRegistry, CarbonOracle | Scheduled |
-| Code4rena | Full contract suite (public contest) | Scheduled |
+| Audit         | Scope                                | Status    |
+| ------------- | ------------------------------------ | --------- |
+| Trail of Bits | ProductRegistry, LifecycleTracker    | Scheduled |
+| OpenZeppelin  | Attestation, GreenTagCert            | Scheduled |
+| Halborn       | VerifierRegistry, CarbonOracle       | Scheduled |
+| Code4rena     | Full contract suite (public contest) | Scheduled |
 
 ---
 
@@ -2116,12 +2112,12 @@ All smart contracts undergo third-party security audits before mainnet deploymen
 
 ### Stellar Network Performance
 
-| Metric | Value |
-|---|---|
-| Transaction finality | ~5 seconds |
-| Max transactions per second | 1,000+ |
-| Cost per operation | ~0.00001 XLM (~$0.000001) |
-| Carbon footprint per tx | 0.0000012 kgCO2e |
+| Metric                      | Value                     |
+| --------------------------- | ------------------------- |
+| Transaction finality        | ~5 seconds                |
+| Max transactions per second | 1,000+                    |
+| Cost per operation          | ~0.00001 XLM (~$0.000001) |
+| Carbon footprint per tx     | 0.0000012 kgCO2e          |
 
 ### API Layer
 
@@ -2221,16 +2217,16 @@ npm run test
 
 ### What We Need Help With
 
-| Area | Skills Needed |
-|---|---|
-| Smart contracts | Rust, Soroban SDK, formal verification |
-| Backend API | NestJS, TypeScript, Stellar SDK |
-| Frontend | Next.js, React, D3.js (provenance graph), Tailwind |
+| Area              | Skills Needed                                           |
+| ----------------- | ------------------------------------------------------- |
+| Smart contracts   | Rust, Soroban SDK, formal verification                  |
+| Backend API       | NestJS, TypeScript, Stellar SDK                         |
+| Frontend          | Next.js, React, D3.js (provenance graph), Tailwind      |
 | Carbon accounting | GHG Protocol, LCA methodology, emission factor research |
-| Documentation | Technical writing, API docs, user guides |
-| Security audits | Smart contract security, penetration testing |
-| Data science | Emission factor analysis, carbon modeling |
-| UX/UI | Design system, mobile app, accessibility |
+| Documentation     | Technical writing, API docs, user guides                |
+| Security audits   | Smart contract security, penetration testing            |
+| Data science      | Emission factor analysis, carbon modeling               |
+| UX/UI             | Design system, mobile app, accessibility                |
 
 ### Contribution Guidelines
 

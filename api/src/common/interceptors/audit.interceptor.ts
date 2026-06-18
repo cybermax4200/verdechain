@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 
 @Injectable()
@@ -20,9 +14,7 @@ export class AuditInterceptor implements NestInterceptor {
       tap({
         next: () => {
           if (method !== 'GET') {
-            this.logger.log(
-              `User ${user?.sub ?? 'anonymous'} performed ${method} ${url}`,
-            );
+            this.logger.log(`User ${user?.sub ?? 'anonymous'} performed ${method} ${url}`);
           }
         },
         error: (error: Error) => {

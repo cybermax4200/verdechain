@@ -34,9 +34,7 @@ describe('Scope1 - Direct Emissions', () => {
 
   describe('calculateProcessEmissions', () => {
     it('calculates cement emissions correctly', () => {
-      const result = calculateProcessEmissions([
-        { name: 'cement_clinker', quantity: 100 },
-      ]);
+      const result = calculateProcessEmissions([{ name: 'cement_clinker', quantity: 100 }]);
       expect(result).toBeCloseTo(52.5, 1);
     });
 
@@ -49,9 +47,7 @@ describe('Scope1 - Direct Emissions', () => {
     });
 
     it('returns 0 for unknown processes', () => {
-      const result = calculateProcessEmissions([
-        { name: 'unknown_process', quantity: 100 },
-      ]);
+      const result = calculateProcessEmissions([{ name: 'unknown_process', quantity: 100 }]);
       expect(result).toBe(0);
     });
 

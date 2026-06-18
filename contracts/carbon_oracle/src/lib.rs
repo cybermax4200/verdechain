@@ -95,7 +95,7 @@ impl CarbonOracleContract {
         methodology: String,
     ) -> Result<(), Error> {
         admin.require_auth();
-        if methodology.len() == 0 {
+        if methodology.is_empty() {
             return Err(Error::InvalidInput);
         }
         MethodologyStore::set(&env, &methodology);
@@ -108,7 +108,7 @@ impl CarbonOracleContract {
 }
 
 fn validate_factor(factor: &EmissionFactor) -> Result<(), Error> {
-    if factor.activity_type.len() == 0 || factor.unit.len() == 0 || factor.source.len() == 0 {
+    if factor.activity_type.is_empty() || factor.unit.is_empty() || factor.source.is_empty() {
         return Err(Error::InvalidInput);
     }
     if factor.factor_value < 0 {

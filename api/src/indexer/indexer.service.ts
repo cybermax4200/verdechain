@@ -76,7 +76,9 @@ export class IndexerService implements OnModuleInit {
         await this.processTransaction(tx);
         this.currentCursor = tx.paging_token;
       } catch (error) {
-        this.logger.error(`Failed to process tx ${tx.hash}: ${error instanceof Error ? error.message : String(error)}`);
+        this.logger.error(
+          `Failed to process tx ${tx.hash}: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     }
 
@@ -85,10 +87,15 @@ export class IndexerService implements OnModuleInit {
     }
   }
 
-  private async processTransaction(tx: { hash: string; paging_token: string; created_at: string; successful: boolean }): Promise<void> {
+  private async processTransaction(tx: {
+    hash: string;
+    paging_token: string;
+    created_at: string;
+    successful: boolean;
+  }): Promise<void> {
     if (!tx.successful) return;
 
-    const events: IndexerEvent[] = [];  // Placeholder for actual event extraction
+    const events: IndexerEvent[] = []; // Placeholder for actual event extraction
 
     for (const event of events) {
       try {
@@ -117,7 +124,9 @@ export class IndexerService implements OnModuleInit {
             break;
         }
       } catch (error) {
-        this.logger.error(`Event processor error: ${error instanceof Error ? error.message : String(error)}`);
+        this.logger.error(
+          `Event processor error: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     }
   }
@@ -136,7 +145,9 @@ export class IndexerService implements OnModuleInit {
         await this.processTransaction(tx);
       }
     } catch (error) {
-      this.logger.error(`Failed to process ledger ${seq}: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `Failed to process ledger ${seq}: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 

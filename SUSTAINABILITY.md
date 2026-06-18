@@ -1,27 +1,28 @@
 # VerdeChain Sustainability Impact Report
 
-> *We hold ourselves to the same standards we build for others — full transparency on our own environmental footprint.*
+> _We hold ourselves to the same standards we build for others — full transparency on our own environmental footprint._
 
 ## Our Carbon Footprint
 
 ### Infrastructure Emissions (Monthly Estimate)
 
-| Source | Monthly CO2e | Notes |
-|--------|-------------|-------|
-| CI/CD Pipelines (GitHub Actions) | ~2.5 kg | ~500 min/month × 5g CO2e/min |
-| Development Machines | ~50 kg | 10 developers × ~5 kg/month |
-| API Servers (AWS ECS Fargate) | ~150 kg | 3 × t3.medium, 24/7 |
-| Database (RDS PostgreSQL) | ~100 kg | 1 × db.r6g.large |
-| Cache (ElastiCache Redis) | ~50 kg | 1 × cache.r6g.large |
-| CDN (CloudFront) | ~10 kg | Edge caching minimizes origin load |
-| Stellar Network Fees | ~0.0006 kg | ~0.0000012 kgCO2e per transaction |
-| **Total** | **~362.5 kg** | |
+| Source                           | Monthly CO2e  | Notes                              |
+| -------------------------------- | ------------- | ---------------------------------- |
+| CI/CD Pipelines (GitHub Actions) | ~2.5 kg       | ~500 min/month × 5g CO2e/min       |
+| Development Machines             | ~50 kg        | 10 developers × ~5 kg/month        |
+| API Servers (AWS ECS Fargate)    | ~150 kg       | 3 × t3.medium, 24/7                |
+| Database (RDS PostgreSQL)        | ~100 kg       | 1 × db.r6g.large                   |
+| Cache (ElastiCache Redis)        | ~50 kg        | 1 × cache.r6g.large                |
+| CDN (CloudFront)                 | ~10 kg        | Edge caching minimizes origin load |
+| Stellar Network Fees             | ~0.0006 kg    | ~0.0000012 kgCO2e per transaction  |
+| **Total**                        | **~362.5 kg** |                                    |
 
 ### Annual Projected: ~4.35 tonnes CO2e
 
 ### Offsets
 
 We purchase verified carbon credits from [Verra-certified](https://verra.org) projects:
+
 - Reforestation in Madagascar (VCS-CCB)
 - Wind energy in India (VCS-Gold Standard)
 
@@ -37,6 +38,7 @@ We purchase verified carbon credits from [Verra-certified](https://verra.org) pr
 ## Our Product's Impact
 
 By enabling transparent, verifiable supply chains, VerdeChain helps:
+
 - **Reduce greenwashing** — Companies can no longer make false sustainability claims
 - **Optimize supply chains** — Visibility enables carbon-aware routing and sourcing
 - **Automate carbon accounting** — Eliminates manual, error-prone reporting

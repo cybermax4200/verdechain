@@ -81,10 +81,7 @@ function DonutChart({ breakdown }: { breakdown: EmissionsBreakdown[] }) {
 
       const largeArc = sliceAngle > Math.PI ? 1 : 0;
       const path = document.createElementNS(ns, 'path');
-      path.setAttribute(
-        'd',
-        `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} L 0 0 Z`,
-      );
+      path.setAttribute('d', `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} L 0 0 Z`);
       path.setAttribute('fill', STAGE_COLORS[item.stage] ?? '#9ca3af');
       path.setAttribute('opacity', '0.85');
       path.setAttribute('stroke', '#fff');
@@ -124,7 +121,7 @@ function DonutChart({ breakdown }: { breakdown: EmissionsBreakdown[] }) {
 
   if (total === 0) return null;
 
-  return <svg ref={svgRef} className="w-full max-w-[200px] mx-auto" />;
+  return <svg ref={svgRef} className="mx-auto w-full max-w-[200px]" />;
 }
 
 export function CarbonBreakdown({
@@ -142,12 +139,12 @@ export function CarbonBreakdown({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Carbon Footprint</p>
-        <p className="text-4xl font-bold text-brand-600 dark:text-brand-400">
+        <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">Total Carbon Footprint</p>
+        <p className="text-brand-600 dark:text-brand-400 text-4xl font-bold">
           {totalFootprint.toFixed(1)}
-          <span className="text-lg font-normal text-gray-500 ml-2">kg CO₂e</span>
+          <span className="ml-2 text-lg font-normal text-gray-500">kg CO₂e</span>
         </p>
-        <div className="flex items-center justify-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <div className="mt-2 flex items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400">
           {confidenceScore !== undefined && (
             <span>
               Confidence: {confidenceScore}%
@@ -158,9 +155,9 @@ export function CarbonBreakdown({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card className="p-4">
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
+          <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
             Emissions by Lifecycle Stage
           </h4>
           <DonutChart breakdown={breakdown} />
@@ -168,7 +165,7 @@ export function CarbonBreakdown({
             {breakdown.map((item) => (
               <div key={item.stage} className="flex items-center gap-2 text-xs">
                 <span
-                  className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                  className="h-2.5 w-2.5 flex-shrink-0 rounded-sm"
                   style={{ backgroundColor: STAGE_COLORS[item.stage] ?? '#9ca3af' }}
                 />
                 <span className="flex-1 capitalize text-gray-600 dark:text-gray-400">
@@ -184,23 +181,25 @@ export function CarbonBreakdown({
         </Card>
 
         <Card className="p-4">
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
+          <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
             Scope Breakdown
           </h4>
           <div className="space-y-3">
-            {([
-              { key: 'scope1', label: 'Scope 1 — Direct Emissions', value: scope1 },
-              { key: 'scope2', label: 'Scope 2 — Energy Indirect', value: scope2 },
-              { key: 'scope3', label: 'Scope 3 — Supply Chain', value: scope3 },
-            ] as const).map(({ key, label, value }) => (
+            {(
+              [
+                { key: 'scope1', label: 'Scope 1 — Direct Emissions', value: scope1 },
+                { key: 'scope2', label: 'Scope 2 — Energy Indirect', value: scope2 },
+                { key: 'scope3', label: 'Scope 3 — Supply Chain', value: scope3 },
+              ] as const
+            ).map(({ key, label, value }) => (
               <div key={key}>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="mb-1 flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-400">{label}</span>
                   <span className="font-medium text-gray-900 dark:text-gray-100">
                     {value.toFixed(1)} kg
                   </span>
                 </div>
-                <div className="w-full h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-3 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
@@ -216,7 +215,7 @@ export function CarbonBreakdown({
             {(['scope1', 'scope2', 'scope3'] as const).map((key) => (
               <div key={key} className="flex items-center gap-1">
                 <span
-                  className="w-2 h-2 rounded-sm"
+                  className="h-2 w-2 rounded-sm"
                   style={{ backgroundColor: SCOPE_COLORS[key] }}
                 />
                 {key.replace('scope', 'S')}
@@ -227,13 +226,13 @@ export function CarbonBreakdown({
       </div>
 
       <Card className="p-4">
-        <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
+        <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
           Carbon Equivalents
         </h4>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {equivalents.map((eq) => (
-            <div key={eq.label} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-center">
-              <p className="text-xl font-bold text-brand-600 dark:text-brand-400">{eq.value}</p>
+            <div key={eq.label} className="rounded-lg bg-gray-50 p-3 text-center dark:bg-gray-800">
+              <p className="text-brand-600 dark:text-brand-400 text-xl font-bold">{eq.value}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">{eq.label}</p>
             </div>
           ))}

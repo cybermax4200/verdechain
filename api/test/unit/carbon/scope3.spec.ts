@@ -19,7 +19,7 @@ describe('Scope3 - Supply Chain Emissions', () => {
         [],
         [{ mode: 'road_freight_diesel', distanceKm: 100, massKg: 1000 }],
       );
-      expect(result).toBeCloseTo(100 * 1000 * 0.162 / 1000, 1);
+      expect(result).toBeCloseTo((100 * 1000 * 0.162) / 1000, 1);
     });
 
     it('calculates combined material and transport emissions', () => {
@@ -55,20 +55,14 @@ describe('Scope3 - Supply Chain Emissions', () => {
     });
 
     it('calculates use phase emissions', () => {
-      const result = calculateDownstreamEmissions(
-        [],
-        { energyKwh: 500, gridIntensity: 0.475 },
-        [],
-      );
+      const result = calculateDownstreamEmissions([], { energyKwh: 500, gridIntensity: 0.475 }, []);
       expect(result).toBeCloseTo(237.5, 1);
     });
 
     it('calculates disposal emissions', () => {
-      const result = calculateDownstreamEmissions(
-        [],
-        { energyKwh: 0, gridIntensity: 0 },
-        [{ wasteKg: 100, method: 'landfill_mixed' }],
-      );
+      const result = calculateDownstreamEmissions([], { energyKwh: 0, gridIntensity: 0 }, [
+        { wasteKg: 100, method: 'landfill_mixed' },
+      ]);
       expect(result).toBeCloseTo(58.9, 1);
     });
 
@@ -106,9 +100,7 @@ describe('Scope3 - Supply Chain Emissions', () => {
     });
 
     it('returns zero for non-scope3 events', () => {
-      const events = [
-        { stage: 'MANUFACTURING', fuelUsed: 100, fuelType: 'natural_gas' },
-      ];
+      const events = [{ stage: 'MANUFACTURING', fuelUsed: 100, fuelType: 'natural_gas' }];
       const result = calculateScope3FromEvents(events as any);
       expect(result.totalScope3).toBe(0);
     });

@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 
 @Injectable()
@@ -20,9 +14,7 @@ export class TimingInterceptor implements NestInterceptor {
       tap(() => {
         const duration = Date.now() - now;
         if (duration > 1000) {
-          this.logger.warn(
-            `Slow request: ${controller}.${handler} took ${duration}ms`,
-          );
+          this.logger.warn(`Slow request: ${controller}.${handler} took ${duration}ms`);
         }
       }),
     );

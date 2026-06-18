@@ -1,11 +1,4 @@
-import {
-  rpc,
-  TransactionBuilder,
-  Operation,
-  Keypair,
-  xdr,
-  Networks,
-} from '@stellar/stellar-sdk';
+import { rpc, TransactionBuilder, Operation, xdr, Networks } from '@stellar/stellar-sdk';
 
 export interface StellarConfig {
   sorobanRpc: string;
@@ -27,8 +20,7 @@ export class StellarBrowserClient {
 
   constructor(config: StellarConfig) {
     this.server = new rpc.Server(config.sorobanRpc);
-    this.networkPassphrase =
-      config.networkPassphrase ?? Networks.TESTNET;
+    this.networkPassphrase = config.networkPassphrase ?? Networks.TESTNET;
   }
 
   async callContract(
@@ -79,13 +71,14 @@ export class StellarBrowserClient {
 }
 
 export function scValToString(val: xdr.ScVal): string {
-  if (val.symbol() !== undefined) {
-    return val.symbol()!.toString();
+  switch (val.switch().name) {
+    case 'scvSymbol':
+      return val.sym().toString();
+    case 'scvString':
+      return val.str().toString();
+    default:
+      return val.toXDR('base64');
   }
-  if (val.str() !== undefined) {
-    return val.str()!.toString();
-  }
-  return val.toXDR('base64');
 }
 
 export function scValToNumber(val: xdr.ScVal): number {

@@ -8,7 +8,13 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    project: ['./tsconfig.json', './api/tsconfig.json', './frontend/tsconfig.json', './sdk/tsconfig.json', './cli/tsconfig.json'],
+    project: [
+      './tsconfig.json',
+      './api/tsconfig.json',
+      './frontend/tsconfig.json',
+      './sdk/tsconfig.json',
+      './cli/tsconfig.json',
+    ],
   },
   plugins: ['@typescript-eslint'],
   extends: [

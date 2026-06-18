@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsDateString,
-  IsObject,
-  IsEnum,
-} from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsObject, IsEnum } from 'class-validator';
 
 export enum CertType {
   GREEN_TAG = 'GREEN_TAG',

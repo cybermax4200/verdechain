@@ -59,12 +59,12 @@ export default function ProductsPage() {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="animate-fade-in space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           Products
           {total > 0 && (
-            <span className="text-sm font-normal text-gray-500 ml-2">({total} total)</span>
+            <span className="ml-2 text-sm font-normal text-gray-500">({total} total)</span>
           )}
         </h1>
       </div>
@@ -78,7 +78,7 @@ export default function ProductsPage() {
             setFilters({ ...filters, q: e.target.value });
             setPage(1);
           }}
-          className="flex-1 min-w-[200px] px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"
+          className="focus:ring-brand-500 min-w-[200px] flex-1 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 dark:border-gray-700 dark:bg-gray-900"
         />
         <select
           value={filters.type}
@@ -86,7 +86,7 @@ export default function ProductsPage() {
             setFilters({ ...filters, type: e.target.value });
             setPage(1);
           }}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm"
+          className="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900"
         >
           <option value="">All Types</option>
           <option value="apparel">Apparel</option>
@@ -103,7 +103,7 @@ export default function ProductsPage() {
             setFilters({ ...filters, origin: e.target.value });
             setPage(1);
           }}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm"
+          className="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900"
         >
           <option value="">All Origins</option>
           <option value="Portugal">Portugal</option>
@@ -119,7 +119,7 @@ export default function ProductsPage() {
             setFilters({ ...filters, sort: e.target.value });
             setPage(1);
           }}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm"
+          className="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900"
         >
           <option value="newest">Newest</option>
           <option value="oldest">Oldest</option>
@@ -128,18 +128,21 @@ export default function ProductsPage() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 animate-pulse">
-              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-3" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2 mb-2" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-2/3" />
+            <div
+              key={i}
+              className="animate-pulse rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900"
+            >
+              <div className="mb-3 h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
+              <div className="mb-2 h-3 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
+              <div className="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-800" />
             </div>
           ))}
         </div>
       ) : products.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -149,7 +152,7 @@ export default function ProductsPage() {
               <button
                 onClick={() => setPage(Math.max(1, page - 1))}
                 disabled={page === 1}
-                className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-sm disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-900"
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-900"
               >
                 Previous
               </button>
@@ -157,10 +160,10 @@ export default function ProductsPage() {
                 <button
                   key={p}
                   onClick={() => setPage(p)}
-                  className={`px-3 py-1.5 rounded-lg text-sm ${
+                  className={`rounded-lg px-3 py-1.5 text-sm ${
                     p === page
                       ? 'bg-brand-500 text-white'
-                      : 'border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900'
+                      : 'border border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-900'
                   }`}
                 >
                   {p}
@@ -169,7 +172,7 @@ export default function ProductsPage() {
               <button
                 onClick={() => setPage(Math.min(totalPages, page + 1))}
                 disabled={page === totalPages}
-                className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-sm disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-900"
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-900"
               >
                 Next
               </button>
@@ -177,7 +180,7 @@ export default function ProductsPage() {
           )}
         </>
       ) : (
-        <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+        <div className="py-16 text-center text-gray-500 dark:text-gray-400">
           No products found matching your criteria.
         </div>
       )}

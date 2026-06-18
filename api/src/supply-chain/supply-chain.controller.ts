@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ValidationPipe } from '@nestjs/common';
 import { SupplyChainService } from './supply-chain.service';
 import { AggregationService } from './aggregation.service';
 import { CreateEventDto } from './dto/create-event.dto';

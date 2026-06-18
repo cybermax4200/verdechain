@@ -4,13 +4,13 @@ on:
   push:
     branches: [main]
     paths:
-      - "contracts/**"
-      - "api/**"
-      - ".github/workflows/deploy-testnet.yml"
+      - 'contracts/**'
+      - 'api/**'
+      - '.github/workflows/deploy-testnet.yml'
 
 env:
-  NODE_VERSION: "20"
-  RUST_VERSION: "1.75"
+  NODE_VERSION: '20'
+  RUST_VERSION: '1.75'
   STELLAR_NETWORK: testnet
   SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
 

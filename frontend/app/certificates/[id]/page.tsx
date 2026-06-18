@@ -12,12 +12,20 @@ export default function CertificateDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    api.getCertificate(params.id as string).then(setCertificate).catch(() => setCertificate(null)).finally(() => setIsLoading(false));
+    api
+      .getCertificate(params.id as string)
+      .then(setCertificate)
+      .catch(() => setCertificate(null))
+      .finally(() => setIsLoading(false));
   }, [params.id]);
 
   const handleVerify = async (id: string): Promise<boolean> => {
     try {
-      const result = await api.request<any>({ method: 'POST', url: `/certificates/verify`, data: { id } });
+      const result = await api.request<any>({
+        method: 'POST',
+        url: `/certificates/verify`,
+        data: { id },
+      });
       return result.valid === true;
     } catch {
       return false;
@@ -36,19 +44,24 @@ export default function CertificateDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto space-y-4 animate-pulse">
-        <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/3" />
-        <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl" />
+      <div className="mx-auto max-w-3xl animate-pulse space-y-4">
+        <div className="h-8 w-1/3 rounded bg-gray-200 dark:bg-gray-800" />
+        <div className="h-64 rounded-xl bg-gray-200 dark:bg-gray-800" />
       </div>
     );
   }
 
   if (!certificate) {
     return (
-      <div className="text-center py-16">
-        <p className="text-lg text-red-500 mb-2">Certificate not found</p>
-        <p className="text-sm text-gray-500 mb-4">The certificate you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-        <button onClick={() => router.push('/certificates')} className="text-brand-600 dark:text-brand-400 hover:underline">
+      <div className="py-16 text-center">
+        <p className="mb-2 text-lg text-red-500">Certificate not found</p>
+        <p className="mb-4 text-sm text-gray-500">
+          The certificate you&apos;re looking for doesn&apos;t exist or has been removed.
+        </p>
+        <button
+          onClick={() => router.push('/certificates')}
+          className="text-brand-600 dark:text-brand-400 hover:underline"
+        >
           ← Back to certificates
         </button>
       </div>
@@ -56,8 +69,11 @@ export default function CertificateDetailPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
-      <button onClick={() => router.push('/certificates')} className="text-sm text-brand-600 dark:text-brand-400 hover:underline">
+    <div className="animate-fade-in mx-auto max-w-3xl space-y-6">
+      <button
+        onClick={() => router.push('/certificates')}
+        className="text-brand-600 dark:text-brand-400 text-sm hover:underline"
+      >
         ← Back to certificates
       </button>
       <CertificatePreview
@@ -70,7 +86,7 @@ export default function CertificateDetailPage() {
         onRevoke={handleRevoke}
       />
       <div className="text-center">
-        <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
+        <p className="font-mono text-xs text-gray-400 dark:text-gray-500">
           Certificate ID: {certificate.id} | Verify on Stellar blockchain
         </p>
       </div>

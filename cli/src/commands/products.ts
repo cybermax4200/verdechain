@@ -82,7 +82,10 @@ productsCommand
         table.push(['Origin', data.originCountry ?? '-']);
         table.push(['Status', data.status ?? '-']);
         table.push(['Manufacturer', data.manufacturer?.name ?? '-']);
-        table.push(['Created', data.createdAt ? new Date(data.createdAt).toLocaleDateString() : '-']);
+        table.push([
+          'Created',
+          data.createdAt ? new Date(data.createdAt).toLocaleDateString() : '-',
+        ]);
         console.log(table.toString());
       }
     } catch (error: any) {

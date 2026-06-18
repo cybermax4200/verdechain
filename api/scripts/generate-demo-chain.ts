@@ -3,20 +3,69 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const participants = [
-  { name: 'Amazon Rainforest Reserve', publicKey: 'GA7QYNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZJ', country: 'Brazil', role: 'raw_material' },
-  { name: 'Green Logistics Ltd', publicKey: 'GB8RZNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZK', country: 'Netherlands', role: 'logistics' },
-  { name: 'EcoManufacture GmbH', publicKey: 'GC9SYNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZL', country: 'Germany', role: 'manufacturer' },
-  { name: 'Sustainable Distributors Inc', publicKey: 'GD0TZNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZM', country: 'USA', role: 'distributor' },
-  { name: 'EcoRetail Chain', publicKey: 'GE1UZNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZN', country: 'UK', role: 'retailer' },
+  {
+    name: 'Amazon Rainforest Reserve',
+    publicKey: 'GA7QYNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZJ',
+    country: 'Brazil',
+    role: 'raw_material',
+  },
+  {
+    name: 'Green Logistics Ltd',
+    publicKey: 'GB8RZNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZK',
+    country: 'Netherlands',
+    role: 'logistics',
+  },
+  {
+    name: 'EcoManufacture GmbH',
+    publicKey: 'GC9SYNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZL',
+    country: 'Germany',
+    role: 'manufacturer',
+  },
+  {
+    name: 'Sustainable Distributors Inc',
+    publicKey: 'GD0TZNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZM',
+    country: 'USA',
+    role: 'distributor',
+  },
+  {
+    name: 'EcoRetail Chain',
+    publicKey: 'GE1UZNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5ZN',
+    country: 'UK',
+    role: 'retailer',
+  },
 ];
 
 const supplyChainStages = [
-  { stage: 'RAW_MATERIAL_EXTRACTION', description: 'Sustainable harvesting of raw rubber from managed forests', location: 'Manaus, Brazil' },
-  { stage: 'TRANSPORT_TO_SUPPLIER', description: 'River barge transport to processing facility', location: 'Amazon River Basin' },
-  { stage: 'MANUFACTURING', description: 'Processing into eco-friendly rubber sheets using solar-powered facility', location: 'Hamburg, Germany' },
-  { stage: 'TRANSPORT_TO_DISTRIBUTOR', description: 'Ocean freight via wind-assisted cargo vessel', location: 'North Atlantic' },
-  { stage: 'DISTRIBUTION', description: 'Warehousing and quality control at regional hub', location: 'Newark, NJ, USA' },
-  { stage: 'RETAIL', description: 'Final product preparation for retail sale', location: 'London, UK' },
+  {
+    stage: 'RAW_MATERIAL_EXTRACTION',
+    description: 'Sustainable harvesting of raw rubber from managed forests',
+    location: 'Manaus, Brazil',
+  },
+  {
+    stage: 'TRANSPORT_TO_SUPPLIER',
+    description: 'River barge transport to processing facility',
+    location: 'Amazon River Basin',
+  },
+  {
+    stage: 'MANUFACTURING',
+    description: 'Processing into eco-friendly rubber sheets using solar-powered facility',
+    location: 'Hamburg, Germany',
+  },
+  {
+    stage: 'TRANSPORT_TO_DISTRIBUTOR',
+    description: 'Ocean freight via wind-assisted cargo vessel',
+    location: 'North Atlantic',
+  },
+  {
+    stage: 'DISTRIBUTION',
+    description: 'Warehousing and quality control at regional hub',
+    location: 'Newark, NJ, USA',
+  },
+  {
+    stage: 'RETAIL',
+    description: 'Final product preparation for retail sale',
+    location: 'London, UK',
+  },
 ];
 
 async function generate() {
@@ -41,7 +90,8 @@ async function generate() {
       productId: 100,
       manufacturerId: manufacturerRecord.id,
       name: 'Eco-Rubber Gasket (Demo Supply Chain)',
-      description: 'A fully traceable eco-friendly rubber gasket demonstrating multi-hop supply chain tracking',
+      description:
+        'A fully traceable eco-friendly rubber gasket demonstrating multi-hop supply chain tracking',
       sku: 'ERG-2024-DEMO',
       batchNumber: 'DEMO-CHAIN-001',
       productType: 'industrial',
@@ -58,8 +108,8 @@ async function generate() {
   console.log(`  Created demo product: ${product.name}`);
 
   for (let i = 0; i < supplyChainStages.length; i++) {
-    const stage = supplyChainStages[i];
-    const participant = participants[i % participants.length];
+    const stage = supplyChainStages[i]!;
+    const participant = participants[i % participants.length]!;
 
     await prisma.lifecycleEvent.create({
       data: {
@@ -113,7 +163,7 @@ async function generate() {
       certType: 'GREEN_TAG',
       title: 'GreenTag Certificate - Eco-Rubber Gasket',
       description: 'Verified sustainable supply chain certificate',
-      issuerId: participant.publicKey,
+      issuerId: participants[2]!.publicKey,
       issuedAt: new Date(),
       status: 'active',
       metadata: {

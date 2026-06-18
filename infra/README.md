@@ -90,11 +90,11 @@ Deploys a CloudFront CDN distribution for certificate delivery. The module creat
 
 Each module accepts the following common variables:
 
-| Variable | Description | Type | Default |
-|----------|-------------|------|---------|
-| `environment` | Environment name | `string` | — |
-| `app_name` | Application name | `string` | `verdechain` |
-| `subnet_ids` | VPC subnet IDs | `list(string)` | — |
+| Variable      | Description      | Type           | Default      |
+| ------------- | ---------------- | -------------- | ------------ |
+| `environment` | Environment name | `string`       | —            |
+| `app_name`    | Application name | `string`       | `verdechain` |
+| `subnet_ids`  | VPC subnet IDs   | `list(string)` | —            |
 
 See individual module `main.tf` files for module-specific variables.
 

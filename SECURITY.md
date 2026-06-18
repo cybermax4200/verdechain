@@ -3,7 +3,7 @@
 ## Supported Versions
 
 | Version | Supported          |
-|---------|--------------------|
+| ------- | ------------------ |
 | 1.0.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
@@ -67,12 +67,12 @@ security vulnerability, please **do not open a public issue**.
 
 Smart contract security audits will be conducted before mainnet launch:
 
-| Auditor        | Scope                          | Status    |
-|----------------|--------------------------------|-----------|
-| Trail of Bits  | ProductRegistry, LifecycleTracker | Scheduled |
-| OpenZeppelin   | Attestation, GreenTagCert      | Scheduled |
-| Halborn        | VerifierRegistry, CarbonOracle | Scheduled |
-| Code4rena      | Full contract suite            | Scheduled |
+| Auditor       | Scope                             | Status    |
+| ------------- | --------------------------------- | --------- |
+| Trail of Bits | ProductRegistry, LifecycleTracker | Scheduled |
+| OpenZeppelin  | Attestation, GreenTagCert         | Scheduled |
+| Halborn       | VerifierRegistry, CarbonOracle    | Scheduled |
+| Code4rena     | Full contract suite               | Scheduled |
 
 ## Bug Bounty
 

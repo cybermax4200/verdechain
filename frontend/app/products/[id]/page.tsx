@@ -27,8 +27,17 @@ interface ProductDetail {
 }
 
 interface ProvenanceData {
-  nodes: { id: string; label: string; role: 'manufacturer' | 'supplier' | 'logistics' | 'verifier' | 'retailer' }[];
-  edges: { source: string; target: string; label?: string; type: 'transfer' | 'lifecycle' | 'certification' }[];
+  nodes: {
+    id: string;
+    label: string;
+    role: 'manufacturer' | 'supplier' | 'logistics' | 'verifier' | 'retailer';
+  }[];
+  edges: {
+    source: string;
+    target: string;
+    label?: string;
+    type: 'transfer' | 'lifecycle' | 'certification';
+  }[];
 }
 
 export default function ProductDetailPage() {
@@ -71,12 +80,12 @@ export default function ProductDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/3" />
-        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/4" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 h-64 bg-gray-200 dark:bg-gray-800 rounded-xl" />
-          <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl" />
+      <div className="animate-pulse space-y-6">
+        <div className="h-8 w-1/3 rounded bg-gray-200 dark:bg-gray-800" />
+        <div className="h-4 w-1/4 rounded bg-gray-200 dark:bg-gray-800" />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="h-64 rounded-xl bg-gray-200 lg:col-span-2 dark:bg-gray-800" />
+          <div className="h-64 rounded-xl bg-gray-200 dark:bg-gray-800" />
         </div>
       </div>
     );
@@ -84,9 +93,9 @@ export default function ProductDetailPage() {
 
   if (error || !product) {
     return (
-      <div className="text-center py-16">
+      <div className="py-16 text-center">
         <p className="text-red-500">{error ?? 'Product not found'}</p>
-        <a href="/products" className="text-brand-600 hover:underline mt-4 inline-block">
+        <a href="/products" className="text-brand-600 mt-4 inline-block hover:underline">
           ← Back to products
         </a>
       </div>
@@ -97,11 +106,15 @@ export default function ProductDetailPage() {
   const carbonBreakdown = latestCarbon?.breakdown
     ? Object.entries(latestCarbon.breakdown as Record<string, number>).map(([stage, value]) => ({
         stage,
-        scope: stage === 'rawMaterialExtraction' || stage === 'manufacturing' ? 'scope1' as const
-          : stage === 'transportation' || stage === 'distribution' ? 'scope3' as const
-          : 'scope2' as const,
+        scope:
+          stage === 'rawMaterialExtraction' || stage === 'manufacturing'
+            ? ('scope1' as const)
+            : stage === 'transportation' || stage === 'distribution'
+              ? ('scope3' as const)
+              : ('scope2' as const),
         value,
-        percentage: latestCarbon.totalFootprint > 0 ? (value / latestCarbon.totalFootprint) * 100 : 0,
+        percentage:
+          latestCarbon.totalFootprint > 0 ? (value / latestCarbon.totalFootprint) * 100 : 0,
       }))
     : [];
 
@@ -117,20 +130,21 @@ export default function ProductDetailPage() {
   }));
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="animate-fade-in space-y-8">
       <div>
-        <a href="/products" className="text-sm text-brand-600 dark:text-brand-400 hover:underline mb-2 inline-block">
+        <a
+          href="/products"
+          className="text-brand-600 dark:text-brand-400 mb-2 inline-block text-sm hover:underline"
+        >
           ← Back to products
         </a>
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{product.name}</h1>
-            <div className="flex items-center gap-3 mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <div className="mt-2 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
               {product.sku && <span>SKU: {product.sku}</span>}
               {product.batchNumber && <span>Batch: {product.batchNumber}</span>}
-              {product.productType && (
-                <Badge variant="secondary">{product.productType}</Badge>
-              )}
+              {product.productType && <Badge variant="secondary">{product.productType}</Badge>}
               <Badge variant={product.status === 'ACTIVE' ? 'default' : 'destructive'}>
                 {product.status}
               </Badge>
@@ -139,9 +153,9 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
-          <h2 className="text-lg font-semibold mb-4">Product Information</h2>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <Card className="p-6 lg:col-span-2">
+          <h2 className="mb-4 text-lg font-semibold">Product Information</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Manufacturer</p>
@@ -153,7 +167,7 @@ export default function ProductDetailPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Product ID</p>
-              <p className="font-medium font-mono">#{product.productId}</p>
+              <p className="font-mono font-medium">#{product.productId}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Registered</p>
@@ -161,17 +175,17 @@ export default function ProductDetailPage() {
             </div>
           </div>
           {product.description && (
-            <p className="text-gray-600 dark:text-gray-300 mt-4">{product.description}</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">{product.description}</p>
           )}
         </Card>
 
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Carbon Footprint</h2>
+          <h2 className="mb-4 text-lg font-semibold">Carbon Footprint</h2>
           {latestCarbon ? (
             <div className="space-y-3">
-              <div className="text-3xl font-bold text-brand-600 dark:text-brand-400">
+              <div className="text-brand-600 dark:text-brand-400 text-3xl font-bold">
                 {(latestCarbon.totalFootprint ?? 0).toFixed(1)}
-                <span className="text-sm font-normal text-gray-500 ml-1">kg CO₂e</span>
+                <span className="ml-1 text-sm font-normal text-gray-500">kg CO₂e</span>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
@@ -187,12 +201,12 @@ export default function ProductDetailPage() {
                   <span className="font-medium">{latestCarbon.scope3.toFixed(1)} kg</span>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                 Confidence: {latestCarbon.confidenceScore ?? 'N/A'}% · {latestCarbon.methodology}
               </div>
             </div>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400 text-sm">No carbon data available</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">No carbon data available</p>
           )}
         </Card>
       </div>
@@ -222,9 +236,11 @@ export default function ProductDetailPage() {
             />
           ) : (
             <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
-              <p className="text-lg mb-2">🌱</p>
+              <p className="mb-2 text-lg">🌱</p>
               <p>No carbon data available for this product.</p>
-              <p className="text-sm mt-1">Record lifecycle events to generate a carbon footprint breakdown.</p>
+              <p className="mt-1 text-sm">
+                Record lifecycle events to generate a carbon footprint breakdown.
+              </p>
             </Card>
           )}
         </TabsContent>
@@ -252,9 +268,11 @@ export default function ProductDetailPage() {
             </div>
           ) : (
             <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
-              <p className="text-lg mb-2">🏷️</p>
+              <p className="mb-2 text-lg">🏷️</p>
               <p>No certificates issued for this product.</p>
-              <p className="text-sm mt-1">Complete the attestation process to issue certificates.</p>
+              <p className="mt-1 text-sm">
+                Complete the attestation process to issue certificates.
+              </p>
             </Card>
           )}
         </TabsContent>
@@ -268,16 +286,18 @@ export default function ProductDetailPage() {
             />
           ) : (
             <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
-              <p className="text-lg mb-2">🔗</p>
+              <p className="mb-2 text-lg">🔗</p>
               <p>No provenance data available for this product.</p>
-              <p className="text-sm mt-1">The provenance graph will show the complete supply chain journey.</p>
+              <p className="mt-1 text-sm">
+                The provenance graph will show the complete supply chain journey.
+              </p>
             </Card>
           )}
         </TabsContent>
       </Tabs>
 
-      <div className="text-center py-4">
-        <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
+      <div className="py-4 text-center">
+        <p className="font-mono text-xs text-gray-400 dark:text-gray-500">
           Product ID: {product.id} | On-chain verification available
         </p>
       </div>

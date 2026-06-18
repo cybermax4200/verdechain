@@ -74,10 +74,15 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
     const simNodes = nodes.map((n) => ({ ...n }));
     const simLinks = edges.map((e) => ({ ...e }));
 
-    const simulation = d3.forceSimulation(simNodes as any)
-      .force('link', d3.forceLink(simLinks as any)
-        .id((d: any) => d.id)
-        .distance(150))
+    const simulation = d3
+      .forceSimulation(simNodes as any)
+      .force(
+        'link',
+        d3
+          .forceLink(simLinks as any)
+          .id((d: any) => d.id)
+          .distance(150),
+      )
       .force('charge', d3.forceManyBody().strength(-300))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide().radius(60));
@@ -85,7 +90,8 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
     const defs = svg.append('defs');
 
     edges.forEach((_, i) => {
-      defs.append('marker')
+      defs
+        .append('marker')
         .attr('id', `arrow-${i}`)
         .attr('viewBox', '0 -5 10 10')
         .attr('refX', 20)
@@ -98,25 +104,25 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
         .attr('fill', '#9ca3af');
     });
 
-    const linkGroup = svg.append('g')
-      .selectAll('g')
-      .data(simLinks)
-      .join('g');
+    const linkGroup = svg.append('g').selectAll('g').data(simLinks).join('g');
 
-    linkGroup.append('line')
+    linkGroup
+      .append('line')
       .attr('stroke', '#d1d5db')
       .attr('stroke-width', 2)
-      .attr('stroke-dasharray', (d: any) => d.type === 'certification' ? '5,5' : 'none')
+      .attr('stroke-dasharray', (d: any) => (d.type === 'certification' ? '5,5' : 'none'))
       .attr('marker-end', (_d: any, i: number) => `url(#arrow-${i})`);
 
-    linkGroup.append('text')
+    linkGroup
+      .append('text')
       .attr('font-size', '10px')
       .attr('fill', '#6b7280')
       .attr('text-anchor', 'middle')
       .attr('dy', '-8')
       .text((d: any) => d.label ?? '');
 
-    const nodeGroup = svg.append('g')
+    const nodeGroup = svg
+      .append('g')
       .selectAll('g')
       .data(simNodes)
       .join('g')
@@ -125,58 +131,67 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
         setSelectedNode(d);
         onNodeClick?.(d);
       })
-      .call(d3.drag<any, any>()
-        .on('start', (event: any, d: any) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x;
-          d.fy = d.y;
-        })
-        .on('drag', (event: any, d: any) => {
-          d.fx = event.x;
-          d.fy = event.y;
-        })
-        .on('end', (event: any, d: any) => {
-          if (!event.active) simulation.alphaTarget(0);
-          d.fx = null;
-          d.fy = null;
-        }));
+      .call(
+        d3
+          .drag<any, any>()
+          .on('start', (event: any, d: any) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on('drag', (event: any, d: any) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on('end', (event: any, d: any) => {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          }),
+      );
 
-    nodeGroup.append('circle')
+    nodeGroup
+      .append('circle')
       .attr('r', 24)
       .attr('fill', (d: any) => ROLE_COLORS[d.role] ?? '#9ca3af')
       .attr('stroke', '#fff')
       .attr('stroke-width', 3)
       .attr('opacity', 0.9);
 
-    nodeGroup.append('text')
+    nodeGroup
+      .append('text')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
       .attr('font-size', '16px')
       .text((d: any) => ROLE_ICONS[d.role] ?? '📄');
 
-    nodeGroup.append('text')
+    nodeGroup
+      .append('text')
       .attr('text-anchor', 'middle')
       .attr('dy', '38')
       .attr('font-size', '11px')
       .attr('fill', '#374151')
       .attr('font-weight', '500')
-      .text((d: any) => d.label.length > 15 ? d.label.slice(0, 15) + '…' : d.label);
+      .text((d: any) => (d.label.length > 15 ? d.label.slice(0, 15) + '…' : d.label));
 
     simulation.on('tick', () => {
-      linkGroup.selectAll('line')
+      linkGroup
+        .selectAll('line')
         .attr('x1', (d: any) => d.source.x)
         .attr('y1', (d: any) => d.source.y)
         .attr('x2', (d: any) => d.target.x)
         .attr('y2', (d: any) => d.target.y);
 
-      linkGroup.selectAll('text')
+      linkGroup
+        .selectAll('text')
         .attr('x', (d: any) => (d.source.x + d.target.x) / 2)
         .attr('y', (d: any) => (d.source.y + d.target.y) / 2);
 
       nodeGroup.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
     });
 
-    const zoom = d3.zoom<SVGSVGElement, unknown>()
+    const zoom = d3
+      .zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.3, 3])
       .on('zoom', (event) => {
         svg.selectAll('g').attr('transform', event.transform);
@@ -193,7 +208,7 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
   if (nodes.length === 0) {
     return (
       <Card className="p-12 text-center text-gray-500 dark:text-gray-400">
-        <p className="text-lg mb-2">🔗</p>
+        <p className="mb-2 text-lg">🔗</p>
         <p>No provenance data available for this product.</p>
       </Card>
     );
@@ -201,33 +216,39 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
 
   return (
     <div className="space-y-4">
-      <div ref={containerRef} className="w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden" style={{ minHeight: 400 }}>
+      <div
+        ref={containerRef}
+        className="w-full overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900"
+        style={{ minHeight: 400 }}
+      >
         <svg ref={svgRef} width={dimensions.width} height={dimensions.height} className="w-full" />
       </div>
       <div className="flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
         {Object.entries(ROLE_ICONS).map(([role, icon]) => (
           <div key={role} className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: ROLE_COLORS[role] }} />
-            <span>{icon} {role.charAt(0).toUpperCase() + role.slice(1)}</span>
+            <span className="h-3 w-3 rounded-full" style={{ backgroundColor: ROLE_COLORS[role] }} />
+            <span>
+              {icon} {role.charAt(0).toUpperCase() + role.slice(1)}
+            </span>
           </div>
         ))}
-        <div className="flex items-center gap-1.5 ml-4">
-          <span className="w-4 h-0.5 bg-gray-300" />
+        <div className="ml-4 flex items-center gap-1.5">
+          <span className="h-0.5 w-4 bg-gray-300" />
           <span>Transfer</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-4 h-0.5 bg-gray-300" />
+          <span className="h-0.5 w-4 bg-gray-300" />
           <span>Certification</span>
         </div>
       </div>
       {selectedNode && (
-        <Card className="p-4 animate-slide-up">
+        <Card className="animate-slide-up p-4">
           <div className="flex items-start justify-between">
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">
                 {ROLE_ICONS[selectedNode.role]} {selectedNode.label}
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+              <p className="text-sm capitalize text-gray-500 dark:text-gray-400">
                 Role: {selectedNode.role}
               </p>
               {selectedNode.productCount !== undefined && (
@@ -238,7 +259,7 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
             </div>
             <button
               onClick={() => setSelectedNode(null)}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm"
+              className="text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               ✕
             </button>

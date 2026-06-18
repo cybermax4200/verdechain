@@ -24,6 +24,7 @@ npm run dev
 ```
 
 This will:
+
 1. Check prerequisites
 2. Install dependencies
 3. Start Docker services (PostgreSQL, Redis, Stellar)
@@ -48,6 +49,7 @@ docker compose up -d
 ```
 
 This starts:
+
 - PostgreSQL 16 on port 5432
 - Redis 7 on port 6379
 - Stellar Quickstart (testnet) on port 8000
@@ -61,15 +63,15 @@ cp .env.example .env
 
 Key variables:
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection | `postgresql://...` |
-| `REDIS_URL` | Redis connection | `redis://localhost:6379` |
-| `SOROBAN_RPC_URL` | Soroban RPC endpoint | `http://localhost:8000/soroban/rpc` |
-| `HORIZON_URL` | Horizon endpoint | `http://localhost:8000` |
+| Variable           | Description           | Default                                  |
+| ------------------ | --------------------- | ---------------------------------------- |
+| `DATABASE_URL`     | PostgreSQL connection | `postgresql://...`                       |
+| `REDIS_URL`        | Redis connection      | `redis://localhost:6379`                 |
+| `SOROBAN_RPC_URL`  | Soroban RPC endpoint  | `http://localhost:8000/soroban/rpc`      |
+| `HORIZON_URL`      | Horizon endpoint      | `http://localhost:8000`                  |
 | `ADMIN_SECRET_KEY` | Admin Stellar keypair | (generate via `npm run wallet:generate`) |
-| `PINATA_API_KEY` | IPFS Pinata API key | (get from pinata.cloud) |
-| `JWT_SECRET` | JWT signing secret | (generate via `openssl rand -hex 32`) |
+| `PINATA_API_KEY`   | IPFS Pinata API key   | (get from pinata.cloud)                  |
+| `JWT_SECRET`       | JWT signing secret    | (generate via `openssl rand -hex 32`)    |
 
 ### 4. Database Setup
 
@@ -105,6 +107,7 @@ npm run dev
 ```
 
 This starts:
+
 - **API**: http://localhost:3000 (Swagger docs at /v1/docs)
 - **Frontend**: http://localhost:3001
 
@@ -129,21 +132,21 @@ verdechain/
 
 ## Available Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start all dev servers in parallel |
-| `npm run build` | Build all packages |
-| `npm run test` | Run all tests |
-| `npm run test:ci` | Run all tests with coverage |
-| `npm run lint` | Lint all packages |
-| `npm run typecheck` | TypeScript type checking |
-| `npm run format` | Check formatting |
-| `npm run format:fix` | Fix formatting |
-| `npm run db:migrate` | Run database migrations |
-| `npm run db:seed` | Seed sample data |
-| `npm run contracts:build` | Build Soroban contracts |
-| `npm run doctor` | Environment diagnostics |
-| `npm run clean` | Clean all build artifacts |
+| Command                   | Description                       |
+| ------------------------- | --------------------------------- |
+| `npm run dev`             | Start all dev servers in parallel |
+| `npm run build`           | Build all packages                |
+| `npm run test`            | Run all tests                     |
+| `npm run test:ci`         | Run all tests with coverage       |
+| `npm run lint`            | Lint all packages                 |
+| `npm run typecheck`       | TypeScript type checking          |
+| `npm run format`          | Check formatting                  |
+| `npm run format:fix`      | Fix formatting                    |
+| `npm run db:migrate`      | Run database migrations           |
+| `npm run db:seed`         | Seed sample data                  |
+| `npm run contracts:build` | Build Soroban contracts           |
+| `npm run doctor`          | Environment diagnostics           |
+| `npm run clean`           | Clean all build artifacts         |
 
 ## Testing
 

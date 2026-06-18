@@ -38,13 +38,13 @@ pub enum LifecycleStage {
 
 Records a lifecycle event for a product.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `product_id` | `u64` | Product identifier |
-| `stage` | `LifecycleStage` | Lifecycle stage |
-| `participant` | `Address` | Address recording the event |
-| `metadata_hash` | `BytesN<32>` | SHA-256 hash of event metadata |
-| `location` | `String` | ISO country/region code |
+| Parameter       | Type             | Description                    |
+| --------------- | ---------------- | ------------------------------ |
+| `product_id`    | `u64`            | Product identifier             |
+| `stage`         | `LifecycleStage` | Lifecycle stage                |
+| `participant`   | `Address`        | Address recording the event    |
+| `metadata_hash` | `BytesN<32>`     | SHA-256 hash of event metadata |
+| `location`      | `String`         | ISO country/region code        |
 
 **Events emitted:** `LifecycleEventRecorded { product_id, event_id, stage }`
 
@@ -52,9 +52,9 @@ Records a lifecycle event for a product.
 
 Atomically records multiple lifecycle events.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `events` | `Vec<EventInput>` | Array of event inputs |
+| Parameter | Type              | Description           |
+| --------- | ----------------- | --------------------- |
+| `events`  | `Vec<EventInput>` | Array of event inputs |
 
 ### get_lifecycle
 
@@ -75,18 +75,19 @@ Returns the total number of events recorded for a product.
 ## Cross-Contract Calls
 
 The LifecycleTracker calls:
+
 - **ProductRegistry**: Validates product existence and ownership
 - **CarbonOracle**: Retrieves emission factors for the event's location and stage
 
 ## Error Codes
 
-| Code | Error | Description |
-|------|-------|-------------|
-| 300 | `ProductNotFound` | Product does not exist in registry |
-| 301 | `NotAuthorized` | Caller is not authorized |
-| 302 | `InvalidStage` | Lifecycle stage is invalid |
-| 303 | `InvalidEventData` | Event data failed validation |
-| 304 | `BatchTooLarge` | Batch exceeds maximum size |
+| Code | Error              | Description                        |
+| ---- | ------------------ | ---------------------------------- |
+| 300  | `ProductNotFound`  | Product does not exist in registry |
+| 301  | `NotAuthorized`    | Caller is not authorized           |
+| 302  | `InvalidStage`     | Lifecycle stage is invalid         |
+| 303  | `InvalidEventData` | Event data failed validation       |
+| 304  | `BatchTooLarge`    | Batch exceeds maximum size         |
 
 ## Testing
 

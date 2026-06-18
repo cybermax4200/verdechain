@@ -57,9 +57,9 @@ export function WalletConnector() {
   if (publicKey) {
     return (
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 border border-brand-200 dark:border-brand-800">
-          <div className="w-2 h-2 rounded-full bg-brand-500" />
-          <span className="text-xs font-mono text-brand-700 dark:text-brand-300">
+        <div className="bg-brand-50 dark:bg-brand-950 border-brand-200 dark:border-brand-800 flex items-center gap-2 rounded-lg border px-3 py-1.5">
+          <div className="bg-brand-500 h-2 w-2 rounded-full" />
+          <span className="text-brand-700 dark:text-brand-300 font-mono text-xs">
             {publicKey.slice(0, 4)}...{publicKey.slice(-4)}
           </span>
         </div>
@@ -77,7 +77,7 @@ export function WalletConnector() {
     <button
       onClick={connect}
       disabled={isConnecting}
-      className="px-4 py-1.5 rounded-lg bg-brand-500 text-white text-sm font-medium hover:bg-brand-600 transition-colors disabled:opacity-50"
+      className="bg-brand-500 hover:bg-brand-600 rounded-lg px-4 py-1.5 text-sm font-medium text-white transition-colors disabled:opacity-50"
     >
       {isConnecting ? 'Connecting...' : 'Connect Wallet'}
     </button>

@@ -64,31 +64,31 @@
 
 The backend API is organized into domain modules:
 
-| Module | Purpose |
-|--------|---------|
-| **Products** | CRUD for product registration, provenance queries |
-| **Supply Chain** | Lifecycle event recording and aggregation |
-| **Carbon Accounting** | GHG Protocol Scope 1/2/3 calculations |
-| **Certificates** | GreenTag certificate issuance and verification |
-| **Auth** | SEP-10 Stellar challenge + JWT authentication |
-| **Verifiers** | Verifier registration, staking, reputation |
-| **Indexer** | Stellar Horizon event stream processing |
-| **Webhooks** | Event-driven callbacks with HMAC signing |
-| **IPFS** | Decentralized metadata storage via Pinata |
-| **Stellar** | Soroban/Horizon client wrappers |
+| Module                | Purpose                                           |
+| --------------------- | ------------------------------------------------- |
+| **Products**          | CRUD for product registration, provenance queries |
+| **Supply Chain**      | Lifecycle event recording and aggregation         |
+| **Carbon Accounting** | GHG Protocol Scope 1/2/3 calculations             |
+| **Certificates**      | GreenTag certificate issuance and verification    |
+| **Auth**              | SEP-10 Stellar challenge + JWT authentication     |
+| **Verifiers**         | Verifier registration, staking, reputation        |
+| **Indexer**           | Stellar Horizon event stream processing           |
+| **Webhooks**          | Event-driven callbacks with HMAC signing          |
+| **IPFS**              | Decentralized metadata storage via Pinata         |
+| **Stellar**           | Soroban/Horizon client wrappers                   |
 
 ### 3. Stellar Soroban Contracts
 
 Smart contracts deployed on Stellar Soroban:
 
-| Contract | Purpose |
-|----------|---------|
-| **ProductRegistry** | Register, transfer, and recall products |
+| Contract             | Purpose                                          |
+| -------------------- | ------------------------------------------------ |
+| **ProductRegistry**  | Register, transfer, and recall products          |
 | **LifecycleTracker** | Record and query lifecycle events with emissions |
-| **CarbonOracle** | Emission factors, grid intensity, methodology |
-| **Attestation** | Multi-verifier attestation workflow |
-| **GreenTagCert** | GreenTag certificate issuance and revocation |
-| **VerifierRegistry** | Verifier registration, staking, reputation |
+| **CarbonOracle**     | Emission factors, grid intensity, methodology    |
+| **Attestation**      | Multi-verifier attestation workflow              |
+| **GreenTagCert**     | GreenTag certificate issuance and revocation     |
+| **VerifierRegistry** | Verifier registration, staking, reputation       |
 
 ### 4. Data Layer
 

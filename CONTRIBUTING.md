@@ -72,30 +72,30 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Types
 
-| Type     | Usage                                  |
-|----------|----------------------------------------|
-| `feat`   | A new feature                          |
-| `fix`    | A bug fix                              |
-| `chore`  | Tooling, config, dependency changes    |
-| `docs`   | Documentation only                     |
-| `style`  | Formatting, missing semicolons         |
+| Type       | Usage                                   |
+| ---------- | --------------------------------------- |
+| `feat`     | A new feature                           |
+| `fix`      | A bug fix                               |
+| `chore`    | Tooling, config, dependency changes     |
+| `docs`     | Documentation only                      |
+| `style`    | Formatting, missing semicolons          |
 | `refactor` | Code change that neither fixes nor adds |
-| `test`   | Adding or updating tests               |
-| `perf`   | Performance improvement                |
+| `test`     | Adding or updating tests                |
+| `perf`     | Performance improvement                 |
 
 ### Scopes
 
-| Scope           | Area                          |
-|-----------------|-------------------------------|
-| `contracts`     | Soroban smart contracts       |
-| `api`           | NestJS backend                |
-| `frontend`      | Next.js frontend              |
-| `sdk`           | TypeScript SDK                |
-| `cli`           | CLI tool                      |
-| `infra`         | Terraform, Docker, CI/CD      |
-| `oracle`        | IoT/data oracle sidecar       |
-| `connectors`    | ERP integrations              |
-| `docs`          | Documentation                 |
+| Scope        | Area                     |
+| ------------ | ------------------------ |
+| `contracts`  | Soroban smart contracts  |
+| `api`        | NestJS backend           |
+| `frontend`   | Next.js frontend         |
+| `sdk`        | TypeScript SDK           |
+| `cli`        | CLI tool                 |
+| `infra`      | Terraform, Docker, CI/CD |
+| `oracle`     | IoT/data oracle sidecar  |
+| `connectors` | ERP integrations         |
+| `docs`       | Documentation            |
 
 ### Examples
 
@@ -119,6 +119,7 @@ chore: upgrade Soroban SDK to v21.1
 ### PR Template
 
 Fill out the [PR template](.github/PULL_REQUEST_TEMPLATE.md) with:
+
 - What this PR does
 - How to test it
 - Screenshots (for UI changes)
@@ -157,6 +158,7 @@ Fill out the [PR template](.github/PULL_REQUEST_TEMPLATE.md) with:
 ### Smart Contracts
 
 Every contract function must have at minimum:
+
 - One happy-path test
 - One authorization failure test
 - One edge case test

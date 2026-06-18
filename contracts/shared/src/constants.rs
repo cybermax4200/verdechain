@@ -1,6 +1,6 @@
 use soroban_sdk::Env;
 
-pub const MIN_STAKE: i128 = 1_000_000_000_0; // 1000 XLM (in stroops)
+pub const MIN_STAKE: i128 = 10_000_000_000; // 1000 XLM (in stroops)
 pub const MAX_PRODUCT_NAME_LEN: u32 = 128;
 pub const MAX_PRODUCT_DESC_LEN: u32 = 1024;
 pub const MAX_IPFS_HASH_LEN: u32 = 64;

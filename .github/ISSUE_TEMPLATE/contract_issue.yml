@@ -1,6 +1,6 @@
 name: Smart Contract Issue
 description: Report a bug, logic error, or security concern in a Soroban contract
-labels: ["contracts", "needs-triage"]
+labels: ['contracts', 'needs-triage']
 body:
   - type: markdown
     attributes:
@@ -69,4 +69,4 @@ body:
     id: soroban_version
     attributes:
       label: Soroban SDK Version
-      placeholder: "21.x"
+      placeholder: '21.x'

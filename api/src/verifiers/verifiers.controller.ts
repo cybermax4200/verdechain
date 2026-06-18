@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Body,
-  Param,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Param, ValidationPipe } from '@nestjs/common';
 import { VerifiersService } from './verifiers.service';
 import { RegisterVerifierDto } from './dto/register-verifier.dto';
 
@@ -35,10 +27,7 @@ export class VerifiersController {
   }
 
   @Put(':id/stake')
-  async addStake(
-    @Param('id') id: string,
-    @Body('amount') amount: number,
-  ) {
+  async addStake(@Param('id') id: string, @Body('amount') amount: number) {
     return this.verifiersService.addStake(id, amount);
   }
 

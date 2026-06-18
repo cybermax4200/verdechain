@@ -32,7 +32,7 @@ impl AttestationContract {
             return Err(Error::InsufficientVerifiers);
         }
 
-        if evidence_ipfs_hash.len() == 0 {
+        if evidence_ipfs_hash.is_empty() {
             return Err(Error::InvalidInput);
         }
 
@@ -91,7 +91,7 @@ impl AttestationContract {
         approvals.push_back(verifier.clone());
         record.approvals = approvals;
 
-        let approval_count: u32 = record.approvals.len() as u32;
+        let approval_count: u32 = record.approvals.len();
         if approval_count >= ATTESTATION_QUORUM {
             record.status = AttestationStatus::Approved;
             record.resolved_at = env.ledger().timestamp();
@@ -136,7 +136,7 @@ impl AttestationContract {
 
         record_dissent(&env, &mut record, verifier.clone(), reason.clone());
 
-        let rejection_count: u32 = record.rejections.len() as u32;
+        let rejection_count: u32 = record.rejections.len();
         if rejection_count >= ATTESTATION_QUORUM {
             record.status = AttestationStatus::Rejected;
             record.resolved_at = env.ledger().timestamp();

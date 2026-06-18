@@ -49,7 +49,10 @@ export class CertificatesService {
     };
 
     const pdfBuffer = await this.pdfGenerator.generateCertificate(certData);
-    const ipfsResult = await this.ipfsService.upload(pdfBuffer, `certificate-${certData.certificateId}.pdf`);
+    const ipfsResult = await this.ipfsService.upload(
+      pdfBuffer,
+      `certificate-${certData.certificateId}.pdf`,
+    );
 
     this.jsonLdGenerator.generateProvenanceDocument({
       productId: product.id,
@@ -60,19 +63,23 @@ export class CertificatesService {
         name: product.manufacturer?.name ?? 'Unknown',
         publicKey: product.manufacturer?.publicKey ?? '',
       },
-      certificates: [{
-        id: ipfsResult.cid,
-        certType: dto.certType,
-        title: dto.title,
-        issuedAt: new Date(),
-        status: 'active',
-      }],
+      certificates: [
+        {
+          id: ipfsResult.cid,
+          certType: dto.certType,
+          title: dto.title,
+          issuedAt: new Date(),
+          status: 'active',
+        },
+      ],
     });
 
     try {
       await this.stellarService.callContract('greenTagCert', 'issue_certificate');
     } catch (error) {
-      this.logger.warn(`Stellar contract call failed (certificate will be off-chain only): ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(
+        `Stellar contract call failed (certificate will be off-chain only): ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
 
     const certificate = await this.repository.create({
@@ -103,18 +110,14 @@ export class CertificatesService {
       onChainValid = false;
     }
 
-    const ipfsValid = certificate.ipfsHash
-      ? await this.verifyIpfsHash(certificate.ipfsHash)
-      : true;
+    const ipfsValid = certificate.ipfsHash ? await this.verifyIpfsHash(certificate.ipfsHash) : true;
 
     const valid = certificate.status === 'active' && onChainValid && ipfsValid;
 
     return {
       valid,
       certificate,
-      message: valid
-        ? 'Certificate is valid'
-        : 'Certificate is invalid or revoked',
+      message: valid ? 'Certificate is valid' : 'Certificate is invalid or revoked',
     };
   }
 
@@ -130,7 +133,9 @@ export class CertificatesService {
     try {
       await this.stellarService.callContract('greenTagCert', 'revoke_certificate');
     } catch (error) {
-      this.logger.warn(`Stellar contract revoke failed (revoking off-chain only): ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(
+        `Stellar contract revoke failed (revoking off-chain only): ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
 
     const updated = await this.repository.update(id, {
@@ -164,7 +169,9 @@ export class CertificatesService {
       try {
         return await this.ipfsService.get(certificate.ipfsHash);
       } catch (error) {
-        this.logger.warn(`IPFS fetch failed, generating PDF from data: ${error instanceof Error ? error.message : String(error)}`);
+        this.logger.warn(
+          `IPFS fetch failed, generating PDF from data: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     }
 

@@ -43,7 +43,7 @@ export class CertificateProcessor {
     await this.prisma.certificate.create({
       data: {
         productId: product.id,
-        certType: (event.data['certType'] as string ?? 'GREEN_TAG') as any,
+        certType: ((event.data['certType'] as string) ?? 'GREEN_TAG') as any,
         title: (event.data['title'] as string) ?? `GreenTag Certificate - ${event.productId}`,
         description: (event.data['description'] as string) ?? null,
         issuerId: (event.data['issuerId'] as string) ?? null,

@@ -91,7 +91,9 @@ export class AuthService {
         expiresIn: this.defaultExpiry,
       };
     } catch (error) {
-      this.logger.error(`Token refresh failed: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `Token refresh failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
       throw new UnauthorizedException('Invalid or expired token');
     }
   }
