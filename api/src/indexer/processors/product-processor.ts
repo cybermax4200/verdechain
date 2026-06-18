@@ -42,7 +42,7 @@ export class ProductProcessor {
         where: { id: existingProduct.id },
         data: {
           status: 'ACTIVE',
-          metadata: { ...(existingProduct.metadata as Record<string, unknown>), ...event.data },
+          metadata: { ...(existingProduct.metadata as Record<string, unknown>) || {}, ...event.data } as any,
         },
       });
       this.logger.log(`Updated existing product ${event.productId} from on-chain event`);

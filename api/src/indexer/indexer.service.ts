@@ -129,7 +129,7 @@ export class IndexerService implements OnModuleInit {
       const transactions = await this.horizonClient.getTransactions(undefined, {
         limit: 200,
         order: 'asc',
-        cursor: ledger.paging_token,
+        cursor: (ledger as any).paging_token,
       });
 
       for (const tx of transactions.records) {
