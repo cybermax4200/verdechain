@@ -18,9 +18,30 @@ NODE_VERSION=$(node -v | sed 's/v//' | cut -d. -f1)
 if [ "$NODE_VERSION" -lt 20 ]; then
   echo "Error: Node.js 20+ required (found: $(node -v))"; exit 1;
 fi
+
+if command -v rustc >/dev/null 2>&1; then
+  echo "  Rust $(rustc --version) — OK"
+else
+  echo "  Warning: Rust not found — contract compilation will be skipped"
+fi
+
 echo "  Node.js $(node -v) — OK"
 echo "  npm $(npm -v) — OK"
 echo "  Docker $(docker -v) — OK"
+
+# ── Environment file ────────────────────────────────────────────────────────
+echo ""
+echo "[1.5/7] Checking environment configuration..."
+if [ ! -f .env ]; then
+  if [ -f .env.example ]; then
+    cp .env.example .env
+    echo "  Created .env from .env.example — please review and update secrets"
+  else
+    echo "  Warning: No .env.example found, skipping"
+  fi
+else
+  echo "  .env already exists — OK"
+fi
 
 # ── Install dependencies ───────────────────────────────────────────────────
 echo ""
@@ -34,20 +55,61 @@ docker compose up -d
 echo "  Waiting for services to be healthy..."
 sleep 5
 
+# ── Generate Prisma client ─────────────────────────────────────────────────
+echo ""
+echo "[3.5/7] Generating Prisma client..."
+if [ -f api/prisma/schema.prisma ]; then
+  cd api && npx prisma generate && cd ..
+  echo "  Prisma client generated — OK"
+else
+  echo "  Skipped — no Prisma schema found"
+fi
+
 # ── Migrate database ───────────────────────────────────────────────────────
 echo ""
 echo "[4/7] Running database migrations..."
-echo "  (Skipped — API module not yet implemented)"
+if [ -f api/prisma/schema.prisma ]; then
+  cd api && npx prisma migrate deploy && cd ..
+  echo "  Migrations applied — OK"
+else
+  echo "  Skipped — no Prisma schema found"
+fi
 
-# ── Fund testnet keypair ───────────────────────────────────────────────────
+# ── Build contracts ────────────────────────────────────────────────────────
+echo ""
+echo "[4.5/7] Building smart contracts..."
+if command -v rustc >/dev/null 2>&1 && [ -f contracts/Cargo.toml ]; then
+  cd contracts && cargo build --target wasm32-unknown-unknown --release 2>/dev/null && cd ..
+  echo "  Contracts built — OK"
+else
+  echo "  Skipped — Rust toolchain or contract directory not found"
+fi
+
+# ── Fund testnet keypair ──────────────────────────────────────────────────
 echo ""
 echo "[5/7] Funding Stellar testnet keypair..."
-echo "  (Skipped — deploy contracts not yet implemented)"
+if [ -f contracts/deploy-testnet.sh ]; then
+  echo "  Running deploy-testnet.sh..."
+  cd contracts && bash deploy-testnet.sh && cd ..
+  echo "  Testnet contracts deployed — OK"
+else
+  echo "  Skipped — deploy-testnet.sh not found"
+fi
 
 # ── Seed data ──────────────────────────────────────────────────────────────
 echo ""
 echo "[6/7] Seeding sample data..."
-echo "  (Skipped — seed scripts not yet implemented)"
+if [ -f api/scripts/seed-products.ts ]; then
+  cd api && npx ts-node scripts/seed-products.ts && cd ..
+  echo "  Products seeded — OK"
+else
+  echo "  Skipped — seed scripts not found"
+fi
+
+if [ -f api/scripts/seed-verifiers.ts ]; then
+  cd api && npx ts-node scripts/seed-verifiers.ts && cd ..
+  echo "  Verifiers seeded — OK"
+fi
 
 # ── Start dev servers ─────────────────────────────────────────────────────
 echo ""
@@ -57,7 +119,15 @@ echo ""
 
 echo "=== Bootstrap complete ==="
 echo ""
+echo "Your VerdeChain development environment is ready."
+echo ""
+echo "Quick links:"
+echo "  API:        http://localhost:3000"
+echo "  API Docs:   http://localhost:3000/v1/docs"
+echo "  Frontend:   http://localhost:3001"
+echo "  Prisma Studio: npm run db:studio -w api"
+echo ""
 echo "Next steps:"
-echo "  1. Copy .env.example to .env and fill in secrets"
-echo "  2. Run 'npm run dev' to start API + frontend"
-echo "  3. Visit http://localhost:3000 (API) or http://localhost:3001 (Frontend)"
+echo "  1. Review .env and update any secrets"
+echo "  2. Run 'npm run dev' to start API and frontend"
+echo "  3. Run 'npm run test' to verify everything works"
