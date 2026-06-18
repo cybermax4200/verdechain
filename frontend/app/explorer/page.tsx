@@ -32,7 +32,9 @@ export default function ExplorerPage() {
   const [activeTab, setActiveTab] = useState('browse');
 
   const handleSearch = useCallback(async () => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      return;
+    }
     setIsLoading(true);
     try {
       const result = await api.getProducts({ q: query, limit: 20 });

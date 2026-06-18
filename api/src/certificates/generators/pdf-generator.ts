@@ -147,7 +147,7 @@ export class PdfGeneratorService {
     return [
       ' ',
       `${streamContent.length} 0 obj`,
-      '<< /Type /EmbeddedFile /Subtype /text%2Fxml /Length ' + streamContent.length + ' >>',
+      `<< /Type /EmbeddedFile /Subtype /text%2Fxml /Length ${streamContent.length} >>`,
       'stream',
       streamContent,
       'endstream',

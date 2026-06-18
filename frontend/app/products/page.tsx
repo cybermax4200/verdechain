@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ProductCard } from '@/components/product-card';
 import { api } from '@/lib/api';
@@ -17,7 +17,7 @@ interface Product {
   manufacturer: { name: string; country?: string };
 }
 
-export default function ProductsPage() {
+function ProductsList() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
@@ -185,5 +185,31 @@ export default function ProductsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 w-48 rounded bg-gray-200 dark:bg-gray-800" />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900"
+              >
+                <div className="mb-3 h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
+                <div className="mb-2 h-3 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
+                <div className="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-800" />
+              </div>
+            ))}
+          </div>
+        </div>
+      }
+    >
+      <ProductsList />
+    </Suspense>
   );
 }

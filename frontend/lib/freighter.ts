@@ -26,7 +26,9 @@ export async function getFreighterPublicKey(): Promise<string> {
 
 export async function isFreighterConnected(): Promise<boolean> {
   try {
-    if (!window.freighter) return false;
+    if (!window.freighter) {
+      return false;
+    }
     const { isConnected } = await window.freighter.isConnected();
     return isConnected;
   } catch {

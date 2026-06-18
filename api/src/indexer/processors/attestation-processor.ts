@@ -69,7 +69,9 @@ export class AttestationProcessor {
 
   private async handleApproved(event: AttestationEvent): Promise<void> {
     const record = await this.findAttestation(event.attestationId, event.productId);
-    if (!record) return;
+    if (!record) {
+      return;
+    }
 
     const newApprovals = record.approvals + 1;
     const status = newApprovals >= record.threshold ? 'APPROVED' : 'PENDING';
@@ -88,7 +90,9 @@ export class AttestationProcessor {
 
   private async handleRejected(event: AttestationEvent): Promise<void> {
     const record = await this.findAttestation(event.attestationId, event.productId);
-    if (!record) return;
+    if (!record) {
+      return;
+    }
 
     const newRejections = record.rejections + 1;
     await this.prisma.attestationRecord.update({
@@ -105,7 +109,9 @@ export class AttestationProcessor {
 
   private async handleEscalated(event: AttestationEvent): Promise<void> {
     const record = await this.findAttestation(event.attestationId, event.productId);
-    if (!record) return;
+    if (!record) {
+      return;
+    }
 
     await this.prisma.attestationRecord.update({
       where: { id: record.id },
@@ -129,7 +135,9 @@ export class AttestationProcessor {
       where: { productId: parseInt(productId, 10) },
     });
 
-    if (!product) return null;
+    if (!product) {
+      return null;
+    }
 
     return this.prisma.attestationRecord.findFirst({
       where: { productId: product.id },

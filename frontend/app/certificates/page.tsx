@@ -54,7 +54,9 @@ export default function CertificatesPage() {
   };
 
   const filtered = certificates.filter((cert) => {
-    if (!searchQuery) return true;
+    if (!searchQuery) {
+      return true;
+    }
     const q = searchQuery.toLowerCase();
     return (
       cert.title.toLowerCase().includes(q) ||

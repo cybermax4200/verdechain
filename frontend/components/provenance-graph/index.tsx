@@ -58,12 +58,16 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
     };
     updateDimensions();
     const observer = new ResizeObserver(updateDimensions);
-    if (containerRef.current) observer.observe(containerRef.current);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!svgRef.current || nodes.length === 0) return;
+    if (!svgRef.current || nodes.length === 0) {
+      return;
+    }
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -135,7 +139,9 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
         d3
           .drag<any, any>()
           .on('start', (event: any, d: any) => {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
+            if (!event.active) {
+              simulation.alphaTarget(0.3).restart();
+            }
             d.fx = d.x;
             d.fy = d.y;
           })
@@ -144,7 +150,9 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
             d.fy = event.y;
           })
           .on('end', (event: any, d: any) => {
-            if (!event.active) simulation.alphaTarget(0);
+            if (!event.active) {
+              simulation.alphaTarget(0);
+            }
             d.fx = null;
             d.fy = null;
           }),
@@ -172,7 +180,7 @@ export function ProvenanceGraph({ nodes, edges, onNodeClick }: ProvenanceGraphPr
       .attr('font-size', '11px')
       .attr('fill', '#374151')
       .attr('font-weight', '500')
-      .text((d: any) => (d.label.length > 15 ? d.label.slice(0, 15) + '…' : d.label));
+      .text((d: any) => (d.label.length > 15 ? `${d.label.slice(0, 15)}…` : d.label));
 
     simulation.on('tick', () => {
       linkGroup

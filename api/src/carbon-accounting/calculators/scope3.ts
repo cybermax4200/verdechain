@@ -118,7 +118,9 @@ export function calculateScope3FromEvents(
       : [];
     const usePhase = { energyKwh: event.energyKwh || 0, gridIntensity: 0.475 };
     const disposal =
-      event.wasteKg != null ? [{ wasteKg: event.wasteKg, method: 'landfill_mixed' }] : [];
+      event.wasteKg !== undefined && event.wasteKg !== null
+        ? [{ wasteKg: event.wasteKg, method: 'landfill_mixed' }]
+        : [];
 
     const emissions = calculateDownstreamEmissions(distribution, usePhase, disposal);
     downstreamEmissions += emissions;

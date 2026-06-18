@@ -51,7 +51,9 @@ function DonutChart({ breakdown }: { breakdown: EmissionsBreakdown[] }) {
   const total = breakdown.reduce((sum, b) => sum + b.value, 0);
 
   useEffect(() => {
-    if (!svgRef.current || total === 0) return;
+    if (!svgRef.current || total === 0) {
+      return;
+    }
 
     const svg = svgRef.current;
     const width = 200;
@@ -71,7 +73,9 @@ function DonutChart({ breakdown }: { breakdown: EmissionsBreakdown[] }) {
 
     breakdown.forEach((item) => {
       const sliceAngle = (item.value / total) * 2 * Math.PI;
-      if (sliceAngle === 0) return;
+      if (sliceAngle === 0) {
+        return;
+      }
 
       const r = radius;
       const x1 = r * Math.cos(cumulativeAngle);
@@ -119,7 +123,9 @@ function DonutChart({ breakdown }: { breakdown: EmissionsBreakdown[] }) {
     donut.appendChild(unitText);
   }, [breakdown, total]);
 
-  if (total === 0) return null;
+  if (total === 0) {
+    return null;
+  }
 
   return <svg ref={svgRef} className="mx-auto w-full max-w-[200px]" />;
 }

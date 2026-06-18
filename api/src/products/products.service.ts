@@ -76,7 +76,7 @@ export class ProductsService {
         .map((e) => ({
           id: `${e.id}-location`,
           type: 'location',
-          label: e.location!,
+          label: e.location || '',
           metadata: { stage: e.stage },
         })),
     ];

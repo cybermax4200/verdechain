@@ -18,7 +18,9 @@ export function calculateDirectEmissions(
   unit: 'kWh' | 'kg' | 'liter' = 'kWh',
 ): number {
   const factor = IpccFactors.getFuelFactor(fuelType);
-  if (!factor) return 0;
+  if (!factor) {
+    return 0;
+  }
 
   let convertedAmount = fuelUse;
   if (unit === 'kg') {
@@ -51,7 +53,7 @@ export function calculateScope1FromEvents(events: LifecycleEventData[]): DirectE
   const breakdown: { source: string; value: number; unit: string }[] = [];
 
   for (const event of events) {
-    if (event.fuelUsed != null && event.fuelType) {
+    if (event.fuelUsed !== undefined && event.fuelUsed !== null && event.fuelType) {
       const emissions = calculateDirectEmissions(event.fuelUsed, event.fuelType);
       if (emissions > 0) {
         combustionEmissions += emissions;

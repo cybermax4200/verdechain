@@ -43,7 +43,7 @@ describe('CarbonAPI', () => {
 
       const result = await carbon.getBreakdown('123');
       expect(result).toHaveLength(2);
-      expect(result[0].stage).toBe('manufacturing');
+      expect(result[0]?.stage).toBe('manufacturing');
 
       requestSpy.mockRestore();
     });

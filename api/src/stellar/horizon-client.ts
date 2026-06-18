@@ -38,9 +38,15 @@ export class HorizonClientService {
     if (accountId) {
       builder.forAccount(accountId);
     }
-    if (options?.limit) builder.limit(options.limit);
-    if (options?.order) builder.order(options.order);
-    if (options?.cursor) builder.cursor(options.cursor);
+    if (options?.limit) {
+      builder.limit(options.limit);
+    }
+    if (options?.order) {
+      builder.order(options.order);
+    }
+    if (options?.cursor) {
+      builder.cursor(options.cursor);
+    }
 
     return builder.call();
   }
@@ -57,8 +63,12 @@ export class HorizonClientService {
     },
   ) {
     const builder = this.server.payments().forAccount(accountId);
-    if (options?.limit) builder.limit(options.limit);
-    if (options?.cursor) builder.cursor(options.cursor);
+    if (options?.limit) {
+      builder.limit(options.limit);
+    }
+    if (options?.cursor) {
+      builder.cursor(options.cursor);
+    }
     return builder.call();
   }
 

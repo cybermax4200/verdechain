@@ -29,7 +29,9 @@ export function Tabs({
 
   const handleValueChange = React.useCallback(
     (newValue: string) => {
-      if (!isControlled) setInternalValue(newValue);
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
       onValueChange?.(newValue);
     },
     [isControlled, onValueChange],
@@ -99,7 +101,9 @@ export function TabsContent({
   children: React.ReactNode;
 }) {
   const ctx = React.useContext(TabsContext);
-  if (ctx?.value !== value) return null;
+  if (ctx?.value !== value) {
+    return null;
+  }
 
   return <div className={className}>{children}</div>;
 }

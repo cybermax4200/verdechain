@@ -18,7 +18,8 @@
   "scripts": {
     "dev": "echo 'SDK scaffold ready'",
     "build": "tsc",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --passWithNoTests",
+    "test": "jest --passWithNoTests",
+    "test:ci": "jest --ci --coverage --passWithNoTests",
     "lint": "echo 'SDK lint placeholder'",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
@@ -33,5 +34,22 @@
     "@types/jest": "^29.5.0",
     "ts-jest": "^29.1.0",
     "axios-mock-adapter": "^1.22.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testRegex": ".*\\.test\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.(t|j)s"
+    ],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node"
   }
 }

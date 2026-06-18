@@ -52,7 +52,9 @@ export function CertificatePreview({
   const isRevoked = certificate.status === 'revoked';
 
   const handleVerify = async () => {
-    if (!onVerify) return;
+    if (!onVerify) {
+      return;
+    }
     setVerificationStatus('verifying');
     try {
       const isValid = await onVerify(certificate.id);

@@ -123,15 +123,21 @@ export class CarbonService {
 
       if (mapping.scope === 1) {
         for (const b of scope1Result.breakdown) {
-          if (b.source.includes(e.stage.toLowerCase())) value += b.value;
+          if (b.source.includes(e.stage.toLowerCase())) {
+            value += b.value;
+          }
         }
       } else if (mapping.scope === 2) {
         for (const b of scope2Result.breakdown) {
-          if (b.source.includes(e.stage.toLowerCase())) value += b.value;
+          if (b.source.includes(e.stage.toLowerCase())) {
+            value += b.value;
+          }
         }
       } else if (mapping.scope === 3) {
         for (const b of scope3Result.breakdown) {
-          if (b.source.includes(e.stage.toLowerCase())) value += b.value;
+          if (b.source.includes(e.stage.toLowerCase())) {
+            value += b.value;
+          }
         }
       }
 
@@ -162,7 +168,9 @@ export class CarbonService {
           },
         },
       });
-    } catch {}
+    } catch {
+      // Ignore database save errors to avoid failing the calculation
+    }
 
     return {
       productId,

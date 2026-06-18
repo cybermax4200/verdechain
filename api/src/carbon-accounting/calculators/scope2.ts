@@ -19,10 +19,14 @@ export function calculateEnergyEmissions(kwh: number, gridIntensity: number): nu
 
 export function getGridIntensityForRegion(region: string): number {
   const gridData = GridIntensityFactor.getIntensity(region);
-  if (gridData) return gridData.value;
+  if (gridData) {
+    return gridData.value;
+  }
 
   const ipccGrid = IpccFactors.getGridFactor(region);
-  if (ipccGrid) return ipccGrid.value;
+  if (ipccGrid) {
+    return ipccGrid.value;
+  }
 
   const globalAvg = IpccFactors.getGridFactor('global_avg');
   return globalAvg?.value ?? 0.475;
@@ -30,11 +34,11 @@ export function getGridIntensityForRegion(region: string): number {
 
 export function calculateScope2FromEvents(events: LifecycleEventData[]): EnergyEmissionsResult {
   let purchasedElectricity = 0;
-  let purchasedHeat = 0;
+  const purchasedHeat = 0;
   const breakdown: { source: string; value: number; unit: string }[] = [];
 
   for (const event of events) {
-    if (event.energyKwh != null && event.energyKwh > 0) {
+    if (event.energyKwh !== undefined && event.energyKwh !== null && event.energyKwh > 0) {
       const region = event.region || event.location || 'global_avg';
       const intensity = getGridIntensityForRegion(region);
       const emissions = calculateEnergyEmissions(event.energyKwh, intensity);

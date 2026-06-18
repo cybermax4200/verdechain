@@ -1,3 +1,5 @@
+#![no_std]
+
 pub mod auth;
 pub mod constants;
 pub mod errors;

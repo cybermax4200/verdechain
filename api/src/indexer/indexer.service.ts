@@ -82,8 +82,8 @@ export class IndexerService implements OnModuleInit {
       }
     }
 
-    if (transactions.records.length > 0) {
-      await this.saveLastProcessedLedger(this.currentCursor!);
+    if (transactions.records.length > 0 && this.currentCursor !== null) {
+      await this.saveLastProcessedLedger(this.currentCursor);
     }
   }
 
@@ -93,7 +93,9 @@ export class IndexerService implements OnModuleInit {
     created_at: string;
     successful: boolean;
   }): Promise<void> {
-    if (!tx.successful) return;
+    if (!tx.successful) {
+      return;
+    }
 
     const events: IndexerEvent[] = []; // Placeholder for actual event extraction
 

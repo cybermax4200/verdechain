@@ -83,12 +83,24 @@ class ApiClient {
 
   async getProducts(filters: ProductFilters = {}) {
     const params: Record<string, string> = {};
-    if (filters.q) params.q = filters.q;
-    if (filters.type) params.type = filters.type;
-    if (filters.origin) params.origin = filters.origin;
-    if (filters.sort) params.sort = filters.sort;
-    if (filters.page) params.page = String(filters.page);
-    if (filters.limit) params.limit = String(filters.limit);
+    if (filters.q) {
+      params.q = filters.q;
+    }
+    if (filters.type) {
+      params.type = filters.type;
+    }
+    if (filters.origin) {
+      params.origin = filters.origin;
+    }
+    if (filters.sort) {
+      params.sort = filters.sort;
+    }
+    if (filters.page) {
+      params.page = String(filters.page);
+    }
+    if (filters.limit) {
+      params.limit = String(filters.limit);
+    }
 
     return this.request<{
       data: any[];

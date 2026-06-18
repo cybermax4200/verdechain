@@ -68,7 +68,9 @@ export function getApplicableFactors(
 }
 
 export function computeConfidence(events: LifecycleEventData[]): number {
-  if (!events || events.length === 0) return 0;
+  if (!events || events.length === 0) {
+    return 0;
+  }
 
   const weights = {
     hasEnergyData: 0.25,
@@ -84,13 +86,24 @@ export function computeConfidence(events: LifecycleEventData[]): number {
   for (const event of events) {
     let eventScore = 0;
 
-    if (event.energyKwh != null) eventScore += weights.hasEnergyData;
-    if (event.fuelUsed != null && event.fuelType) eventScore += weights.hasFuelData;
-    if (event.materialInputs && event.materialInputs.length > 0)
+    if (event.energyKwh !== undefined && event.energyKwh !== null) {
+      eventScore += weights.hasEnergyData;
+    }
+    if (event.fuelUsed !== undefined && event.fuelUsed !== null && event.fuelType) {
+      eventScore += weights.hasFuelData;
+    }
+    if (event.materialInputs && event.materialInputs.length > 0) {
       eventScore += weights.hasMaterialData;
-    if (event.transportMode && event.distanceKm != null) eventScore += weights.hasTransportData;
-    if (event.wasteKg != null) eventScore += weights.hasWasteData;
-    if (event.region || event.location) eventScore += weights.hasRegionData;
+    }
+    if (event.transportMode && event.distanceKm !== undefined && event.distanceKm !== null) {
+      eventScore += weights.hasTransportData;
+    }
+    if (event.wasteKg !== undefined && event.wasteKg !== null) {
+      eventScore += weights.hasWasteData;
+    }
+    if (event.region || event.location) {
+      eventScore += weights.hasRegionData;
+    }
 
     score += eventScore;
   }

@@ -25,7 +25,9 @@ export function Dialog({
 
   const handleOpenChange = React.useCallback(
     (newOpen: boolean) => {
-      if (!isControlled) setInternalOpen(newOpen);
+      if (!isControlled) {
+        setInternalOpen(newOpen);
+      }
       onOpenChange?.(newOpen);
     },
     [isControlled, onOpenChange],
@@ -60,7 +62,9 @@ export function DialogContent({
   children: React.ReactNode;
 }) {
   const ctx = React.useContext(DialogContext);
-  if (!ctx?.open) return null;
+  if (!ctx?.open) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
