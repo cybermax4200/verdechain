@@ -10,7 +10,7 @@ on:
 
 env:
   NODE_VERSION: '20'
-  RUST_VERSION: '1.75'
+  RUST_VERSION: 'stable'
   STELLAR_NETWORK: testnet
   SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
 
