@@ -1,0 +1,75 @@
+name: Deploy to Testnet
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "contracts/**"
+      - "api/**"
+      - ".github/workflows/deploy-testnet.yml"
+
+env:
+  NODE_VERSION: "20"
+  RUST_VERSION: "1.75"
+  STELLAR_NETWORK: testnet
+  SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
+
+jobs:
+  deploy-contracts:
+    name: Deploy Contracts
+    runs-on: ubuntu-latest
+    environment: testnet
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          target: wasm32-unknown-unknown
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            contracts/target
+          key: ${{ runner.os }}-cargo-deploy-${{ hashFiles('contracts/Cargo.lock') }}
+
+      - name: Build WASM
+        run: cd contracts && cargo build --target wasm32-unknown-unknown --release
+
+      - name: Deploy contracts
+        env:
+          ADMIN_SECRET_KEY: ${{ secrets.ADMIN_SECRET_KEY }}
+        run: |
+          cd contracts
+          chmod +x deploy-testnet.sh
+          ./deploy-testnet.sh
+
+  smoke-tests:
+    name: Smoke Tests
+    needs: deploy-contracts
+    runs-on: ubuntu-latest
+    environment: testnet
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Run smoke tests
+        env:
+          API_URL: ${{ vars.API_URL }}
+          ADMIN_SECRET_KEY: ${{ secrets.ADMIN_SECRET_KEY }}
+          SOROBAN_RPC_URL: ${{ env.SOROBAN_RPC_URL }}
+        run: |
+          echo "Running smoke tests against testnet..."
+          npm run test -w api -- --testPathPattern="smoke"

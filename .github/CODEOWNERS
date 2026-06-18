@@ -1,0 +1,27 @@
+# Global owners
+* @verdechain/core
+
+# Smart Contracts
+/contracts/ @verdechain/contracts-team
+
+# Backend API
+/api/ @verdechain/api-team
+
+# Frontend
+/frontend/ @verdechain/frontend-team
+
+# SDK
+/sdk/ @verdechain/sdk-team
+
+# CLI
+/cli/ @verdechain/cli-team
+
+# Infrastructure
+/infra/ @verdechain/infra-team
+/docker-compose*.yml @verdechain/infra-team
+
+# CI/CD
+/.github/ @verdechain/infra-team
+
+# Documentation
+/docs/ @verdechain/docs-team
