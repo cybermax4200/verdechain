@@ -31,12 +31,21 @@ This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). By particip
 ### One-Click Setup
 
 ```bash
-git clone https://github.com/your-org/verdechain
+git clone https://github.com/verdechain/verdechain
 cd verdechain
 ./scripts/bootstrap.sh
 ```
 
 See the [README](./README.md#quick-start) for manual setup instructions.
+
+### Good First Issues
+
+New to the codebase? Start here:
+
+- Issues labelled [`good first issue`](https://github.com/verdechain/verdechain/issues?q=label%3A%22good+first+issue%22) are self-contained and well-scoped.
+- Issues labelled [`help wanted`](https://github.com/verdechain/verdechain/issues?q=label%3A%22help+wanted%22) are higher-impact tasks where external input is especially welcome.
+
+Leave a comment on the issue before starting work so maintainers can assign it to you and avoid duplication.
 
 ## Development Workflow
 

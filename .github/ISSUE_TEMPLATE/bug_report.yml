@@ -1,0 +1,82 @@
+name: Bug Report
+description: Something isn't working as expected
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please fill in as much detail as possible.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the project is affected?
+      options:
+        - Smart Contracts (Rust/Soroban)
+        - API (NestJS)
+        - Frontend (Next.js)
+        - SDK (@verdechain/sdk)
+        - CLI (@verdechain/cli)
+        - Infrastructure / CI
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal steps to reliably reproduce the issue.
+      placeholder: |
+        1. Run `npm run dev`
+        2. Navigate to `/products`
+        3. Click "Register Product"
+        4. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened? Include error messages, stack traces, or logs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Fill in the relevant details.
+      value: |
+        - OS:
+        - Node.js version:
+        - Rust version:
+        - Soroban CLI version:
+        - Stellar network: testnet / mainnet / local
+        - Browser (frontend issues):
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or links that might help.

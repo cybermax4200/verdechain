@@ -1,45 +1,52 @@
 ## Description
 
-<!-- Briefly describe the changes in this PR -->
+<!-- Briefly describe what this PR does and why. -->
+
+Fixes #<!-- issue number -->
 
 ## Type of Change
 
-- [ ] feat — new feature
-- [ ] fix — bug fix
-- [ ] chore — tooling, config, dependencies
-- [ ] docs — documentation
-- [ ] refactor — code restructuring
-- [ ] test — adding or updating tests
-- [ ] perf — performance improvement
+- [ ] `feat` — new feature
+- [ ] `fix` — bug fix
+- [ ] `chore` — tooling, config, or dependencies
+- [ ] `docs` — documentation only
+- [ ] `refactor` — no behaviour change
+- [ ] `test` — adding or updating tests
+- [ ] `perf` — performance improvement
 
-## Related Issues
+## Area(s) Affected
 
-<!-- Link to related issues: Fixes #123, Closes #456 -->
+- [ ] Smart Contracts (`contracts/`)
+- [ ] API (`api/`)
+- [ ] Frontend (`frontend/`)
+- [ ] SDK (`sdk/`)
+- [ ] CLI (`cli/`)
+- [ ] Infrastructure / CI
+- [ ] Documentation
 
-## How Has This Been Tested?
+## How to Test
+
+<!-- Describe the steps a reviewer can follow to verify the change works. -->
+
+1.
+2.
+3.
+
+## Checklist
 
 - [ ] `npm run test` passes
 - [ ] `npm run lint` passes
 - [ ] `npm run typecheck` passes
 - [ ] `cargo test` passes (if contracts changed)
-- [ ] Manual testing steps described below
+- [ ] `cargo clippy -- -D warnings` passes (if contracts changed)
+- [ ] Tests added or updated for new/changed behaviour
+- [ ] Public API changes are documented (docstrings, README, or `/docs`)
+- [ ] No `.env`, secrets, or private keys committed
 
-### Manual Testing Steps
+## Breaking Changes
 
-<!-- Describe how reviewers can test your changes -->
+<!-- If this PR introduces breaking changes, describe them here and how consumers should migrate. If none, write "None". -->
 
-## Screenshots (if applicable)
+## Screenshots / Recordings
 
-<!-- Add screenshots for UI changes -->
-
-## Checklist
-
-- [ ] My code follows the project's code style
-- [ ] I have added tests for my changes
-- [ ] I have updated documentation accordingly
-- [ ] My changes generate no new warnings or errors
-- [ ] Any breaking changes are noted in the PR description
-
-## Additional Context
-
-<!-- Add any other context about the PR here -->
+<!-- For UI changes. Delete this section if not applicable. -->

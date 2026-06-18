@@ -1,0 +1,102 @@
+name: Deploy — Mainnet
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "deploy-mainnet" to confirm'
+        required: true
+
+concurrency:
+  group: deploy-mainnet
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    name: Confirm intent
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check confirmation
+        if: github.event.inputs.confirm != 'deploy-mainnet'
+        run: |
+          echo "Confirmation string mismatch. Aborting."
+          exit 1
+
+  build:
+    name: Build contracts
+    needs: gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: "1.75"
+          target: wasm32-unknown-unknown
+          components: clippy
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            contracts/target
+          key: ${{ runner.os }}-cargo-mainnet-${{ hashFiles('contracts/Cargo.lock') }}
+
+      - name: Build contracts (release)
+        run: cd contracts && cargo build --target wasm32-unknown-unknown --release
+
+      - name: Clippy
+        run: cd contracts && cargo clippy -- -D warnings
+
+      - name: Upload WASM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-wasm
+          path: contracts/target/wasm32-unknown-unknown/release/*.wasm
+          retention-days: 7
+
+  # Mainnet deploy requires manual multi-sig ceremony outside CI.
+  # This job generates the unsigned deploy transactions for offline signing.
+  generate-deploy-txs:
+    name: Generate unsigned deploy transactions
+    needs: build
+    runs-on: ubuntu-latest
+    environment: mainnet         # requires 2 required reviewers in GitHub env settings
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download WASM artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: contract-wasm
+          path: contracts/target/wasm32-unknown-unknown/release/
+
+      - name: Install Stellar CLI
+        run: cargo install --locked stellar-cli@21.0.0
+
+      - name: Generate deploy transactions
+        run: cd contracts && ./deploy-mainnet.sh --dry-run
+        env:
+          STELLAR_NETWORK: mainnet
+          STELLAR_ADMIN_PUBLIC_KEY: ${{ secrets.STELLAR_MAINNET_ADMIN_PUBLIC_KEY }}
+
+      - name: Upload unsigned transactions
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-deploy-txs
+          path: contracts/.deploy-txs/
+          retention-days: 1
+
+  notify:
+    name: Notify team
+    needs: generate-deploy-txs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to Discord
+        run: |
+          curl -X POST "${{ secrets.DISCORD_DEPLOY_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"⚠️ **Mainnet deploy transactions generated** by @${{ github.actor }}. Download artifacts and complete the multi-sig ceremony. Run ID: ${{ github.run_id }}\"}"

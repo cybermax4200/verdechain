@@ -1,0 +1,59 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, please check the [roadmap](../../README.md#roadmap) and open [discussions](https://github.com/verdechain/verdechain/discussions) to avoid duplicates.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Smart Contracts (Rust/Soroban)
+        - API (NestJS)
+        - Frontend (Next.js)
+        - SDK (@verdechain/sdk)
+        - CLI (@verdechain/cli)
+        - Infrastructure / CI
+        - Documentation
+        - Carbon Accounting Engine
+        - Verifier Network
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: What problem does this solve? Why is it needed?
+      placeholder: "As a manufacturer, I can't..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature you'd like, including any API or contract interface changes.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any other approaches you considered and why you ruled them out?
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I've searched existing issues and discussions for duplicates
+          required: true
+        - label: This feature aligns with the project roadmap or I've explained why it should be prioritised
+          required: true
