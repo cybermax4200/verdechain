@@ -11,6 +11,7 @@ import { VerifiersModule } from './verifiers/verifiers.module';
 import { StellarModule } from './stellar/stellar.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { IndexerModule } from './indexer/indexer.module';
+import { HealthModule } from './health/health.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TimingInterceptor } from './common/interceptors/timing.interceptor';
@@ -30,6 +31,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     VerifiersModule,
     WebhooksModule,
     IndexerModule,
+    HealthModule,
   ],
   providers: [
     {
