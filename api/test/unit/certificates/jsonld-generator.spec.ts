@@ -1,4 +1,7 @@
-import { JsonLdGeneratorService, ProvenanceData } from '../../../src/certificates/generators/jsonld-generator';
+import {
+  JsonLdGeneratorService,
+  ProvenanceData,
+} from '../../../src/certificates/generators/jsonld-generator';
 
 describe('JsonLdGeneratorService', () => {
   let service: JsonLdGeneratorService;

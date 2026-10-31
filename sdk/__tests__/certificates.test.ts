@@ -108,7 +108,12 @@ describe('CertificatesAPI', () => {
         description: 'Certified organic process',
       };
 
-      const mockResponse = { id: 'cert-2', ...issueData, status: 'ACTIVE' as const, issuedAt: '2024-01-01' };
+      const mockResponse = {
+        id: 'cert-2',
+        ...issueData,
+        status: 'ACTIVE' as const,
+        issuedAt: '2024-01-01',
+      };
       const requestSpy = jest.spyOn(client, 'request').mockResolvedValue(mockResponse);
 
       const result = await certificates.issueCertificate(issueData);

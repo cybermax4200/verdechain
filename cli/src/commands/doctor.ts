@@ -12,7 +12,9 @@ export function checkCommand(cmd: string): { name: string; installed: boolean } 
   }
 }
 
-export async function checkEnv(apiUrl: string): Promise<{ name: string; ok: boolean; detail: string }[]> {
+export async function checkEnv(
+  apiUrl: string,
+): Promise<{ name: string; ok: boolean; detail: string }[]> {
   const results: { name: string; ok: boolean; detail: string }[] = [];
 
   try {
@@ -21,7 +23,11 @@ export async function checkEnv(apiUrl: string): Promise<{ name: string; ok: bool
     results.push({ name: 'API', ok: true, detail: `${apiUrl} (reachable)` });
   } catch (err: any) {
     if (err.response !== undefined) {
-      results.push({ name: 'API', ok: true, detail: `${apiUrl} (reachable, status ${err.response.status})` });
+      results.push({
+        name: 'API',
+        ok: true,
+        detail: `${apiUrl} (reachable, status ${err.response.status})`,
+      });
     } else {
       results.push({ name: 'API', ok: false, detail: `${apiUrl} (${err.code || err.message})` });
     }

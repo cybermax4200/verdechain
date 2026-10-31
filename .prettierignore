@@ -1,0 +1,9 @@
+node_modules
+dist
+.next
+.turbo
+target
+contracts/target
+package-lock.json
+*.log
+contracts/**/test_snapshots/**
