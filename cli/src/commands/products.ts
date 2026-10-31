@@ -7,7 +7,7 @@ function getClient(options: any) {
   return axios.create({ baseURL: options.apiUrl || 'http://localhost:3000' });
 }
 
-function formatProducts(products: any[], format: string) {
+export function formatProducts(products: any[], format: string) {
   if (format === 'json') {
     return JSON.stringify(products, null, 2);
   }
@@ -49,10 +49,18 @@ productsCommand
     try {
       const client = getClient(globalOpts);
       const params: Record<string, string> = {};
-      if (options.type) params.type = options.type;
-      if (options.origin) params.origin = options.origin;
-      if (options.query) params.q = options.query;
-      if (options.limit) params.limit = options.limit;
+      if (options.type) {
+        params.type = options.type;
+      }
+      if (options.origin) {
+        params.origin = options.origin;
+      }
+      if (options.query) {
+        params.q = options.query;
+      }
+      if (options.limit) {
+        params.limit = options.limit;
+      }
 
       const { data } = await client.get('/products', { params });
       console.log(formatProducts(data.data ?? data ?? [], format));

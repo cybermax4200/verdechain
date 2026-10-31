@@ -1,8 +1,9 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
+import axios from 'axios';
 
-function checkCommand(cmd: string): { name: string; installed: boolean } {
+export function checkCommand(cmd: string): { name: string; installed: boolean } {
   try {
     execSync(`${cmd} --version`, { stdio: 'pipe' });
     return { name: cmd, installed: true };
@@ -11,13 +12,19 @@ function checkCommand(cmd: string): { name: string; installed: boolean } {
   }
 }
 
-function checkEnv(apiUrl: string): { name: string; ok: boolean; detail: string }[] {
+export async function checkEnv(apiUrl: string): Promise<{ name: string; ok: boolean; detail: string }[]> {
   const results: { name: string; ok: boolean; detail: string }[] = [];
 
   try {
+    const client = axios.create({ baseURL: apiUrl, timeout: 3000 });
+    await client.get('/');
     results.push({ name: 'API', ok: true, detail: `${apiUrl} (reachable)` });
-  } catch {
-    results.push({ name: 'API', ok: false, detail: `${apiUrl} (not reachable)` });
+  } catch (err: any) {
+    if (err.response !== undefined) {
+      results.push({ name: 'API', ok: true, detail: `${apiUrl} (reachable, status ${err.response.status})` });
+    } else {
+      results.push({ name: 'API', ok: false, detail: `${apiUrl} (${err.code || err.message})` });
+    }
   }
 
   return results;
@@ -42,7 +49,7 @@ export const doctorCommand = new Command('doctor')
     }
 
     console.log(chalk.bold('\n🌐 Environment:\n'));
-    const envResults = checkEnv(apiUrl);
+    const envResults = await checkEnv(apiUrl);
     for (const result of envResults) {
       const icon = result.ok ? chalk.green('✓') : chalk.red('✗');
       console.log(`  ${icon} ${result.name}: ${result.detail}`);
