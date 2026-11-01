@@ -66,7 +66,7 @@ export class CertificatesAPI {
     return this.client.request<{ valid: boolean; details?: string }>({
       method: 'POST',
       url: '/certificates/verify',
-      data: { id },
+      data: { certificateId: id, id },
     });
   }
 }

@@ -154,7 +154,7 @@ describe('CertificatesAPI', () => {
       expect(requestSpy).toHaveBeenCalledWith({
         method: 'POST',
         url: '/certificates/verify',
-        data: { id: 'cert-1' },
+        data: { certificateId: 'cert-1', id: 'cert-1' },
       });
       expect(result.valid).toBe(true);
     });

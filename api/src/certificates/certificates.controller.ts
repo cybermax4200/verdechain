@@ -8,11 +8,13 @@ import {
   ValidationPipe,
   Res,
   Header,
+  BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CertificatesService } from './certificates.service';
 import { IssueCertificateDto } from './dto/issue-certificate.dto';
 import { QueryCertificateDto } from './dto/query-certificate.dto';
+import { VerifyCertificateDto } from './dto/verify-certificate.dto';
 
 @Controller('certificates')
 export class CertificatesController {
@@ -34,8 +36,12 @@ export class CertificatesController {
   }
 
   @Post('verify')
-  async verify(@Body('certificateId') certificateId: string) {
-    return this.certificatesService.verify(certificateId);
+  async verify(@Body(ValidationPipe) dto: VerifyCertificateDto) {
+    const certId = dto.certificateId ?? dto.id;
+    if (!certId) {
+      throw new BadRequestException('Certificate ID is required');
+    }
+    return this.certificatesService.verify(certId);
   }
 
   @Get(':id')
@@ -58,7 +64,7 @@ export class CertificatesController {
   }
 
   @Post(':id/revoke')
-  async revoke(@Param('id') id: string, @Body('reason') reason: string) {
+  async revoke(@Param('id') id: string, @Body('reason') reason?: string) {
     return this.certificatesService.revoke(id, reason ?? 'No reason provided');
   }
 }
