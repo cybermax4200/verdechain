@@ -90,6 +90,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck -w frontend
 
+      - name: Run tests
+        run: npm run test:ci -w frontend
+
       - name: Build
         run: npm run build -w frontend
 
@@ -137,6 +140,9 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck -w cli
+
+      - name: Run tests
+        run: npm run test:ci -w cli
 
       - name: Build
         run: npm run build -w cli
