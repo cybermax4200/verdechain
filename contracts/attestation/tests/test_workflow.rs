@@ -93,6 +93,70 @@ fn test_escalate_attestation() {
 }
 
 #[test]
+fn test_escalate_and_approve_with_escalated_quorum() {
+    let (env, _submitter, product_id, verifiers, client) = setup_test();
+
+    let ipfs_hash = String::from_str(&env, "QmEscalateApprove");
+    let id = client.submit_for_attestation(&_submitter, &product_id, &verifiers, &ipfs_hash);
+
+    let additional1 = Address::generate(&env);
+    let additional2 = Address::generate(&env);
+    let additional_verifiers = Vec::from_array(&env, [additional1.clone(), additional2.clone()]);
+
+    client.escalate_attestation(&_submitter, &id, &additional_verifiers);
+
+    // Vote with original 3 verifiers - status remains Escalated since ESCALATED_QUORUM is 5
+    client.approve_attestation(&verifiers.get(0).unwrap(), &id);
+    client.approve_attestation(&verifiers.get(1).unwrap(), &id);
+    client.approve_attestation(&verifiers.get(2).unwrap(), &id);
+
+    let record = client.get_attestation(&id);
+    assert_eq!(record.status, AttestationStatus::Escalated);
+    assert_eq!(record.approvals.len(), 3);
+
+    // 4th approval - still Escalated
+    client.approve_attestation(&additional1, &id);
+    let record = client.get_attestation(&id);
+    assert_eq!(record.status, AttestationStatus::Escalated);
+
+    // 5th approval - reaches ESCALATED_QUORUM and transitions to Approved
+    client.approve_attestation(&additional2, &id);
+    let record = client.get_attestation(&id);
+    assert_eq!(record.status, AttestationStatus::Approved);
+    assert_eq!(record.approvals.len(), 5);
+}
+
+#[test]
+fn test_escalate_and_reject_with_escalated_quorum() {
+    let (env, _submitter, product_id, verifiers, client) = setup_test();
+
+    let ipfs_hash = String::from_str(&env, "QmEscalateReject");
+    let id = client.submit_for_attestation(&_submitter, &product_id, &verifiers, &ipfs_hash);
+
+    let additional1 = Address::generate(&env);
+    let additional2 = Address::generate(&env);
+    let additional_verifiers = Vec::from_array(&env, [additional1.clone(), additional2.clone()]);
+
+    client.escalate_attestation(&_submitter, &id, &additional_verifiers);
+
+    let reason = String::from_str(&env, "Insufficient proof on audit");
+    for i in 0..3 {
+        client.reject_attestation(&verifiers.get(i).unwrap(), &id, &reason);
+    }
+    client.reject_attestation(&additional1, &id, &reason);
+
+    let record = client.get_attestation(&id);
+    assert_eq!(record.status, AttestationStatus::Escalated);
+    assert_eq!(record.rejections.len(), 4);
+
+    // 5th rejection reaches quorum
+    client.reject_attestation(&additional2, &id, &reason);
+    let record = client.get_attestation(&id);
+    assert_eq!(record.status, AttestationStatus::Rejected);
+    assert_eq!(record.rejections.len(), 5);
+}
+
+#[test]
 fn test_attestation_threshold_not_reached() {
     let (env, _submitter, product_id, verifiers, client) = setup_test();
 

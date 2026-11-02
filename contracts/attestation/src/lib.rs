@@ -75,7 +75,9 @@ impl AttestationContract {
         let mut record = Self::load_attestation(&env, attestation_id)
             .ok_or(Error::AttestationNotFound)?;
 
-        if record.status != AttestationStatus::Pending {
+        if record.status != AttestationStatus::Pending
+            && record.status != AttestationStatus::Escalated
+        {
             return Err(Error::AttestationNotPending);
         }
 
@@ -91,8 +93,14 @@ impl AttestationContract {
         approvals.push_back(verifier.clone());
         record.approvals = approvals;
 
+        let required_quorum = if record.status == AttestationStatus::Escalated {
+            crate::escalation::ESCALATED_QUORUM
+        } else {
+            ATTESTATION_QUORUM
+        };
+
         let approval_count: u32 = record.approvals.len();
-        if approval_count >= ATTESTATION_QUORUM {
+        if approval_count >= required_quorum {
             record.status = AttestationStatus::Approved;
             record.resolved_at = env.ledger().timestamp();
             Self::remove_from_verifier_pending(&env, &verifier, attestation_id);
@@ -118,7 +126,9 @@ impl AttestationContract {
         let mut record = Self::load_attestation(&env, attestation_id)
             .ok_or(Error::AttestationNotFound)?;
 
-        if record.status != AttestationStatus::Pending {
+        if record.status != AttestationStatus::Pending
+            && record.status != AttestationStatus::Escalated
+        {
             return Err(Error::AttestationNotPending);
         }
 
@@ -136,10 +146,17 @@ impl AttestationContract {
 
         record_dissent(&env, &mut record, verifier.clone(), reason.clone());
 
+        let required_quorum = if record.status == AttestationStatus::Escalated {
+            crate::escalation::ESCALATED_QUORUM
+        } else {
+            ATTESTATION_QUORUM
+        };
+
         let rejection_count: u32 = record.rejections.len();
-        if rejection_count >= ATTESTATION_QUORUM {
+        if rejection_count >= required_quorum {
             record.status = AttestationStatus::Rejected;
             record.resolved_at = env.ledger().timestamp();
+            Self::remove_from_verifier_pending(&env, &verifier, attestation_id);
 
             env.events().publish(
                 (soroban_sdk::Symbol::new(&env, "attestation_rejected"),),
