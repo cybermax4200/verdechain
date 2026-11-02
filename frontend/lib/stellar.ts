@@ -82,21 +82,16 @@ export function scValToString(val: xdr.ScVal): string {
 }
 
 export function scValToNumber(val: xdr.ScVal): number {
-  const i32 = val.i32();
-  if (i32 !== undefined) {
-    return i32;
+  switch (val.switch().name) {
+    case 'scvI32':
+      return val.i32();
+    case 'scvU32':
+      return val.u32();
+    case 'scvI64':
+      return Number(val.i64());
+    case 'scvU64':
+      return Number(val.u64());
+    default:
+      return 0;
   }
-  const u32 = val.u32();
-  if (u32 !== undefined) {
-    return u32;
-  }
-  const i64 = val.i64();
-  if (i64 !== undefined) {
-    return Number(i64);
-  }
-  const u64 = val.u64();
-  if (u64 !== undefined) {
-    return Number(u64);
-  }
-  return 0;
 }

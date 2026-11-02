@@ -7,29 +7,29 @@ export interface FreighterError {
 
 export async function isFreighterInstalled(): Promise<boolean> {
   try {
-    return window.freighter !== undefined;
+    return typeof window !== 'undefined' && (window as any).freighter !== undefined;
   } catch {
     return false;
   }
 }
 
 export async function getFreighterPublicKey(): Promise<string> {
-  if (!window.freighter) {
+  if (typeof window === 'undefined' || !(window as any).freighter) {
     throw new Error('Freighter wallet not installed');
   }
-  const { isConnected } = await window.freighter.isConnected();
+  const { isConnected } = await (window as any).freighter.isConnected();
   if (!isConnected) {
     throw new Error('Freighter wallet not connected');
   }
-  return window.freighter.getPublicKey();
+  return (window as any).freighter.getPublicKey();
 }
 
 export async function isFreighterConnected(): Promise<boolean> {
   try {
-    if (!window.freighter) {
+    if (typeof window === 'undefined' || !(window as any).freighter) {
       return false;
     }
-    const { isConnected } = await window.freighter.isConnected();
+    const { isConnected } = await (window as any).freighter.isConnected();
     return isConnected;
   } catch {
     return false;
@@ -40,10 +40,10 @@ export async function signFreighterTransaction(
   xdr: string,
   networkPassphrase = Networks.TESTNET,
 ): Promise<string> {
-  if (!window.freighter) {
+  if (typeof window === 'undefined' || !(window as any).freighter) {
     throw new Error('Freighter wallet not installed');
   }
-  return window.freighter.signTransaction(xdr, {
+  return (window as any).freighter.signTransaction(xdr, {
     networkPassphrase,
   });
 }
