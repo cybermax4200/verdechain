@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Param, Query, ValidationPipe } from '@nestjs/common';
 import { VerifiersService } from './verifiers.service';
 import { RegisterVerifierDto } from './dto/register-verifier.dto';
 
@@ -17,7 +17,7 @@ export class VerifiersController {
   }
 
   @Get('pending')
-  async getPendingAttestations(@Body('verifierId') verifierId: string) {
+  async getPendingAttestations(@Query('verifierId') verifierId?: string) {
     return this.verifiersService.getPendingAttestations(verifierId);
   }
 

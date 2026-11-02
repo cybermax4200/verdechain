@@ -61,12 +61,14 @@ export class VerifiersService {
     return verifier;
   }
 
-  async getPendingAttestations(id: string) {
-    const verifier = await this.prisma.verifier.findUnique({
-      where: { id },
-    });
-    if (!verifier) {
-      throw new NotFoundException('Verifier not found');
+  async getPendingAttestations(id?: string) {
+    if (id) {
+      const verifier = await this.prisma.verifier.findUnique({
+        where: { id },
+      });
+      if (!verifier) {
+        throw new NotFoundException('Verifier not found');
+      }
     }
 
     return this.prisma.attestationRecord.findMany({
