@@ -19,6 +19,9 @@ describe('ProductsService', () => {
   };
 
   const mockPrisma = {
+    product: {
+      findUnique: jest.fn(),
+    },
     manufacturer: {
       findUnique: jest.fn(),
     },
@@ -252,6 +255,30 @@ describe('ProductsService', () => {
 
       const result = await service.getCertificates('prod-1');
       expect(result).toEqual(certs);
+    });
+  });
+
+  describe('getParticipants', () => {
+    it('should throw NotFoundException if product not found', async () => {
+      (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
+
+      await expect(service.getParticipants('prod-missing')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should return distinct participants including manufacturer and event locations', async () => {
+      (prisma.product.findUnique as jest.Mock).mockResolvedValue({
+        id: 'prod-1',
+        manufacturer: { publicKey: 'PUB_KEY_1' },
+        lifecycleEvents: [
+          { location: 'Warehouse A' },
+          { location: 'Port B' },
+          { location: 'Warehouse A' },
+          { location: null },
+        ],
+      });
+
+      const result = await service.getParticipants('prod-1');
+      expect(result).toEqual(['PUB_KEY_1', 'Warehouse A', 'Port B']);
     });
   });
 

@@ -16,6 +16,7 @@ describe('ProductsController', () => {
     getLifecycle: jest.fn(),
     getCarbon: jest.fn(),
     getCertificates: jest.fn(),
+    getParticipants: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -135,6 +136,16 @@ describe('ProductsController', () => {
       const result = await controller.getCertificates('prod-1');
       expect(service.getCertificates).toHaveBeenCalledWith('prod-1');
       expect(result).toHaveLength(1);
+    });
+  });
+
+  describe('getParticipants', () => {
+    it('should return participants in the product supply chain', async () => {
+      mockService.getParticipants.mockResolvedValue(['GBR1...', 'Factory A']);
+
+      const result = await controller.getParticipants('prod-1');
+      expect(service.getParticipants).toHaveBeenCalledWith('prod-1');
+      expect(result).toEqual(['GBR1...', 'Factory A']);
     });
   });
 });

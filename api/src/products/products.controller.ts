@@ -51,4 +51,9 @@ export class ProductsController {
   async getCertificates(@Param('id') id: string) {
     return this.productsService.getCertificates(id);
   }
+
+  @Get(':id/participants')
+  async getParticipants(@Param('id') id: string) {
+    return this.productsService.getParticipants(id);
+  }
 }

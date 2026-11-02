@@ -139,4 +139,28 @@ export class ProductsService {
   async getProductsByBatch(batch: string) {
     return this.repository.findByBatch(batch);
   }
+
+  async getParticipants(productId: string): Promise<string[]> {
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+      include: {
+        manufacturer: true,
+        lifecycleEvents: true,
+      },
+    });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    const participants = new Set<string>();
+    participants.add(product.manufacturer.publicKey);
+
+    for (const event of product.lifecycleEvents) {
+      if (event.location) {
+        participants.add(event.location);
+      }
+    }
+
+    return Array.from(participants);
+  }
 }
