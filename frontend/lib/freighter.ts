@@ -55,3 +55,31 @@ export async function getNetworkPassphrase(): Promise<string> {
     return Networks.TESTNET;
   }
 }
+
+export async function loginWithFreighter(
+  requestFn?: (config: any) => Promise<any>,
+): Promise<{ publicKey: string; token?: string }> {
+  const publicKey = await getFreighterPublicKey();
+  if (!requestFn) {
+    return { publicKey };
+  }
+  try {
+    const challenge = await requestFn({
+      method: 'POST',
+      url: '/auth/challenge',
+      data: { publicKey },
+    });
+    if (challenge?.challengeXdr) {
+      const signedXdr = await signFreighterTransaction(challenge.challengeXdr);
+      const verifyRes = await requestFn({
+        method: 'POST',
+        url: '/auth/verify',
+        data: { signedXdr },
+      });
+      return { publicKey, token: verifyRes.jwt };
+    }
+  } catch {
+    // Graceful fallback to address-only connection if backend auth is offline
+  }
+  return { publicKey };
+}

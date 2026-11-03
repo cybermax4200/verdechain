@@ -49,6 +49,68 @@ export default function ProductDetailPage() {
   const [provenance, setProvenance] = useState<ProvenanceData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [eventForm, setEventForm] = useState({
+    stage: 'MANUFACTURING',
+    description: '',
+    location: '',
+    energyKwh: 0,
+    fuelUsed: 0,
+    fuelType: 'diesel',
+    wasteKg: 0,
+  });
+
+  const handleRecordEvent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!product) {
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await api.request({
+        method: 'POST',
+        url: '/supply-chain/events',
+        data: {
+          ...eventForm,
+          productId: product.id,
+          timestamp: new Date().toISOString(),
+        },
+      });
+      setIsEventModalOpen(false);
+      setEventForm({
+        stage: 'MANUFACTURING',
+        description: '',
+        location: '',
+        energyKwh: 0,
+        fuelUsed: 0,
+        fuelType: 'diesel',
+        wasteKg: 0,
+      });
+      await loadProduct();
+    } catch (err) {
+      console.error('Failed to record event', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRequestAttestation = async () => {
+    if (!product) {
+      return;
+    }
+    try {
+      await api.request({
+        method: 'POST',
+        url: '/attestations/submit',
+        data: { productId: product.id },
+      });
+      alert('Product submitted for verifier attestation!');
+      await loadProduct();
+    } catch (err) {
+      console.error('Failed to submit attestation', err);
+    }
+  };
 
   useEffect(() => {
     loadProduct();
@@ -150,8 +212,124 @@ export default function ProductDetailPage() {
               </Badge>
             </div>
           </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsEventModalOpen(true)}
+              className="bg-brand-500 hover:bg-brand-600 rounded-lg px-3 py-1.5 text-xs font-medium text-white transition-colors"
+            >
+              + Record Event
+            </button>
+            <button
+              onClick={handleRequestAttestation}
+              className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-1.5 text-xs font-medium text-orange-700 hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300"
+            >
+              Request Attestation
+            </button>
+          </div>
         </div>
       </div>
+
+      {isEventModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl dark:bg-gray-900">
+            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">
+              Record Lifecycle Event
+            </h2>
+            <form onSubmit={handleRecordEvent} className="space-y-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                  Lifecycle Stage *
+                </label>
+                <select
+                  value={eventForm.stage}
+                  onChange={(e) => setEventForm({ ...eventForm, stage: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <option value="RAW_MATERIAL_EXTRACTION">Raw Material Extraction</option>
+                  <option value="TRANSPORT_TO_SUPPLIER">Transport to Supplier</option>
+                  <option value="MANUFACTURING">Manufacturing</option>
+                  <option value="TRANSPORT_TO_DISTRIBUTOR">Transport to Distributor</option>
+                  <option value="DISTRIBUTION">Distribution</option>
+                  <option value="RETAIL">Retail</option>
+                  <option value="USE">Use Phase</option>
+                  <option value="END_OF_LIFE">End of Life</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                  Description *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={eventForm.description}
+                  onChange={(e) => setEventForm({ ...eventForm, description: e.target.value })}
+                  placeholder="e.g. Assembled chassis using 100% solar power"
+                  className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                  Location (GPS or Country/City)
+                </label>
+                <input
+                  type="text"
+                  value={eventForm.location}
+                  onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })}
+                  placeholder="Porto, Portugal"
+                  className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                    Energy (kWh)
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={eventForm.energyKwh}
+                    onChange={(e) =>
+                      setEventForm({ ...eventForm, energyKwh: parseFloat(e.target.value) || 0 })
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                    Waste (kg)
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={eventForm.wasteKg}
+                    onChange={(e) =>
+                      setEventForm({ ...eventForm, wasteKg: parseFloat(e.target.value) || 0 })
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsEventModalOpen(false)}
+                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-brand-500 hover:bg-brand-600 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Recording...' : 'Record On-Chain'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card className="p-6 lg:col-span-2">

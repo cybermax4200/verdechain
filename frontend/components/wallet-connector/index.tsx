@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
+import { loginWithFreighter } from '@/lib/freighter';
 
 declare global {
   interface Window {
@@ -41,8 +43,11 @@ export function WalletConnector() {
         window.open('https://freighter.app', '_blank');
         return;
       }
-      const key = await window.freighter.getPublicKey();
+      const { publicKey: key, token } = await loginWithFreighter(api.request.bind(api));
       setPublicKey(key);
+      if (token) {
+        api.setAuthToken(token);
+      }
     } catch (error) {
       console.error('Failed to connect Freighter:', error);
     } finally {
@@ -52,6 +57,7 @@ export function WalletConnector() {
 
   const disconnect = () => {
     setPublicKey(null);
+    api.setAuthToken(null);
   };
 
   if (publicKey) {

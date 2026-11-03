@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ScannerProps {
   onResult: (result: string) => void;
@@ -10,6 +10,44 @@ interface ScannerProps {
 export function Scanner({ onResult, onClose }: ScannerProps) {
   const [manualInput, setManualInput] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [cameraActive, setCameraActive] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function startCamera() {
+      if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' },
+        });
+        if (!active) {
+          stream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+        setCameraActive(true);
+      } catch {
+        // Camera access denied or not available; fall back to manual entry
+      }
+    }
+
+    startCamera();
+
+    return () => {
+      active = false;
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,12 +70,27 @@ export function Scanner({ onResult, onClose }: ScannerProps) {
         </button>
       </div>
 
-      <div className="mx-auto mb-4 flex aspect-square max-w-xs items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
-        <div className="text-center text-gray-400">
-          <div className="mb-2 text-4xl">📷</div>
-          <p className="text-sm">Camera access needed</p>
-          <p className="mt-1 text-xs">Or enter the code manually below</p>
-        </div>
+      <div className="relative mx-auto mb-4 flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+        {cameraActive ? (
+          <>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="border-brand-500 h-44 w-44 rounded-lg border-2 border-dashed opacity-80" />
+            </div>
+          </>
+        ) : (
+          <div className="text-center text-gray-400 p-4">
+            <div className="mb-2 text-4xl">📷</div>
+            <p className="text-sm">Camera preview ready</p>
+            <p className="mt-1 text-xs">Enter code or scan above</p>
+          </div>
+        )}
       </div>
 
       <form onSubmit={handleManualSubmit} className="space-y-3">
