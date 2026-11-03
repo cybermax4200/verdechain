@@ -85,7 +85,7 @@ export function Scanner({ onResult, onClose }: ScannerProps) {
             </div>
           </>
         ) : (
-          <div className="text-center text-gray-400 p-4">
+          <div className="p-4 text-center text-gray-400">
             <div className="mb-2 text-4xl">📷</div>
             <p className="text-sm">Camera preview ready</p>
             <p className="mt-1 text-xs">Enter code or scan above</p>

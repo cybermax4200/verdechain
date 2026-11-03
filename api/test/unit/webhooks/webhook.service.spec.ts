@@ -203,7 +203,9 @@ describe('WebhookService', () => {
     it('should throw error if event not found', async () => {
       mockPrisma.webhookEvent.findUnique.mockResolvedValue(null);
 
-      await expect(service.retry('evt-missing')).rejects.toThrow('Webhook event evt-missing not found');
+      await expect(service.retry('evt-missing')).rejects.toThrow(
+        'Webhook event evt-missing not found',
+      );
     });
 
     it('should throw error if webhook is deactivated', async () => {

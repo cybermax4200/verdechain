@@ -54,7 +54,11 @@ describe('AttestationsController', () => {
     mockService.rejectAttestation.mockResolvedValue(expected);
 
     const result = await controller.reject('att-1', 'invalid evidence', 'ver-1');
-    expect(verifiersService.rejectAttestation).toHaveBeenCalledWith('att-1', 'invalid evidence', 'ver-1');
+    expect(verifiersService.rejectAttestation).toHaveBeenCalledWith(
+      'att-1',
+      'invalid evidence',
+      'ver-1',
+    );
     expect(result).toEqual(expected);
   });
 
@@ -63,7 +67,11 @@ describe('AttestationsController', () => {
     mockService.escalateAttestation.mockResolvedValue(expected);
 
     const result = await controller.escalate('att-1', 'audit required', 'ver-1');
-    expect(verifiersService.escalateAttestation).toHaveBeenCalledWith('att-1', 'audit required', 'ver-1');
+    expect(verifiersService.escalateAttestation).toHaveBeenCalledWith(
+      'att-1',
+      'audit required',
+      'ver-1',
+    );
     expect(result).toEqual(expected);
   });
 

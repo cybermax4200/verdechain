@@ -83,10 +83,7 @@ export class VerifiersService {
     return records.map((record: any) => ({
       ...record,
       productName: record.product?.name ?? record.productName ?? 'Unknown Product',
-      manufacturer:
-        record.product?.manufacturerId ??
-        record.manufacturer ??
-        'Unknown',
+      manufacturer: record.product?.manufacturerId ?? record.manufacturer ?? 'Unknown',
       verifierCount: record.approvals ?? 0,
       requiredCount: record.threshold ?? 2,
     }));

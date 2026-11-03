@@ -21,9 +21,7 @@ export type IndexerEvent =
   | VerifierEvent;
 
 @Injectable()
-export class IndexerService
-  implements OnModuleInit, OnApplicationBootstrap, OnApplicationShutdown
-{
+export class IndexerService implements OnModuleInit, OnApplicationBootstrap, OnApplicationShutdown {
   private readonly logger = new Logger(IndexerService.name);
   private isRunning = false;
   private currentCursor: string | null = null;

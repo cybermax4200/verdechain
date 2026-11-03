@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Put, Body, Param, Query, ValidationPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Param,
+  Query,
+  ValidationPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { VerifiersService } from './verifiers.service';
 import { RegisterVerifierDto } from './dto/register-verifier.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';

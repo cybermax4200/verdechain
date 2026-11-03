@@ -25,7 +25,7 @@ export class SupplyChainService {
     }
 
     let txHash: string | null = null;
-    if (this.stellarService && this.stellarService.isConfigured('lifecycleTracker')) {
+    if (this.stellarService?.isConfigured('lifecycleTracker')) {
       try {
         const callerScVal = this.stellarService.toAddressScVal(product.manufacturer?.publicKey);
         const productIdScVal = this.stellarService.toU64ScVal(product.productId);

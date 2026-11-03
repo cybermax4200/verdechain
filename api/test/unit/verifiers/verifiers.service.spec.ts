@@ -85,7 +85,10 @@ describe('VerifiersService', () => {
         stakeXlm: 10000,
       });
 
-      expect(mockStellar.callContract).toHaveBeenCalledWith('verifierRegistry', 'register_verifier');
+      expect(mockStellar.callContract).toHaveBeenCalledWith(
+        'verifierRegistry',
+        'register_verifier',
+      );
       expect(mockPrisma.verifier.create).toHaveBeenCalled();
       expect(result.id).toBe('ver-1');
     });

@@ -7,7 +7,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (process.env.NODE_ENV === 'test' || process.env.AUTH_DISABLED === 'true') {
       const req = context.switchToHttp().getRequest();
       if (!req.user) {
-        req.user = { sub: 'GA7QYNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5XZ', roles: ['user', 'manufacturer', 'verifier'] };
+        req.user = {
+          sub: 'GA7QYNF7SOWQ3GLR2ZGMH7G7Y4S5XZ7Y6S5XZ7Y6S5XZ',
+          roles: ['user', 'manufacturer', 'verifier'],
+        };
       }
       return true;
     }

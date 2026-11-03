@@ -80,7 +80,9 @@ describe('freighter wallet helpers', () => {
     it('should return public key when connected', async () => {
       (global as any).window.freighter = {
         isConnected: jest.fn().mockResolvedValue({ isConnected: true }),
-        getPublicKey: jest.fn().mockResolvedValue('GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H'),
+        getPublicKey: jest
+          .fn()
+          .mockResolvedValue('GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H'),
       };
       const key = await getFreighterPublicKey();
       expect(key).toBe('GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H');
@@ -90,7 +92,9 @@ describe('freighter wallet helpers', () => {
   describe('signFreighterTransaction', () => {
     it('should throw error when freighter is not installed', async () => {
       delete (global as any).window.freighter;
-      await expect(signFreighterTransaction('AAAA_XDR')).rejects.toThrow('Freighter wallet not installed');
+      await expect(signFreighterTransaction('AAAA_XDR')).rejects.toThrow(
+        'Freighter wallet not installed',
+      );
     });
 
     it('should call signTransaction with default testnet passphrase', async () => {

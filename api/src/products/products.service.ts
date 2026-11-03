@@ -36,7 +36,7 @@ export class ProductsService {
     }
 
     let txHash: string | null = null;
-    if (this.stellarService && this.stellarService.isConfigured('productRegistry')) {
+    if (this.stellarService?.isConfigured('productRegistry')) {
       try {
         const manufacturerScVal = this.stellarService.toAddressScVal(manufacturer.publicKey);
         const metadataScVal = this.stellarService.toStringScVal(dto.sku ?? dto.name);
