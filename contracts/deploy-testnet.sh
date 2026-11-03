@@ -6,9 +6,27 @@ cd "$VERDECHAIN_ROOT"
 
 # ── Configuration ──────────────────────────────────────────────────────────
 NETWORK="testnet"
-RPC_URL="https://soroban-testnet.stellar.org"
-HORIZON_URL="https://horizon-testnet.stellar.org"
-NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --network)
+      NETWORK="$2"
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
+if [ "$NETWORK" = "local" ]; then
+  RPC_URL="${STELLAR_SOROBAN_RPC:-http://localhost:8000/soroban/rpc}"
+  HORIZON_URL="${STELLAR_HORIZON_URL:-http://localhost:8000}"
+  NETWORK_PASSPHRASE="${STELLAR_NETWORK_PASSPHRASE:-Standalone Network ; February 2017}"
+else
+  RPC_URL="${STELLAR_SOROBAN_RPC:-https://soroban-testnet.stellar.org}"
+  HORIZON_URL="${STELLAR_HORIZON_URL:-https://horizon-testnet.stellar.org}"
+  NETWORK_PASSPHRASE="${STELLAR_NETWORK_PASSPHRASE:-Test SDF Network ; September 2015}"
+fi
 
 # Default admin keypair — MUST be set via env or .env
 ADMIN_SECRET="${ADMIN_SECRET:-}"
@@ -171,7 +189,9 @@ echo "[6/7] Updating .env with contract addresses..."
 if [ -f "$ENV_FILE" ]; then
   # Update existing entries or append
   for var in "PRODUCT_REGISTRY_ID" "LIFECYCLE_TRACKER_ID" "CARBON_ORACLE_ID" \
-             "ATTESTATION_ID" "GREENTAG_CERT_ID" "VERIFIER_REGISTRY_ID"; do
+             "ATTESTATION_ID" "GREENTAG_CERT_ID" "VERIFIER_REGISTRY_ID" \
+             "CONTRACT_PRODUCT_REGISTRY" "CONTRACT_LIFECYCLE_TRACKER" "CONTRACT_CARBON_ORACLE" \
+             "CONTRACT_ATTESTATION" "CONTRACT_GREENTAG_CERT" "CONTRACT_VERIFIER_REGISTRY"; do
     if grep -q "^${var}=" "$ENV_FILE" 2>/dev/null; then
       sed -i.bak "/^${var}=/d" "$ENV_FILE"
     fi
@@ -179,13 +199,19 @@ if [ -f "$ENV_FILE" ]; then
 
   cat >> "$ENV_FILE" <<EOF
 
-# Deployed contract addresses (testnet — $(date -u +%Y-%m-%d))
+# Deployed contract addresses (${NETWORK} — $(date -u +%Y-%m-%d))
 PRODUCT_REGISTRY_ID="${DEPLOYED[ProductRegistry]}"
 LIFECYCLE_TRACKER_ID="${DEPLOYED[LifecycleTracker]}"
 CARBON_ORACLE_ID="${DEPLOYED[CarbonOracle]}"
 ATTESTATION_ID="${DEPLOYED[Attestation]}"
 GREENTAG_CERT_ID="${DEPLOYED[GreenTagCert]}"
 VERIFIER_REGISTRY_ID="${DEPLOYED[VerifierRegistry]}"
+CONTRACT_PRODUCT_REGISTRY="${DEPLOYED[ProductRegistry]}"
+CONTRACT_LIFECYCLE_TRACKER="${DEPLOYED[LifecycleTracker]}"
+CONTRACT_CARBON_ORACLE="${DEPLOYED[CarbonOracle]}"
+CONTRACT_ATTESTATION="${DEPLOYED[Attestation]}"
+CONTRACT_GREENTAG_CERT="${DEPLOYED[GreenTagCert]}"
+CONTRACT_VERIFIER_REGISTRY="${DEPLOYED[VerifierRegistry]}"
 EOF
 
   rm -f "$ENV_FILE.bak"

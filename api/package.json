@@ -19,7 +19,9 @@
     "db:migrate:prod": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:seed": "ts-node scripts/seed-products.ts"
+    "db:seed": "ts-node scripts/seed-products.ts && ts-node scripts/seed-verifiers.ts",
+    "seed:testnet": "ts-node scripts/seed-products.ts && ts-node scripts/seed-verifiers.ts",
+    "seed:local": "ts-node scripts/seed-products.ts && ts-node scripts/seed-verifiers.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
