@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { StellarService } from '../stellar/stellar.service';
 import { calculateScope1FromEvents } from './calculators/scope1';
 import { calculateScope2FromEvents } from './calculators/scope2';
 import { calculateScope3FromEvents } from './calculators/scope3';
@@ -60,12 +61,21 @@ function computeEquivalents(totalKgCO2e: number): Equivalents {
 
 @Injectable()
 export class CarbonService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(CarbonService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly stellarService?: StellarService,
+  ) {}
 
   async calculateFootprint(
     productId: string,
     methodology: MethodologyVersion = 'ghg_protocol_2024',
   ): Promise<CarbonFootprintResult> {
+    if (this.stellarService?.isConfigured('carbonOracle')) {
+      this.logger.debug(`Carbon oracle configured for methodology: ${methodology}`);
+    }
+
     const product = await this.prisma.product.findUnique({
       where: { id: productId },
     });

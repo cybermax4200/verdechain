@@ -1,18 +1,47 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { LifecycleStage } from '@prisma/client';
+import { StellarService } from '../stellar/stellar.service';
+import { WebhookService } from '../webhooks/webhook.service';
 
 @Injectable()
 export class SupplyChainService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(SupplyChainService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly stellarService?: StellarService,
+    @Optional() private readonly webhookService?: WebhookService,
+  ) {}
 
   async recordEvent(dto: CreateEventDto) {
     const product = await this.prisma.product.findUnique({
       where: { id: dto.productId },
+      include: { manufacturer: true },
     });
     if (!product) {
       throw new NotFoundException('Product not found');
+    }
+
+    let txHash: string | null = null;
+    if (this.stellarService && this.stellarService.isConfigured('lifecycleTracker')) {
+      try {
+        const callerScVal = this.stellarService.toAddressScVal(product.manufacturer?.publicKey);
+        const productIdScVal = this.stellarService.toU64ScVal(product.productId);
+        const stageScVal = this.stellarService.toSymbolScVal(dto.stage);
+        const descScVal = this.stellarService.toStringScVal(dto.description ?? '');
+        txHash = await this.stellarService.callContract('lifecycleTracker', 'record_event', [
+          callerScVal,
+          productIdScVal,
+          stageScVal,
+          descScVal,
+        ]);
+      } catch (err) {
+        this.logger.warn(
+          `On-chain lifecycle event recording skipped: ${err instanceof Error ? err.message : String(err)}`,
+        );
+      }
     }
 
     const event = await this.prisma.lifecycleEvent.create({
@@ -26,9 +55,16 @@ export class SupplyChainService {
         fuelUsed: dto.fuelUsed,
         fuelType: dto.fuelType,
         wasteKg: dto.wasteKg,
-        metadata: dto.metadata as any,
+        metadata: { ...((dto.metadata ?? {}) as object), ...(txHash ? { txHash } : {}) } as any,
+        txHash,
       },
     });
+
+    if (this.webhookService) {
+      this.webhookService
+        .dispatch('supply_chain.event_recorded', { event })
+        .catch((err) => this.logger.warn(`Webhook dispatch error: ${err}`));
+    }
 
     return event;
   }

@@ -1,13 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional, Logger } from '@nestjs/common';
 import { ProductsRepository, ProductFilters } from './products.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { StellarService } from '../stellar/stellar.service';
+import { WebhookService } from '../webhooks/webhook.service';
 
 @Injectable()
 export class ProductsService {
+  private readonly logger = new Logger(ProductsService.name);
+
   constructor(
     private readonly repository: ProductsRepository,
     private readonly prisma: PrismaService,
+    @Optional() private readonly stellarService?: StellarService,
+    @Optional() private readonly webhookService?: WebhookService,
   ) {}
 
   async create(dto: CreateProductDto) {
@@ -20,6 +26,22 @@ export class ProductsService {
       throw new NotFoundException('Manufacturer not found');
     }
 
+    let txHash: string | null = null;
+    if (this.stellarService && this.stellarService.isConfigured('productRegistry')) {
+      try {
+        const manufacturerScVal = this.stellarService.toAddressScVal(manufacturer.publicKey);
+        const metadataScVal = this.stellarService.toStringScVal(dto.sku ?? dto.name);
+        txHash = await this.stellarService.callContract('productRegistry', 'register_product', [
+          manufacturerScVal,
+          metadataScVal,
+        ]);
+      } catch (err) {
+        this.logger.warn(
+          `On-chain product registration skipped: ${err instanceof Error ? err.message : String(err)}`,
+        );
+      }
+    }
+
     const product = await this.repository.create({
       productId,
       name: dto.name,
@@ -28,9 +50,15 @@ export class ProductsService {
       batchNumber: dto.batchNumber,
       productType: dto.productType,
       originCountry: dto.originCountry,
-      metadata: dto.metadata as any,
+      metadata: { ...((dto.metadata ?? {}) as object), ...(txHash ? { txHash } : {}) } as any,
       manufacturer: { connect: { id: dto.manufacturerId } },
     });
+
+    if (this.webhookService) {
+      this.webhookService
+        .dispatch('product.created', { product })
+        .catch((err) => this.logger.warn(`Webhook dispatch error: ${err}`));
+    }
 
     return product;
   }

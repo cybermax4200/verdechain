@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Logger, Optional } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { StellarService } from '../stellar/stellar.service';
 import { IpfsService } from '../ipfs/ipfs.service';
@@ -7,6 +7,7 @@ import { JsonLdGeneratorService } from './generators/jsonld-generator';
 import { HtmlGeneratorService } from './generators/html-generator';
 import { CertificatesRepository, CertificateFilters } from './certificates.repository';
 import { IssueCertificateDto } from './dto/issue-certificate.dto';
+import { WebhookService } from '../webhooks/webhook.service';
 
 @Injectable()
 export class CertificatesService {
@@ -20,6 +21,7 @@ export class CertificatesService {
     private readonly pdfGenerator: PdfGeneratorService,
     private readonly jsonLdGenerator: JsonLdGeneratorService,
     private readonly htmlGenerator: HtmlGeneratorService,
+    @Optional() private readonly webhookService?: WebhookService,
   ) {}
 
   async issue(dto: IssueCertificateDto) {
@@ -74,8 +76,22 @@ export class CertificatesService {
       ],
     });
 
+    let txHash: string | null = null;
     try {
-      await this.stellarService.callContract('greenTagCert', 'issue_certificate');
+      const args = this.stellarService?.toAddressScVal
+        ? [
+            this.stellarService.toAddressScVal(dto.issuerId),
+            this.stellarService.toU64ScVal(product.productId || 1),
+            this.stellarService.toSymbolScVal(dto.certType),
+            this.stellarService.toAddressScVal(product.manufacturer?.publicKey),
+            this.stellarService.toU64ScVal(
+              dto.expiresAt ? Math.floor(new Date(dto.expiresAt).getTime() / 1000) : 0,
+            ),
+            this.stellarService.toStringScVal(ipfsResult.cid),
+          ]
+        : [];
+
+      txHash = await this.stellarService.callContract('greenTagCert', 'issue_certificate', args);
     } catch (error) {
       this.logger.warn(
         `Stellar contract call failed (certificate will be off-chain only): ${error instanceof Error ? error.message : String(error)}`,
@@ -92,7 +108,14 @@ export class CertificatesService {
       ipfsHash: ipfsResult.cid,
       metadata: (dto.metadata ?? {}) as any,
       status: 'active',
+      txHash,
     });
+
+    if (this.webhookService) {
+      this.webhookService
+        .dispatch('certificate.issued', { certificate })
+        .catch((err) => this.logger.warn(`Webhook dispatch error: ${err}`));
+    }
 
     return certificate;
   }
@@ -105,7 +128,11 @@ export class CertificatesService {
 
     let onChainValid = true;
     try {
-      await this.stellarService.simulateContract('greenTagCert', 'verify_certificate');
+      const numericId = parseInt(certificate.id.replace(/\D/g, '').slice(0, 8), 10) || 1;
+      const args = this.stellarService?.toU64ScVal
+        ? [this.stellarService.toU64ScVal(numericId)]
+        : [];
+      await this.stellarService.simulateContract('greenTagCert', 'verify_certificate', args);
     } catch {
       onChainValid = false;
     }
@@ -131,7 +158,15 @@ export class CertificatesService {
     }
 
     try {
-      await this.stellarService.callContract('greenTagCert', 'revoke_certificate');
+      const numericId = parseInt(certificate.id.replace(/\D/g, '').slice(0, 8), 10) || 1;
+      const args = this.stellarService?.toAddressScVal
+        ? [
+            this.stellarService.toAddressScVal(certificate.issuerId ?? undefined),
+            this.stellarService.toU64ScVal(numericId),
+            this.stellarService.toStringScVal(reason),
+          ]
+        : [];
+      await this.stellarService.callContract('greenTagCert', 'revoke_certificate', args);
     } catch (error) {
       this.logger.warn(
         `Stellar contract revoke failed (revoking off-chain only): ${error instanceof Error ? error.message : String(error)}`,
@@ -143,6 +178,12 @@ export class CertificatesService {
       revokedAt: new Date(),
       revocationReason: reason,
     });
+
+    if (this.webhookService) {
+      this.webhookService
+        .dispatch('certificate.revoked', { certificate: updated, reason })
+        .catch((err) => this.logger.warn(`Webhook dispatch error: ${err}`));
+    }
 
     return updated;
   }

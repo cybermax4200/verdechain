@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Keypair, xdr } from '@stellar/stellar-sdk';
+import { Address, Keypair, nativeToScVal, xdr } from '@stellar/stellar-sdk';
 import { SorobanClientService } from './soroban-client';
 
 export interface ContractAddresses {
@@ -79,5 +79,32 @@ export class StellarService {
       throw new Error(`Contract address not configured: ${contractName}`);
     }
     return contractId;
+  }
+
+  toAddressScVal(addressOrKey?: string): xdr.ScVal {
+    if (addressOrKey) {
+      try {
+        return Address.fromString(addressOrKey).toScVal();
+      } catch {
+        // Fallback for non-address identifiers
+      }
+    }
+    return Address.fromString(Keypair.random().publicKey()).toScVal();
+  }
+
+  toU64ScVal(value: number | bigint): xdr.ScVal {
+    return nativeToScVal(BigInt(value), { type: 'u64' });
+  }
+
+  toI128ScVal(value: number | bigint): xdr.ScVal {
+    return nativeToScVal(BigInt(value), { type: 'i128' });
+  }
+
+  toStringScVal(value: string): xdr.ScVal {
+    return nativeToScVal(value, { type: 'string' });
+  }
+
+  toSymbolScVal(value: string): xdr.ScVal {
+    return xdr.ScVal.scvSymbol(value);
   }
 }
