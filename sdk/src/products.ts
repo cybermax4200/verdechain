@@ -5,10 +5,13 @@ export interface CreateProductData {
   name: string;
   description?: string;
   sku?: string;
+  batchNumber?: string;
   productType?: string;
   originCountry?: string;
-  manufacturerPublicKey: string;
+  manufacturerPublicKey?: string;
+  manufacturerId?: string;
   ipfsHash?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export class ProductsAPI {

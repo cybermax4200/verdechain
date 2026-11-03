@@ -24,8 +24,13 @@ export class CreateProductDto {
   @IsString()
   originCountry?: string;
 
+  @IsOptional()
   @IsString()
-  manufacturerId!: string;
+  manufacturerId?: string;
+
+  @IsOptional()
+  @IsString()
+  manufacturerPublicKey?: string;
 
   @IsOptional()
   @IsObject()

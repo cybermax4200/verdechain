@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VerifiersService } from './verifiers.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('attestations')
 @Controller('attestations')
@@ -8,6 +9,7 @@ export class AttestationsController {
   constructor(private readonly verifiersService: VerifiersService) {}
 
   @Post('submit')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Submit product for verifier attestation' })
   @ApiResponse({ status: 201, description: 'Attestation requested' })
   async submit(@Body() body: { productId: string; evidence?: any; threshold?: number }) {
@@ -15,6 +17,7 @@ export class AttestationsController {
   }
 
   @Post(':id/approve')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Approve an attestation' })
   @ApiResponse({ status: 200, description: 'Attestation approval recorded' })
   async approve(@Param('id') id: string, @Body('verifierId') verifierId?: string) {
@@ -22,6 +25,7 @@ export class AttestationsController {
   }
 
   @Post(':id/reject')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Reject an attestation' })
   @ApiResponse({ status: 200, description: 'Attestation rejected' })
   async reject(
@@ -33,6 +37,7 @@ export class AttestationsController {
   }
 
   @Post(':id/escalate')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Escalate an attestation to require higher quorum' })
   @ApiResponse({ status: 200, description: 'Attestation escalated' })
   async escalate(

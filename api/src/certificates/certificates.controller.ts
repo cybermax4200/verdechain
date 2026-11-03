@@ -9,18 +9,21 @@ import {
   Res,
   Header,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CertificatesService } from './certificates.service';
 import { IssueCertificateDto } from './dto/issue-certificate.dto';
 import { QueryCertificateDto } from './dto/query-certificate.dto';
 import { VerifyCertificateDto } from './dto/verify-certificate.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('certificates')
 export class CertificatesController {
   constructor(private readonly certificatesService: CertificatesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async issue(@Body(ValidationPipe) dto: IssueCertificateDto) {
     return this.certificatesService.issue(dto);
   }
@@ -64,6 +67,7 @@ export class CertificatesController {
   }
 
   @Post(':id/revoke')
+  @UseGuards(JwtAuthGuard)
   async revoke(@Param('id') id: string, @Body('reason') reason?: string) {
     return this.certificatesService.revoke(id, reason ?? 'No reason provided');
   }

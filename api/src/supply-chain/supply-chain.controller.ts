@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ValidationPipe, UseGuards } from '@nestjs/common';
 import { SupplyChainService } from './supply-chain.service';
 import { AggregationService } from './aggregation.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { BatchEventDto } from './dto/batch-event.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('supply-chain')
 export class SupplyChainController {
@@ -12,11 +13,13 @@ export class SupplyChainController {
   ) {}
 
   @Post('events')
+  @UseGuards(JwtAuthGuard)
   async recordEvent(@Body(ValidationPipe) dto: CreateEventDto) {
     return this.supplyChainService.recordEvent(dto);
   }
 
   @Post('events/batch')
+  @UseGuards(JwtAuthGuard)
   async batchRecord(@Body(ValidationPipe) dto: BatchEventDto) {
     return this.supplyChainService.batchRecord(dto.events);
   }

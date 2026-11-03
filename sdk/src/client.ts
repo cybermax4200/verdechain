@@ -54,4 +54,23 @@ export class VerdeChainClient {
     const response = await this.client.request<T>(config);
     return response.data;
   }
+
+  async authenticateWithSep10(
+    publicKey: string,
+    signChallengeFn: (challengeXdr: string) => Promise<string>,
+  ): Promise<string> {
+    const { challengeXdr } = await this.request<{ challengeXdr: string }>({
+      method: 'POST',
+      url: '/auth/challenge',
+      data: { publicKey },
+    });
+    const signedXdr = await signChallengeFn(challengeXdr);
+    const { jwt } = await this.request<{ jwt: string }>({
+      method: 'POST',
+      url: '/auth/verify',
+      data: { signedXdr },
+    });
+    this.setAuthToken(jwt);
+    return jwt;
+  }
 }

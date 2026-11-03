@@ -19,9 +19,18 @@ export class ProductsService {
   async create(dto: CreateProductDto) {
     const productId = await this.repository.getNextProductId();
 
-    const manufacturer = await this.prisma.manufacturer.findUnique({
-      where: { id: dto.manufacturerId },
-    });
+    let manufacturer = null;
+    if (dto.manufacturerId) {
+      manufacturer = await this.prisma.manufacturer.findUnique({
+        where: { id: dto.manufacturerId },
+      });
+    }
+    if (!manufacturer && (dto.manufacturerPublicKey || dto.manufacturerId)) {
+      const key = dto.manufacturerPublicKey ?? dto.manufacturerId;
+      manufacturer = await this.prisma.manufacturer.findUnique({
+        where: { publicKey: key },
+      });
+    }
     if (!manufacturer) {
       throw new NotFoundException('Manufacturer not found');
     }
@@ -51,7 +60,7 @@ export class ProductsService {
       productType: dto.productType,
       originCountry: dto.originCountry,
       metadata: { ...((dto.metadata ?? {}) as object), ...(txHash ? { txHash } : {}) } as any,
-      manufacturer: { connect: { id: dto.manufacturerId } },
+      manufacturer: { connect: { id: manufacturer.id } },
     });
 
     if (this.webhookService) {
