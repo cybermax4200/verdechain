@@ -1,4 +1,10 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 import { HorizonClientService } from '../stellar/horizon-client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProductProcessor, ProductEvent } from './processors/product-processor';
@@ -15,7 +21,9 @@ export type IndexerEvent =
   | VerifierEvent;
 
 @Injectable()
-export class IndexerService implements OnModuleInit {
+export class IndexerService
+  implements OnModuleInit, OnApplicationBootstrap, OnApplicationShutdown
+{
   private readonly logger = new Logger(IndexerService.name);
   private isRunning = false;
   private currentCursor: string | null = null;
@@ -35,6 +43,16 @@ export class IndexerService implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     this.currentCursor = await this.loadLastProcessedLedger();
     this.logger.log(`Indexer initialized with cursor: ${this.currentCursor ?? 'genesis'}`);
+  }
+
+  async onApplicationBootstrap(): Promise<void> {
+    if (process.env.INDEXER_ENABLED === 'true') {
+      await this.start();
+    }
+  }
+
+  async onApplicationShutdown(): Promise<void> {
+    await this.stop();
   }
 
   async start(): Promise<void> {
@@ -92,12 +110,23 @@ export class IndexerService implements OnModuleInit {
     paging_token: string;
     created_at: string;
     successful: boolean;
+    memo?: string;
   }): Promise<void> {
     if (!tx.successful) {
       return;
     }
 
-    const events: IndexerEvent[] = []; // Placeholder for actual event extraction
+    const events: IndexerEvent[] = [];
+    if (tx.memo) {
+      try {
+        const parsed = JSON.parse(tx.memo);
+        if (parsed && typeof parsed.type === 'string') {
+          events.push(parsed as IndexerEvent);
+        }
+      } catch {
+        // Memo is not JSON, ignore
+      }
+    }
 
     for (const event of events) {
       try {

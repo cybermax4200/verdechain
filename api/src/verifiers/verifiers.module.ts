@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { VerifiersController } from './verifiers.controller';
+import { AttestationsController } from './attestations.controller';
 import { VerifiersService } from './verifiers.service';
 import { StakingService } from './staking.service';
 
 @Module({
-  controllers: [VerifiersController],
+  controllers: [VerifiersController, AttestationsController],
   providers: [VerifiersService, StakingService],
   exports: [VerifiersService, StakingService],
 })
