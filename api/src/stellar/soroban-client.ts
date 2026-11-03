@@ -82,9 +82,9 @@ export class SorobanClientService {
   }
 
   async simulateContract(
-    _contractId: string,
-    _method: string,
-    _args: xdr.ScVal[] = [],
+    contractId: string,
+    method: string,
+    args: xdr.ScVal[] = [],
   ): Promise<xdr.ScVal> {
     const source = this.adminKeypair;
     if (!source) {
@@ -96,6 +96,13 @@ export class SorobanClientService {
       fee: '100000',
       networkPassphrase: this.networkPassphrase,
     })
+      .addOperation(
+        Operation.invokeContractFunction({
+          contract: contractId,
+          function: method,
+          args,
+        }),
+      )
       .setTimeout(30)
       .build();
 
@@ -145,8 +152,12 @@ export class SorobanClientService {
     return tx.toXDR();
   }
 
-  async signAndSend(xdrPayload: string, _keypair: Keypair): Promise<string> {
+  async signAndSend(xdrPayload: string, keypair?: Keypair): Promise<string> {
     const tx = TransactionBuilder.fromXDR(xdrPayload, this.networkPassphrase);
+    const signer = keypair ?? this.adminKeypair;
+    if (signer) {
+      tx.sign(signer);
+    }
     const sendResponse = await this.server.sendTransaction(tx);
     if (sendResponse.status === 'ERROR') {
       throw new Error(`Send error: status=ERROR`);

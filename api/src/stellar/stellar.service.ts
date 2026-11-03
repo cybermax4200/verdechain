@@ -68,6 +68,11 @@ export class StellarService {
     return this.sorobanClient.signAndSend(xdr, keypair);
   }
 
+  isConfigured(contractName: keyof ContractAddresses): boolean {
+    const contractId = this.contractAddresses[contractName];
+    return Boolean(contractId && contractId.length > 0 && !contractId.includes('REPLACE_ME'));
+  }
+
   getContractId(contractName: keyof ContractAddresses): string {
     const contractId = this.contractAddresses[contractName];
     if (!contractId) {
